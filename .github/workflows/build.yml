@@ -36,3 +36,8 @@ jobs:
         run: yarn run lint
       - name: Build
         run: yarn run build
+        env:
+          CLOUD_IDENTIFIER: ${{ vars.CLOUD_IDENTIFIER }}
+          APPLICATION_ID: ${{ vars.APPLICATION_ID }}
+          APPLICATION_URL: ${{ vars.APPLICATION_URL }}
+          INITIAL_PROJECT_KEY: ${{ vars.INITIAL_PROJECT_KEY }}
