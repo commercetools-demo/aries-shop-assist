@@ -16,7 +16,13 @@
     "format": "prettier --write '**/*.{js,ts,tsx}'",
     "typecheck": "tsc --noEmit",
     "versions:appkit": "manypkg upgrade @commercetools-frontend",
-    "versions:uikit": "manypkg upgrade @commercetools-uikit"
+    "versions:uikit": "manypkg upgrade @commercetools-uikit",
+    "generate-types:mc": "graphql-codegen -r dotenv/config --config codegen.mc.yml",
+    "generate-types:ctp": "graphql-codegen -r dotenv/config --config codegen.ctp.yml",
+    "generate-types:core": "graphql-codegen -r dotenv/config --config codegen.core.yml",
+    "generate-types:settings": "graphql-codegen -r dotenv/config --config codegen.settings.yml",
+    "generate-types:proxy": "graphql-codegen -r dotenv/config --config codegen.proxy.yml",
+    "generate-types": "pnpm generate-types:mc && pnpm generate-types:ctp && pnpm generate-types:core && pnpm generate-types:settings && pnpm generate-types:proxy"
   },
   "dependencies": {
     "@apollo/client": "3.7.14",
@@ -103,5 +109,12 @@
     "headers-polyfill": "3.2.5",
     "nwsapi": "2.2.7"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "@graphql-codegen/add": "^5.0.2",
+    "@graphql-codegen/cli": "2.16.5",
+    "@graphql-codegen/introspection": "2.2.3",
+    "@graphql-codegen/typescript": "2.8.8",
+    "@graphql-codegen/typescript-graphql-files-modules": "2.2.1",
+    "@graphql-codegen/typescript-operations": "2.5.13"
+  }
 }
