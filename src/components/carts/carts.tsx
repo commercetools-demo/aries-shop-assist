@@ -42,6 +42,11 @@ const columns = [
     isSortable: true,
   },
   {
+    key: 'businessUnit',
+    label: 'Business unit',
+    isSortable: true,
+  },
+  {
     key: 'store',
     label: 'Store',
     isSortable: true,
@@ -108,12 +113,6 @@ const Carts = (props: TCartsProps) => {
         <Text.Headline as="h2" intlMessage={messages.title} />
       </Spacings.Stack>
 
-      <Constraints.Horizontal max={13}>
-        <ContentNotification type="info">
-          <Text.Body intlMessage={messages.demoHint} />
-        </ContentNotification>
-      </Constraints.Horizontal>
-
       {loading && <LoadingSpinner />}
 
       {cartsPaginatedResult ? (
@@ -134,6 +133,8 @@ const Carts = (props: TCartsProps) => {
                   return item.customerGroupRef?.typeId || NO_VALUE_FALLBACK;
                 case 'anonymousId':
                   return item.anonymousId;
+                case 'businessUnit':
+                  return item.businessUnit?.typeId || NO_VALUE_FALLBACK;
                 case 'store':
                   return item.storeRef?.key || NO_VALUE_FALLBACK;
                 case 'totalLineItemQuantity':

@@ -6,8 +6,8 @@ import { useMcQuery } from '@commercetools-frontend/application-shell';
 import { GRAPHQL_TARGETS } from '@commercetools-frontend/constants';
 import type { TDataTableSortingState } from '@commercetools-uikit/hooks';
 import type {
-  TCartQueryResult,
-  TCartQueryInterface_CartsArgs,
+  TFetchCartsQuery,
+  TFetchCartsQueryVariables,
 } from '../../types/generated/ctp';
 import FetchCartsQuery from './fetch-carts.ctp.graphql';
 
@@ -19,7 +19,7 @@ type PaginationAndSortingProps = {
 type TUseCartsFetcher = (
   paginationAndSortingProps: PaginationAndSortingProps
 ) => {
-  cartsPaginatedResult?: TCartQueryResult['results'];
+  cartsPaginatedResult?: TFetchCartsQuery['carts']['results'];
   total?: number;
   error?: ApolloError;
   loading: boolean;
@@ -31,8 +31,8 @@ export const useCartsFetcher: TUseCartsFetcher = ({
   tableSorting,
 }) => {
   const { data, error, loading } = useMcQuery<
-    TCartQueryResult,
-    TCartQueryInterface_CartsArgs
+    TFetchCartsQuery,
+    TFetchCartsQueryVariables
   >(FetchCartsQuery, {
     variables: {
       limit: perPage.value,
@@ -44,10 +44,14 @@ export const useCartsFetcher: TUseCartsFetcher = ({
     },
   });
 
-  return {
-    cartsPaginatedResult: data?.results,
-    total: data?.total,
+  const objeto = {
+    cartsPaginatedResult: data?.carts?.results,
+    total: data?.carts?.total,
     error,
     loading,
   };
+
+  console.log('objeto', objeto);
+
+  return objeto;
 };
