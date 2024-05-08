@@ -11,7 +11,7 @@ import { renderApplicationWithRedux } from '../../test-utils';
 import { entryPointUriPath, PERMISSIONS } from '../../constants';
 import ApplicationRoutes from '../../routes';
 import type { TCart } from '@commercetools-test-data/cart';
-import * as Cart from '@commercetools-test-data/cart';
+import { Cart } from '@commercetools-test-data/cart';
 
 const mockServer = setupServer();
 afterEach(() => mockServer.resetHandlers());
