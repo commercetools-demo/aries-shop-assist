@@ -7,13 +7,11 @@ import {
   type TRenderAppWithReduxOptions,
 } from '@commercetools-frontend/application-shell/test-utils';
 import { buildGraphqlList } from '@commercetools-test-data/core';
-import { LocalizedString } from '@commercetools-test-data/commons';
 import { renderApplicationWithRedux } from '../../test-utils';
 import { entryPointUriPath, PERMISSIONS } from '../../constants';
 import ApplicationRoutes from '../../routes';
-// TO DO: generate the files for the following imports
-//import type { TCart } from '@commercetools-test-data/cart';
-//import * as Cart from '@commercetools-test-data/cart';
+import type { TCart } from '@commercetools-test-data/cart';
+import * as Cart from '@commercetools-test-data/cart';
 
 const mockServer = setupServer();
 afterEach(() => mockServer.resetHandlers());
@@ -54,8 +52,7 @@ it('should render carts and paginate to second page', async () => {
         ctx.data({
           carts: buildGraphqlList<TCart>(
             Array.from({ length: itemsPerPage }).map((_, index) =>
-              Carts.random()
-                .key(`cart-key-${offset === 0 ? index : 20 + index}`)
+              Cart.random().key(`cart-key-${offset === 0 ? index : 20 + index}`)
             ),
             {
               name: 'Cart',

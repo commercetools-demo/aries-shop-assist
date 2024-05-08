@@ -110,6 +110,7 @@
     "nwsapi": "2.2.7"
   },
   "devDependencies": {
+    "@commercetools-test-data/cart": "^8.1.1",
     "@graphql-codegen/add": "^5.0.2",
     "@graphql-codegen/cli": "2.16.5",
     "@graphql-codegen/introspection": "2.2.3",
