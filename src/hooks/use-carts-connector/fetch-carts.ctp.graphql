@@ -1,0 +1,27 @@
+query FetchCarts($limit: Int!, $offset: Int!, $sort: [String!]) {
+  carts(limit: $limit, offset: $offset, sort: $sort) {
+    total
+    count
+    offset
+    results {
+      id
+      key
+      customerEmail
+      customerGroupRef {
+        typeId
+      }
+      anonymousId
+      storeRef {
+        key
+      }
+      totalLineItemQuantity
+      totalPrice {
+        currencyCode
+        centAmount
+        fractionDigits
+      }
+      cartState
+      origin
+    }
+  }
+}
