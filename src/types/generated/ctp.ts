@@ -12548,3 +12548,12 @@ export type TFetchCartsQuery = {
     results: Array<TCart>;
   };
 };
+
+export type TFetchCartDetailsQueryVariables = Exact<{
+  cartId: Scalars['String'];
+}>;
+
+export type TFetchCartDetailsQuery = {
+  __typename?: 'Query';
+  cart?: TCart | null;
+};

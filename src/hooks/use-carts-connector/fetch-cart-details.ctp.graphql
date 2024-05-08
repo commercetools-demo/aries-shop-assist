@@ -1,0 +1,25 @@
+query FetchCartDetails($cartId: String!) {
+  cart(id: $cartId) {
+    id
+    key
+    customerEmail
+    customerGroupRef {
+      typeId
+    }
+    anonymousId
+    businessUnit {
+      typeId
+    }
+    storeRef {
+      key
+    }
+    totalLineItemQuantity
+    totalPrice {
+      currencyCode
+      centAmount
+      fractionDigits
+    }
+    cartState
+    origin
+  }
+}
