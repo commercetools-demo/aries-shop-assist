@@ -32,7 +32,7 @@ const columns = [
     isSortable: true,
   },
   {
-    key: 'customerGroup',
+    key: 'customerGroupRef',
     label: 'Customer group',
     isSortable: true,
   },
@@ -47,7 +47,7 @@ const columns = [
     isSortable: true,
   },
   {
-    key: 'store',
+    key: 'storeRef',
     label: 'Store',
     isSortable: true,
   },
@@ -129,13 +129,13 @@ const Carts = (props: TCartsProps) => {
                   return item.key;
                 case 'customerEmail':
                   return item.customerEmail;
-                case 'customerGroup':
-                  return item.customerGroupRef?.typeId || NO_VALUE_FALLBACK;
+                case 'customerGroupRef':
+                  return item.customerGroupRef?.id || NO_VALUE_FALLBACK;
                 case 'anonymousId':
                   return item.anonymousId;
                 case 'businessUnit':
-                  return item.businessUnit?.typeId || NO_VALUE_FALLBACK;
-                case 'store':
+                  return item.businessUnit?.id || NO_VALUE_FALLBACK;
+                case 'storeRef':
                   return item.storeRef?.key || NO_VALUE_FALLBACK;
                 case 'totalLineItemQuantity':
                   return item.totalLineItemQuantity;

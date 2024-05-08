@@ -44,14 +44,12 @@ export const useCartsFetcher: TUseCartsFetcher = ({
     },
   });
 
-  const objeto = {
+  return {
     cartsPaginatedResult: data?.carts?.results,
     total: data?.carts?.total,
     error,
     loading,
   };
 
-  console.log('objeto', objeto);
 
-  return objeto;
 };
