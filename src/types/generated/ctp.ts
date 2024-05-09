@@ -912,6 +912,7 @@ export type TCart = TReferenceExpandable &
     __typename?: 'Cart';
     anonymousId?: Maybe<Scalars['String']>;
     billingAddress?: Maybe<TAddress>;
+    businessUnit?: Maybe<TReference>;
     cartState: TCartState;
     country?: Maybe<Scalars['Country']>;
     createdAt: Scalars['DateTime'];
@@ -12529,4 +12530,21 @@ export type TUpdateChannelDetailsMutation = {
       value: string;
     }> | null;
   } | null;
+};
+
+export type TFetchCartsQueryVariables = Exact<{
+  limit: Scalars['Int'];
+  offset: Scalars['Int'];
+  sort?: InputMaybe<Array<Scalars['String']> | Scalars['String']>;
+}>;
+
+export type TFetchCartsQuery = {
+  __typename?: 'Query';
+  carts: {
+    __typename?: 'CartsQueryResult';
+    total: number;
+    count: number;
+    offset: number;
+    results: Array<TCart>;
+  };
 };

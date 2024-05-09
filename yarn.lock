@@ -1957,6 +1957,112 @@
     "@babel/runtime" "^7.22.15"
     "@babel/runtime-corejs3" "^7.22.15"
 
+"@commercetools-test-data/associate-role@8.1.1":
+  version "8.1.1"
+  resolved "https://registry.yarnpkg.com/@commercetools-test-data/associate-role/-/associate-role-8.1.1.tgz#5740d087baeb756902a6cb290609f00e8f9f82e9"
+  integrity sha512-rPbh0F4ApbmWXSkV6YmiR2MkiuGPUenlhHYRxis5Fa1MsCOGuVcHE1jWvoMOaZBr77pgi7aqErVL/ipx1an13A==
+  dependencies:
+    "@babel/runtime" "^7.17.9"
+    "@babel/runtime-corejs3" "^7.17.9"
+    "@commercetools-test-data/commons" "8.1.1"
+    "@commercetools-test-data/core" "8.1.1"
+    "@commercetools-test-data/utils" "8.1.1"
+    "@commercetools/platform-sdk" "^7.0.0"
+    "@faker-js/faker" "^8.0.0"
+
+"@commercetools-test-data/attribute-definition@5.11.2":
+  version "5.11.2"
+  resolved "https://registry.yarnpkg.com/@commercetools-test-data/attribute-definition/-/attribute-definition-5.11.2.tgz#69f823909918b33515c38d58f43ba63f81fbb609"
+  integrity sha512-uL5nP2+FJqUROv5gxdaYDp9xbuig45gxwEf3oBIOambnZjSO28dwh86mt5SeL5f29hhiN9ApswgjKIVjNbbgAw==
+  dependencies:
+    "@babel/runtime" "^7.17.9"
+    "@babel/runtime-corejs3" "^7.17.9"
+    "@commercetools-test-data/attribute-type" "5.11.2"
+    "@commercetools-test-data/commons" "5.11.2"
+    "@commercetools-test-data/core" "5.11.2"
+    "@commercetools-test-data/utils" "5.11.2"
+    "@commercetools/platform-sdk" "^4.11.0"
+    "@faker-js/faker" "^8.0.0"
+
+"@commercetools-test-data/attribute-type@5.11.2":
+  version "5.11.2"
+  resolved "https://registry.yarnpkg.com/@commercetools-test-data/attribute-type/-/attribute-type-5.11.2.tgz#653016ab5b4650d11e11c1f292030d3a09092af7"
+  integrity sha512-JecOqJ3jdc/1+mnNcYKRzQBzNlJSwzuuxOKWKWyAZzXW2sH3z4K+rECaQY3Y+HMFqIMgVboa9ebd6YIgDlFFNA==
+  dependencies:
+    "@babel/runtime" "^7.17.9"
+    "@babel/runtime-corejs3" "^7.17.9"
+    "@commercetools-test-data/commons" "5.11.2"
+    "@commercetools-test-data/core" "5.11.2"
+    "@commercetools-test-data/utils" "5.11.2"
+    "@commercetools/platform-sdk" "^4.11.0"
+    "@faker-js/faker" "^8.0.0"
+
+"@commercetools-test-data/business-unit@8.1.1":
+  version "8.1.1"
+  resolved "https://registry.yarnpkg.com/@commercetools-test-data/business-unit/-/business-unit-8.1.1.tgz#f01ffb54e36c6600f11820f50fe4d19464798d58"
+  integrity sha512-2xZm6/KJx1bdUpTr3imXh71D0EjZld4gjf8Ln4o2UjmE9Z0mIiYJMFKCWOg1cHxEW/IyRhzD3LTP7KJ0Y3KpiQ==
+  dependencies:
+    "@babel/runtime" "^7.17.9"
+    "@babel/runtime-corejs3" "^7.17.9"
+    "@commercetools-test-data/associate-role" "8.1.1"
+    "@commercetools-test-data/commons" "8.1.1"
+    "@commercetools-test-data/core" "8.1.1"
+    "@commercetools-test-data/customer" "8.1.1"
+    "@commercetools-test-data/store" "8.1.1"
+    "@commercetools-test-data/utils" "8.1.1"
+    "@commercetools/platform-sdk" "^7.0.0"
+    "@faker-js/faker" "^8.0.0"
+
+"@commercetools-test-data/cart-discount@8.1.1":
+  version "8.1.1"
+  resolved "https://registry.yarnpkg.com/@commercetools-test-data/cart-discount/-/cart-discount-8.1.1.tgz#f80c2cc63754039096dfefa65da7307550b39159"
+  integrity sha512-ouTjd2zSMXpmnCpkESyAiid9YLX2NbwC3UBtMWQaiPe9HQWF+VVU0aC7adH96wc1r8pHSN1UY4Un8gAmYu+mZQ==
+  dependencies:
+    "@babel/runtime" "^7.17.9"
+    "@babel/runtime-corejs3" "^7.17.9"
+    "@commercetools-test-data/category" "8.1.1"
+    "@commercetools-test-data/commons" "8.1.1"
+    "@commercetools-test-data/core" "8.1.1"
+    "@commercetools-test-data/customer-group" "8.1.1"
+    "@commercetools-test-data/product-type" "8.1.1"
+    "@commercetools-test-data/utils" "8.1.1"
+    "@commercetools/platform-sdk" "^7.0.0"
+    "@faker-js/faker" "^8.0.0"
+
+"@commercetools-test-data/cart@^8.1.1":
+  version "8.1.1"
+  resolved "https://registry.yarnpkg.com/@commercetools-test-data/cart/-/cart-8.1.1.tgz#f0fd433df9da4ae72e960cb5dda9dfc689e2cd06"
+  integrity sha512-6I/aaxJIjf2VFgKMfB6xU7dU/hw4gb9Vrf0XM6U2qY3Oi/muo7imWtq5LVSIW1z82iEV/IbPaKzhNjNeo3wwrw==
+  dependencies:
+    "@babel/runtime" "^7.17.9"
+    "@babel/runtime-corejs3" "^7.17.9"
+    "@commercetools-test-data/business-unit" "8.1.1"
+    "@commercetools-test-data/channel" "8.1.1"
+    "@commercetools-test-data/commons" "8.1.1"
+    "@commercetools-test-data/core" "8.1.1"
+    "@commercetools-test-data/customer" "8.1.1"
+    "@commercetools-test-data/discount-code" "8.1.1"
+    "@commercetools-test-data/product" "8.1.1"
+    "@commercetools-test-data/shipping-method" "8.1.1"
+    "@commercetools-test-data/store" "8.1.1"
+    "@commercetools-test-data/tax-category" "8.1.1"
+    "@commercetools-test-data/utils" "8.1.1"
+    "@commercetools/platform-sdk" "^7.0.0"
+    "@faker-js/faker" "^8.0.0"
+
+"@commercetools-test-data/category@8.1.1":
+  version "8.1.1"
+  resolved "https://registry.yarnpkg.com/@commercetools-test-data/category/-/category-8.1.1.tgz#809fa58ea552d2b39360b6c9c96caa2013e4fc2d"
+  integrity sha512-9Ok0Q2aSjFT/JTPHpmMYyPvfmujZ0ksI2jPpr6xsj2lWysRQxV23pdHqbN/b226SUq+/L2A36ZiNxFJQ5yP87w==
+  dependencies:
+    "@babel/runtime" "^7.17.9"
+    "@babel/runtime-corejs3" "^7.17.9"
+    "@commercetools-test-data/commons" "8.1.1"
+    "@commercetools-test-data/core" "8.1.1"
+    "@commercetools-test-data/utils" "8.1.1"
+    "@commercetools/platform-sdk" "^7.0.0"
+    "@faker-js/faker" "^8.0.0"
+
 "@commercetools-test-data/channel@7.4.0":
   version "7.4.0"
   resolved "https://registry.yarnpkg.com/@commercetools-test-data/channel/-/channel-7.4.0.tgz#a02f0774b661d494fe37fcf1bfd8c2dca3fdda52"
@@ -1969,6 +2075,33 @@
     "@commercetools-test-data/utils" "7.4.0"
     "@commercetools/platform-sdk" "^7.0.0"
     "@faker-js/faker" "^8.0.0"
+
+"@commercetools-test-data/channel@8.1.1":
+  version "8.1.1"
+  resolved "https://registry.yarnpkg.com/@commercetools-test-data/channel/-/channel-8.1.1.tgz#d6833517cad0fc4868e9ad103064e74997816e13"
+  integrity sha512-9MZdhm6AXZlrGX631O74TW1mJdk7BaAEycIKCzw2CIvv+srzepj+wSkJ544CxJiV76PS/rj84G5UYAci+IdLSw==
+  dependencies:
+    "@babel/runtime" "^7.17.9"
+    "@babel/runtime-corejs3" "^7.17.9"
+    "@commercetools-test-data/commons" "8.1.1"
+    "@commercetools-test-data/core" "8.1.1"
+    "@commercetools-test-data/utils" "8.1.1"
+    "@commercetools/platform-sdk" "^7.0.0"
+    "@faker-js/faker" "^8.0.0"
+
+"@commercetools-test-data/commons@5.11.2":
+  version "5.11.2"
+  resolved "https://registry.yarnpkg.com/@commercetools-test-data/commons/-/commons-5.11.2.tgz#fbeeb0bded9ba0b865a76ea64e5140f05bebd716"
+  integrity sha512-AxcUby9NOEmil3kJKrNVa7Lz94UHOeW+nFgsmn5I3CLKrt/Q5VI0et+6Ls1UJh57buxbTQRK15O/Gd/hRMYwSA==
+  dependencies:
+    "@babel/runtime" "^7.17.9"
+    "@babel/runtime-corejs3" "^7.17.9"
+    "@commercetools-test-data/core" "5.11.2"
+    "@commercetools-test-data/utils" "5.11.2"
+    "@commercetools/platform-sdk" "^4.11.0"
+    "@faker-js/faker" "^8.0.0"
+    "@types/lodash" "^4.14.182"
+    lodash "^4.17.21"
 
 "@commercetools-test-data/commons@7.4.0":
   version "7.4.0"
@@ -1984,6 +2117,31 @@
     "@types/lodash" "^4.14.182"
     lodash "^4.17.21"
 
+"@commercetools-test-data/commons@8.1.1":
+  version "8.1.1"
+  resolved "https://registry.yarnpkg.com/@commercetools-test-data/commons/-/commons-8.1.1.tgz#601cbfc327158bf9d030e001e54621eb530e61bd"
+  integrity sha512-II7iG6wN7Ke7NFVFv3DK8DvJPwK6kK/BeWjpzwfiUlp0SXFOMFdDPfP4Yhih2Sf1jy8jq8R55p+mDI3hPqfj9Q==
+  dependencies:
+    "@babel/runtime" "^7.17.9"
+    "@babel/runtime-corejs3" "^7.17.9"
+    "@commercetools-test-data/core" "8.1.1"
+    "@commercetools-test-data/utils" "8.1.1"
+    "@commercetools/platform-sdk" "^7.0.0"
+    "@faker-js/faker" "^8.0.0"
+    "@types/lodash" "^4.17.0"
+    lodash "^4.17.21"
+
+"@commercetools-test-data/core@5.11.2":
+  version "5.11.2"
+  resolved "https://registry.yarnpkg.com/@commercetools-test-data/core/-/core-5.11.2.tgz#43be26f9d1f4ac01d398d155b6839a1d4d6b95fb"
+  integrity sha512-iz++zEBengERwg3REm51RsEFmiUeNPQz1K9K2kZjH1sAkFxOf1ydmpM0Tt4Awmi/OHQ+G2tGKKdJewm8AQyHNg==
+  dependencies:
+    "@babel/runtime" "^7.17.9"
+    "@babel/runtime-corejs3" "^7.17.9"
+    "@faker-js/faker" "^8.0.0"
+    "@types/lodash" "^4.14.182"
+    lodash "^4.17.21"
+
 "@commercetools-test-data/core@7.4.0":
   version "7.4.0"
   resolved "https://registry.yarnpkg.com/@commercetools-test-data/core/-/core-7.4.0.tgz#e8da162318f70a4397289e909b593883d2d3c897"
@@ -1995,6 +2153,168 @@
     "@types/lodash" "^4.14.182"
     lodash "^4.17.21"
 
+"@commercetools-test-data/core@8.1.1":
+  version "8.1.1"
+  resolved "https://registry.yarnpkg.com/@commercetools-test-data/core/-/core-8.1.1.tgz#a9fd7afd989e53c745c4f3cb9b3eac4b595b574d"
+  integrity sha512-IkoGBJ5x7pKzT819MTk162zNDZXnjCTpGp/Tm1nn79sAiC3fjWuDZx41UtfRqXwmMewjLpUFLJKpItL4KJPRMw==
+  dependencies:
+    "@babel/runtime" "^7.17.9"
+    "@babel/runtime-corejs3" "^7.17.9"
+    "@faker-js/faker" "^8.0.0"
+    "@types/lodash" "^4.17.0"
+    lodash "^4.17.21"
+
+"@commercetools-test-data/customer-group@8.1.1":
+  version "8.1.1"
+  resolved "https://registry.yarnpkg.com/@commercetools-test-data/customer-group/-/customer-group-8.1.1.tgz#d56382d28056fd34cccaf3374c612efa37fd200e"
+  integrity sha512-qE4MEB6E6ixuYdqoJZvakhgSj4e57OMSRScsXVJJcOjWQqAGLJNLHYvSkp31tfjtKj8CKNo9PfVzJNrfKFfwww==
+  dependencies:
+    "@babel/runtime" "^7.17.9"
+    "@babel/runtime-corejs3" "^7.17.9"
+    "@commercetools-test-data/commons" "8.1.1"
+    "@commercetools-test-data/core" "8.1.1"
+    "@commercetools-test-data/utils" "8.1.1"
+    "@commercetools/platform-sdk" "^7.0.0"
+    "@faker-js/faker" "^8.0.0"
+
+"@commercetools-test-data/customer@8.1.1":
+  version "8.1.1"
+  resolved "https://registry.yarnpkg.com/@commercetools-test-data/customer/-/customer-8.1.1.tgz#92eed104c6a968e2f97060f1e61d5241d1368779"
+  integrity sha512-oT19bFyaypbnQwo1OT1X3XFi/amNp+t1yAypwEcToId0NqkdS2FPA5yYB0LDyPN9X51Dzqyaawk0IuwB3JBuyg==
+  dependencies:
+    "@babel/runtime" "^7.17.9"
+    "@babel/runtime-corejs3" "^7.17.9"
+    "@commercetools-test-data/commons" "8.1.1"
+    "@commercetools-test-data/core" "8.1.1"
+    "@commercetools-test-data/customer-group" "8.1.1"
+    "@commercetools-test-data/utils" "8.1.1"
+    "@commercetools/platform-sdk" "^7.0.0"
+    "@faker-js/faker" "^8.0.0"
+
+"@commercetools-test-data/discount-code@8.1.1":
+  version "8.1.1"
+  resolved "https://registry.yarnpkg.com/@commercetools-test-data/discount-code/-/discount-code-8.1.1.tgz#f42366d5f80122b4ef2bdc77b2b64cfda72ebdbd"
+  integrity sha512-Y7c7msC8vDfI6SJn3ZfYFQE/8VsAytWDGOoPM4DlO/FciRNDCtre4JHWE1KH/A6TPrYbkGOr11yZKfCSNMzT7Q==
+  dependencies:
+    "@babel/runtime" "^7.17.9"
+    "@babel/runtime-corejs3" "^7.17.9"
+    "@commercetools-test-data/cart-discount" "8.1.1"
+    "@commercetools-test-data/commons" "8.1.1"
+    "@commercetools-test-data/core" "8.1.1"
+    "@commercetools-test-data/utils" "8.1.1"
+    "@commercetools/platform-sdk" "^7.0.0"
+    "@faker-js/faker" "^8.0.0"
+
+"@commercetools-test-data/product-selection@8.1.1":
+  version "8.1.1"
+  resolved "https://registry.yarnpkg.com/@commercetools-test-data/product-selection/-/product-selection-8.1.1.tgz#2bce376b989d9273405aab0bbfab8d6dec385609"
+  integrity sha512-tNJjuzIJog+IFkN1EaZbDLp0ykGpNeyqPbvJKHuu4EwVHR5YkjUx4Q1BzkaDXrWixh+7eRqYOHPwY1JfhRd9ZQ==
+  dependencies:
+    "@babel/runtime" "^7.17.9"
+    "@babel/runtime-corejs3" "^7.17.9"
+    "@commercetools-test-data/commons" "8.1.1"
+    "@commercetools-test-data/core" "8.1.1"
+    "@commercetools-test-data/utils" "8.1.1"
+    "@commercetools/platform-sdk" "^7.0.0"
+    "@faker-js/faker" "^8.0.0"
+
+"@commercetools-test-data/product-type@8.1.1":
+  version "8.1.1"
+  resolved "https://registry.yarnpkg.com/@commercetools-test-data/product-type/-/product-type-8.1.1.tgz#5c845b17670b37b6a43b2fcd78edff6d361880e1"
+  integrity sha512-bR6k0FN8YtO8nNsXuyjsU+JbUs/RyK3df3KBICQriJTEQkRIzNroikxJt+fBbOASvz26N3HIEodFchcpmfvTOw==
+  dependencies:
+    "@babel/runtime" "^7.17.9"
+    "@babel/runtime-corejs3" "^7.17.9"
+    "@commercetools-test-data/commons" "8.1.1"
+    "@commercetools-test-data/core" "8.1.1"
+    "@commercetools-test-data/utils" "8.1.1"
+    "@commercetools/platform-sdk" "^7.0.0"
+    "@faker-js/faker" "^8.0.0"
+
+"@commercetools-test-data/product-variant@5.11.2":
+  version "5.11.2"
+  resolved "https://registry.yarnpkg.com/@commercetools-test-data/product-variant/-/product-variant-5.11.2.tgz#7ba0279a45906578afa0fff1936420f7dfda2e44"
+  integrity sha512-7VT0Iez2bi8fhpqJOzVx/WfmLV+mAXlc5SOxZoTeP1JyUyY07GiujI0ctKAh8Q3/0qzVyJ08RFV1BLtYxLWeKA==
+  dependencies:
+    "@babel/runtime" "^7.17.9"
+    "@babel/runtime-corejs3" "^7.17.9"
+    "@commercetools-test-data/attribute-definition" "5.11.2"
+    "@commercetools-test-data/commons" "5.11.2"
+    "@commercetools-test-data/core" "5.11.2"
+    "@commercetools-test-data/utils" "5.11.2"
+    "@commercetools/platform-sdk" "^4.11.0"
+    "@faker-js/faker" "^8.0.0"
+
+"@commercetools-test-data/product@8.1.1":
+  version "8.1.1"
+  resolved "https://registry.yarnpkg.com/@commercetools-test-data/product/-/product-8.1.1.tgz#85ba429c4b3a357bde5089be8baee5ecf587e364"
+  integrity sha512-hBn/i9fZo8fINahNnAj12WYV+cYLV+pCmdTlG3qffG2WqTDES+FegBsxoFAsHvFliD3yYMh+zaUvxPM347jhhw==
+  dependencies:
+    "@babel/runtime" "^7.17.9"
+    "@babel/runtime-corejs3" "^7.17.9"
+    "@commercetools-test-data/attribute-definition" "5.11.2"
+    "@commercetools-test-data/category" "8.1.1"
+    "@commercetools-test-data/commons" "8.1.1"
+    "@commercetools-test-data/core" "8.1.1"
+    "@commercetools-test-data/product-type" "8.1.1"
+    "@commercetools-test-data/product-variant" "5.11.2"
+    "@commercetools-test-data/tax-category" "8.1.1"
+    "@commercetools-test-data/utils" "8.1.1"
+    "@commercetools/platform-sdk" "^7.0.0"
+    "@faker-js/faker" "^8.0.0"
+
+"@commercetools-test-data/shipping-method@8.1.1":
+  version "8.1.1"
+  resolved "https://registry.yarnpkg.com/@commercetools-test-data/shipping-method/-/shipping-method-8.1.1.tgz#394f14a05f4de4585e595ecde5b1018e432cd87d"
+  integrity sha512-Q2fW30U5c0lyjOqo7mpbbA5E4t5KJyP2Jx1ixI1DI2J8rKBoAK2jlevjRhAMrNVd3/b1HoeALAWPunPHE2tA7w==
+  dependencies:
+    "@babel/runtime" "^7.17.9"
+    "@babel/runtime-corejs3" "^7.17.9"
+    "@commercetools-test-data/commons" "8.1.1"
+    "@commercetools-test-data/core" "8.1.1"
+    "@commercetools-test-data/tax-category" "8.1.1"
+    "@commercetools-test-data/utils" "8.1.1"
+    "@commercetools-test-data/zone" "8.1.1"
+    "@commercetools/platform-sdk" "^7.0.0"
+    "@faker-js/faker" "^8.0.0"
+
+"@commercetools-test-data/store@8.1.1":
+  version "8.1.1"
+  resolved "https://registry.yarnpkg.com/@commercetools-test-data/store/-/store-8.1.1.tgz#85099306e219631bc809655f4e8ee346ca13b426"
+  integrity sha512-JmI9LxSp0XkVKfO+0vKVcVjAUA72wnOm/GS7kR3PuWDFYVJ1psAhUOZY+ohqI1246DpKEG4gowKZuLuokSpNWQ==
+  dependencies:
+    "@babel/runtime" "^7.17.9"
+    "@babel/runtime-corejs3" "^7.17.9"
+    "@commercetools-test-data/channel" "8.1.1"
+    "@commercetools-test-data/commons" "8.1.1"
+    "@commercetools-test-data/core" "8.1.1"
+    "@commercetools-test-data/product-selection" "8.1.1"
+    "@commercetools-test-data/utils" "8.1.1"
+    "@commercetools/platform-sdk" "^7.0.0"
+    "@faker-js/faker" "^8.0.0"
+
+"@commercetools-test-data/tax-category@8.1.1":
+  version "8.1.1"
+  resolved "https://registry.yarnpkg.com/@commercetools-test-data/tax-category/-/tax-category-8.1.1.tgz#e38ed9d650c3a8f268920d6d8253e5b8ee71c421"
+  integrity sha512-Pd5zy+BfRXLrIvwCWbMbFVS0cQbnzdwyEIbeUuMpv06wRWB0QEKXYKUNBwvbgwKo7dKNUGHSAo5HNe/cefZ8xQ==
+  dependencies:
+    "@babel/runtime" "^7.17.9"
+    "@babel/runtime-corejs3" "^7.17.9"
+    "@commercetools-test-data/commons" "8.1.1"
+    "@commercetools-test-data/core" "8.1.1"
+    "@commercetools-test-data/utils" "8.1.1"
+    "@commercetools/platform-sdk" "^7.0.0"
+    "@faker-js/faker" "^8.0.0"
+
+"@commercetools-test-data/utils@5.11.2":
+  version "5.11.2"
+  resolved "https://registry.yarnpkg.com/@commercetools-test-data/utils/-/utils-5.11.2.tgz#d5486461e1f1301100d6134cac662003243fd3ae"
+  integrity sha512-7CU08wvYiQJ+tltvnEDunX/QtVgHimnMtNmwXBicL6/7OsiN/QHtW3pIuN8Sb/OQva6zUPLgOQe/6UbVHB+WpA==
+  dependencies:
+    "@babel/runtime" "^7.17.9"
+    "@babel/runtime-corejs3" "^7.17.9"
+    "@faker-js/faker" "^8.0.0"
+
 "@commercetools-test-data/utils@7.4.0":
   version "7.4.0"
   resolved "https://registry.yarnpkg.com/@commercetools-test-data/utils/-/utils-7.4.0.tgz#caac6413045669f606ce1d01adef1939ce6fbb20"
@@ -2002,6 +2322,28 @@
   dependencies:
     "@babel/runtime" "^7.17.9"
     "@babel/runtime-corejs3" "^7.17.9"
+    "@faker-js/faker" "^8.0.0"
+
+"@commercetools-test-data/utils@8.1.1":
+  version "8.1.1"
+  resolved "https://registry.yarnpkg.com/@commercetools-test-data/utils/-/utils-8.1.1.tgz#03dc16b00095065a773a71198582754100013b27"
+  integrity sha512-silZYmg7KhrHZ/+N+wU2D7/Tt1diL79M8Llfs7UeLNMIvUBRooz7KGmSrqjVWAajFAs1I3R0SSKQN41smV/uUw==
+  dependencies:
+    "@babel/runtime" "^7.17.9"
+    "@babel/runtime-corejs3" "^7.17.9"
+    "@faker-js/faker" "^8.0.0"
+
+"@commercetools-test-data/zone@8.1.1":
+  version "8.1.1"
+  resolved "https://registry.yarnpkg.com/@commercetools-test-data/zone/-/zone-8.1.1.tgz#4dd283b272ba9ff2d8eab12826752f8b7c7f33b6"
+  integrity sha512-HofDzCtYRg1hATclTbbPq6TwsnbihbTYoDQZ6Z8ZihsQNQYbHI37jTpKj76qQjJ4YquCJ2Nzdcyo22JD/P2AEw==
+  dependencies:
+    "@babel/runtime" "^7.17.9"
+    "@babel/runtime-corejs3" "^7.17.9"
+    "@commercetools-test-data/commons" "8.1.1"
+    "@commercetools-test-data/core" "8.1.1"
+    "@commercetools-test-data/utils" "8.1.1"
+    "@commercetools/platform-sdk" "^7.0.0"
     "@faker-js/faker" "^8.0.0"
 
 "@commercetools-uikit/accessible-button@19.1.0", "@commercetools-uikit/accessible-button@^19.0.0":
@@ -2667,6 +3009,16 @@
   resolved "https://registry.yarnpkg.com/@commercetools/http-user-agent/-/http-user-agent-3.0.0.tgz#1bf8573f11f7a9e9688e3460425d9371c4b23c24"
   integrity sha512-kHlVST/Ax8GFpG9vpcUR5wKBGBoY2tZDA87kSC3nxhgk2+szZfv7MMMaAt0EIz2thpyO7oJv9NyPY/3XrrNIXQ==
 
+"@commercetools/platform-sdk@^4.11.0":
+  version "4.11.0"
+  resolved "https://registry.yarnpkg.com/@commercetools/platform-sdk/-/platform-sdk-4.11.0.tgz#501310f8143376939ee31c9b15b9c5db9c5bdf41"
+  integrity sha512-ftcq6mCxzpIG9wmGpTED6KQCApk4nyURh81J3PRP3d48oCLOrkZSyzDDfvflGoVZQeIcox+YdtyqZoryFrRtmQ==
+  dependencies:
+    "@commercetools/sdk-client-v2" "^2.1.6"
+    "@commercetools/sdk-middleware-auth" "^7.0.0"
+    "@commercetools/sdk-middleware-http" "^7.0.0"
+    "@commercetools/sdk-middleware-logger" "^3.0.0"
+
 "@commercetools/platform-sdk@^7.0.0":
   version "7.7.0"
   resolved "https://registry.yarnpkg.com/@commercetools/platform-sdk/-/platform-sdk-7.7.0.tgz#cb29b5a337e78f24ddd81dc9ba36bcbf0cb914bc"
@@ -2677,6 +3029,14 @@
     "@commercetools/sdk-middleware-http" "^7.0.0"
     "@commercetools/sdk-middleware-logger" "^3.0.0"
     "@commercetools/ts-client" "^1.2.0"
+
+"@commercetools/sdk-client-v2@^2.1.6":
+  version "2.5.0"
+  resolved "https://registry.yarnpkg.com/@commercetools/sdk-client-v2/-/sdk-client-v2-2.5.0.tgz#3fe33f733d059472896f4fd0820cf899a30cd150"
+  integrity sha512-v1y++O6yllG+IRTYm9jPE8s667+GapnysyGIf8NJDZbVwhvcanixZL4d20imXjCpOr4u1iZrgRftc90mgYqblw==
+  dependencies:
+    buffer "^6.0.3"
+    node-fetch "^2.6.1"
 
 "@commercetools/sdk-client-v2@^2.4.1":
   version "2.4.1"
@@ -5061,6 +5421,11 @@
   version "4.17.0"
   resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.17.0.tgz#d774355e41f372d5350a4d0714abb48194a489c3"
   integrity sha512-t7dhREVv6dbNj0q17X12j7yDG4bD/DHYX7o5/DbDxobP0HnGPgpRz2Ej77aL7TZT3DSw13fqUTj8J4mMnqa7WA==
+
+"@types/lodash@^4.17.0":
+  version "4.17.1"
+  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.17.1.tgz#0fabfcf2f2127ef73b119d98452bd317c4a17eb8"
+  integrity sha512-X+2qazGS3jxLAIz5JDXDzglAF3KpijdhFxlf/V1+hEsOUc+HnWi81L/uv/EvGuV90WY+7mPGFCUDGfQC3Gj95Q==
 
 "@types/mime@^1":
   version "1.3.5"
@@ -11064,10 +11429,10 @@ nullthrows@^1.1.1:
   resolved "https://registry.yarnpkg.com/nullthrows/-/nullthrows-1.1.1.tgz#7818258843856ae971eae4208ad7d7eb19a431b1"
   integrity sha512-2vPPEi+Z7WqML2jZYddDIfy5Dqb0r2fze2zTxNNknZaFpVHU3mFB3R+DWeJWGVx0ecvttSGlJTI+WG+8Z4cDWw==
 
-nwsapi@^2.2.2, nwsapi@^2.2.4:
-  version "2.2.9"
-  resolved "https://registry.yarnpkg.com/nwsapi/-/nwsapi-2.2.9.tgz#7f3303218372db2e9f27c27766bcfc59ae7e61c6"
-  integrity sha512-2f3F0SEEer8bBu0dsNCFF50N0cTThV1nWFYcEYFZttdW0lDAoybv9cQoK7X7/68Z89S7FoRrVjP1LPX4XRf9vg==
+nwsapi@2.2.7, nwsapi@^2.2.2, nwsapi@^2.2.4:
+  version "2.2.7"
+  resolved "https://registry.yarnpkg.com/nwsapi/-/nwsapi-2.2.7.tgz#738e0707d3128cb750dddcfe90e4610482df0f30"
+  integrity sha512-ub5E4+FBPKwAZx0UwIQOjYWGHTEq5sPqHQNRN8Z9e4A7u3Tj1weLJsL59yH9vmvqEtBHaOmT6cYQKIZOxp35FQ==
 
 object-assign@^4.1.0, object-assign@^4.1.1:
   version "4.1.1"

@@ -2,6 +2,7 @@ import type { ReactNode } from 'react';
 import { Switch, Route, useRouteMatch } from 'react-router-dom';
 import Spacings from '@commercetools-uikit/spacings';
 import Channels from './components/channels';
+import Carts from './components/carts';
 import Welcome from './components/welcome';
 
 type ApplicationRoutesProps = {
@@ -26,6 +27,9 @@ const ApplicationRoutes = (_props: ApplicationRoutesProps) => {
       <Switch>
         <Route path={`${match.path}/channels`}>
           <Channels linkToWelcome={match.url} />
+        </Route>
+        <Route path={`${match.path}/carts`}>
+          <Carts linkToWelcome={match.url} />
         </Route>
         <Route>
           <Welcome />
