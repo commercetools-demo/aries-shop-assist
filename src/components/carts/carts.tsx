@@ -156,7 +156,10 @@ const Carts = (props: TCartsProps) => {
                 case 'totalLineItemQuantity':
                   return item.totalLineItemQuantity;
                 case 'totalPrice':
-                  return formatMoneyCurrency(item.totalPrice);
+                  return formatMoneyCurrency(
+                    item.totalPrice,
+                    item.locale || 'en-US'
+                  );
                 case 'cartState':
                   return item.cartState;
                 case 'origin':
