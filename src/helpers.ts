@@ -71,14 +71,11 @@ export const convertToActionData = (draft: Partial<TChannel>) => ({
   name: transformLocalizedFieldToLocalizedString(draft.nameAllLocales || []),
 });
 
-export const formatMoneyCurrency = (
-  price: TMoney,
-  locale: string = 'en-US'
-) => {
+export const formatMoneyCurrency = (price: TMoney, locale: string) => {
   return new Intl.NumberFormat(locale, {
     style: 'currency',
     currency: price.currencyCode || 'EUR',
     maximumFractionDigits: price.fractionDigits || 0,
     minimumFractionDigits: price.fractionDigits || 0,
-  }).format((price.centAmount || 0) / 100);
+  }).format((price.centAmount || 0) / Math.pow(10, price.fractionDigits || 1));
 };

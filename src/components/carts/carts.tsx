@@ -4,13 +4,13 @@ import {
   useHistory,
   useRouteMatch,
 } from 'react-router-dom';
+import { useApplicationContext } from '@commercetools-frontend/application-shell-connectors';
 import { NO_VALUE_FALLBACK } from '@commercetools-frontend/constants';
 import {
   usePaginationState,
   useDataTableSortingState,
 } from '@commercetools-uikit/hooks';
 import { BackIcon } from '@commercetools-uikit/icons';
-import Constraints from '@commercetools-uikit/constraints';
 import FlatButton from '@commercetools-uikit/flat-button';
 import LoadingSpinner from '@commercetools-uikit/loading-spinner';
 import DataTable from '@commercetools-uikit/data-table';
@@ -18,6 +18,10 @@ import { ContentNotification } from '@commercetools-uikit/notifications';
 import { Pagination } from '@commercetools-uikit/pagination';
 import Spacings from '@commercetools-uikit/spacings';
 import Text from '@commercetools-uikit/text';
+import {
+  formatLocalizedString,
+  transformLocalizedFieldToLocalizedString,
+} from '@commercetools-frontend/l10n';
 import type { TCartQueryResult } from '../../types/generated/ctp';
 import { useCartsFetcher } from '../../hooks/use-carts-connector';
 import { formatMoneyCurrency, getErrorMessage } from '../../helpers';
@@ -32,7 +36,7 @@ const columns = [
     isSortable: true,
   },
   {
-    key: 'customerGroupRef',
+    key: 'customerGroup',
     label: 'Customer group',
     isSortable: true,
   },
@@ -47,7 +51,7 @@ const columns = [
     isSortable: true,
   },
   {
-    key: 'storeRef',
+    key: 'store',
     label: 'Store',
     isSortable: true,
   },
@@ -83,10 +87,10 @@ const Carts = (props: TCartsProps) => {
   const { push } = useHistory();
   const { page, perPage } = usePaginationState();
   const tableSorting = useDataTableSortingState({ key: 'key', order: 'asc' });
-  /* const { dataLocale, projectLanguages } = useApplicationContext((context) => ({
+  const { dataLocale, projectLanguages } = useApplicationContext((context) => ({
     dataLocale: context.dataLocale,
     projectLanguages: context.project?.languages,
-  })); */
+  }));
   const { cartsPaginatedResult, total, error, loading } = useCartsFetcher({
     page,
     perPage,
@@ -129,14 +133,26 @@ const Carts = (props: TCartsProps) => {
                   return item.key;
                 case 'customerEmail':
                   return item.customerEmail;
-                case 'customerGroupRef':
-                  return item.customerGroupRef?.id || NO_VALUE_FALLBACK;
+                case 'customerGroup':
+                  return item.customerGroup?.id || NO_VALUE_FALLBACK;
                 case 'anonymousId':
                   return item.anonymousId;
                 case 'businessUnit':
                   return item.businessUnit?.id || NO_VALUE_FALLBACK;
-                case 'storeRef':
-                  return item.storeRef?.key || NO_VALUE_FALLBACK;
+                case 'store':
+                  return formatLocalizedString(
+                    {
+                      name: transformLocalizedFieldToLocalizedString(
+                        item.store?.nameAllLocales ?? []
+                      ),
+                    },
+                    {
+                      key: 'name',
+                      locale: dataLocale,
+                      fallbackOrder: projectLanguages,
+                      fallback: NO_VALUE_FALLBACK,
+                    }
+                  );
                 case 'totalLineItemQuantity':
                   return item.totalLineItemQuantity;
                 case 'totalPrice':

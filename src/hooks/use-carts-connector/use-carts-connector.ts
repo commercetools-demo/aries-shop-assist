@@ -50,6 +50,4 @@ export const useCartsFetcher: TUseCartsFetcher = ({
     error,
     loading,
   };
-
-
 };
