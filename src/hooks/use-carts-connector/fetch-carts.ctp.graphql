@@ -7,17 +7,22 @@ query FetchCarts($limit: Int!, $offset: Int!, $sort: [String!]) {
       id
       key
       customerEmail
-      customerGroupRef {
+      customerGroup {
         id
       }
       anonymousId
       businessUnit {
         id
       }
-      storeRef {
+      store {
         key
+        nameAllLocales {
+          locale
+          value
+        }
       }
       totalLineItemQuantity
+      locale
       totalPrice {
         currencyCode
         centAmount
