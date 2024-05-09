@@ -22,6 +22,7 @@ query FetchCarts($limit: Int!, $offset: Int!, $sort: [String!]) {
         }
       }
       totalLineItemQuantity
+      locale
       totalPrice {
         currencyCode
         centAmount
