@@ -3,23 +3,12 @@ query FetchCartDetails($cartId: String!) {
     id
     key
     customerEmail
-    customerGroupRef {
-      typeId
-    }
-    anonymousId
-    businessUnit {
-      typeId
-    }
-    storeRef {
-      key
-    }
     totalLineItemQuantity
+    locale
     totalPrice {
       currencyCode
       centAmount
       fractionDigits
     }
-    cartState
-    origin
   }
 }
