@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "private": true,
+  "packageManager": "yarn@1.22.21",
   "scripts": {
     "build": "mc-scripts build",
     "start": "mc-scripts start",
