@@ -30,7 +30,7 @@ const ApplicationRoutes = (_props: ApplicationRoutesProps) => {
         </Route>
         <Route path={`${match.path}/carts`}>
           <Carts linkToWelcome={match.url} />
-        </Route> 
+        </Route>
         <Route>
           <Welcome />
         </Route>

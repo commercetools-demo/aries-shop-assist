@@ -1,14 +1,7 @@
 import { useIntl } from 'react-intl';
-import {
-  Link as RouterLink,
-  useHistory,
-  useParams,
-  useRouteMatch,
-} from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import { useApplicationContext } from '@commercetools-frontend/application-shell-connectors';
 import { NO_VALUE_FALLBACK } from '@commercetools-frontend/constants';
-import { BackIcon } from '@commercetools-uikit/icons';
-import FlatButton from '@commercetools-uikit/flat-button';
 import LoadingSpinner from '@commercetools-uikit/loading-spinner';
 import { ContentNotification } from '@commercetools-uikit/notifications';
 import Spacings from '@commercetools-uikit/spacings';
@@ -23,6 +16,7 @@ import { formatMoneyCurrency, getErrorMessage } from '../../helpers';
 import messages from './messages';
 import Card from '@commercetools-uikit/card';
 import CartLineItem from './cart-line-item';
+import { InfoModalPage } from '@commercetools-frontend/application-components';
 
 type TCartDetailsProps = {
   linkToCarts: string;
@@ -31,10 +25,11 @@ type TCartDetailsProps = {
 const CartDetails = (props: TCartDetailsProps) => {
   const intl = useIntl();
   const params = useParams<{ id: string }>();
+  const { push } = useHistory();
   const { loading, error, cart } = useCartDetailsFetcher(params.id);
   const { dataLocale, projectLanguages } = useApplicationContext((context) => ({
     dataLocale: context.dataLocale,
-    projectLanguages: context.project?.languages,
+    projectLanguages: context.project?.languages ?? [],
   }));
 
   const itemSubtotal: TMoney = {
@@ -57,127 +52,165 @@ const CartDetails = (props: TCartDetailsProps) => {
   }
 
   return (
-    <Spacings.Stack scale="xl">
-      <Spacings.Stack scale="xs">
-        <FlatButton
-          as={RouterLink}
-          to={props.linkToCarts}
-          label={intl.formatMessage(messages.backToCartsList)}
-          icon={<BackIcon />}
-        />
-        <Text.Headline as="h2" intlMessage={messages.cartNameLabel} />
-      </Spacings.Stack>
-
-      {loading && <LoadingSpinner />}
-      {cart && (
-        <Spacings.Stack scale="xs">
-          <Card type="raised" theme="light" insetScale="m">
-            <Spacings.Inline scale="m">
+    <InfoModalPage
+      isOpen={true}
+      title={`${intl.formatMessage(messages.cartKeyLabel)}: ${cart?.id}`}
+      topBarCurrentPathLabel={cart?.id}
+      topBarPreviousPathLabel={intl.formatMessage(messages.backToCartsList)}
+      onClose={() => push(props.linkToCarts)}
+    >
+      <Spacings.Stack scale="xl">
+        {loading && (
+          <Spacings.Stack alignItems="center">
+            <LoadingSpinner />
+          </Spacings.Stack>
+        )}
+        {error && (
+          <ContentNotification type="error">
+            <Text.Body>
+              {intl.formatMessage(messages.cartDetailsErrorMessage)}
+            </Text.Body>
+          </ContentNotification>
+        )}
+        {cart && (
+          <Spacings.Stack scale="xs">
+            <Spacings.Inline scale="l">
               <Spacings.Stack scale="m">
                 {cart &&
                   cart?.lineItems &&
-                  cart.lineItems.map((item, key) => <CartLineItem 
-                    key={`item-${key}`} 
-                    itemName={item?.nameAllLocales && formatLocalizedString(
-                      {
-                        name: transformLocalizedFieldToLocalizedString(
-                          item.nameAllLocales ?? []
-                        ),
-                      },
-                      {
-                        key: 'name',
-                        locale: dataLocale,
-                        fallbackOrder: projectLanguages,
-                        fallback: NO_VALUE_FALLBACK,
+                  cart.lineItems.map((item, key) => (
+                    <CartLineItem
+                      key={`item-${key}`}
+                      itemName={
+                        item?.nameAllLocales &&
+                        formatLocalizedString(
+                          {
+                            name: transformLocalizedFieldToLocalizedString(
+                              item.nameAllLocales ?? []
+                            ),
+                          },
+                          {
+                            key: 'name',
+                            locale: dataLocale,
+                            fallbackOrder: projectLanguages,
+                            fallback: NO_VALUE_FALLBACK,
+                          }
+                        )
                       }
-                    )} 
-                    imageUrl={item?.variant?.images[0]?.url ?? ''} 
-                    sku={item?.variant?.sku ?? NO_VALUE_FALLBACK} 
-                    color={'No Color'} 
-                    size={'One Size'} 
-                    quantity={item.quantity} 
-                    price={item?.price}
-                  />)}
+                      imageUrl={item?.variant?.images[0]?.url ?? ''}
+                      sku={item?.variant?.sku ?? NO_VALUE_FALLBACK}
+                      color={'No Color'}
+                      size={'One Size'}
+                      quantity={item.quantity}
+                      price={
+                        item?.totalPrice ?? {
+                          type: 'centPrecision',
+                          currencyCode: cart?.totalPrice?.currencyCode,
+                          centAmount: 0,
+                          fractionDigits: cart?.totalPrice?.fractionDigits,
+                        }
+                      }
+                    />
+                  ))}
               </Spacings.Stack>
               <Spacings.Stack scale="m">
                 <Card type="raised" theme="light" insetScale="s">
-                  <Text.Headline
-                    as="h3"
-                    intlMessage={messages.cartSummaryLabel}
-                  />
-                  <Text.Wrap>
-                    <Text.Body isBold={true}>Items Subtotal:</Text.Body>
-                    <Text.Body>
-                      {formatMoneyCurrency(itemSubtotal, dataLocale || 'en-US')}
-                    </Text.Body>
-                  </Text.Wrap>
-                  <Text.Wrap>
-                    <Text.Body isBold={true}>Discounts:</Text.Body>
-                    <Text.Body>
-                      {formatMoneyCurrency(itemSubtotal, dataLocale || 'en-US')}
-                    </Text.Body>
-                  </Text.Wrap>
-                  <Text.Wrap>
-                    <Text.Body isBold={true}>Shipping:</Text.Body>
-                    <Text.Body>
-                      {formatMoneyCurrency(
-                        cart?.shippingInfo?.price ?? {
-                          type: 'centPrecision',
-                          centAmount: 0,
-                          currencyCode: cart?.totalPrice?.currencyCode,
-                          fractionDigits: cart?.totalPrice?.fractionDigits,
-                        },
-                        dataLocale || 'en-US'
-                      )}
-                    </Text.Body>
-                  </Text.Wrap>
-                  <Text.Wrap>
-                    <Text.Body isBold={true}>Total:</Text.Body>
-                    <Text.Body>
-                      {formatMoneyCurrency(
-                        cart?.totalPrice,
-                        dataLocale || 'en-US'
-                      )}
-                    </Text.Body>
-                  </Text.Wrap>
+                  <Spacings.Stack scale="m">
+                    <Text.Headline
+                      as="h2"
+                      intlMessage={messages.cartSummaryLabel}
+                    />
+                    <Spacings.Stack scale="xs">
+                      <Spacings.Inline scale="s">
+                        <Text.Body isBold={true}>Items Subtotal:</Text.Body>
+                        <Text.Body>
+                          {formatMoneyCurrency(
+                            itemSubtotal,
+                            dataLocale || projectLanguages[0]
+                          )}
+                        </Text.Body>
+                      </Spacings.Inline>
+                      <Spacings.Inline scale="s">
+                        <Text.Body isBold={true}>Discounts:</Text.Body>
+                        <Text.Body>
+                          {formatMoneyCurrency(
+                            {
+                              type: 'centPrecision',
+                              currencyCode: cart?.totalPrice?.currencyCode,
+                              centAmount: 0,
+                              fractionDigits: cart?.totalPrice?.fractionDigits,
+                            },
+                            dataLocale || projectLanguages[0]
+                          )}
+                        </Text.Body>
+                      </Spacings.Inline>
+                      <Spacings.Inline scale="s">
+                        <Text.Body isBold={true}>Shipping:</Text.Body>
+                        <Text.Body>
+                          {formatMoneyCurrency(
+                            cart?.shippingInfo?.price ?? {
+                              type: 'centPrecision',
+                              centAmount: 0,
+                              currencyCode: cart?.totalPrice?.currencyCode,
+                              fractionDigits: cart?.totalPrice?.fractionDigits,
+                            },
+                            dataLocale || projectLanguages[0]
+                          )}
+                        </Text.Body>
+                      </Spacings.Inline>
+                      <Spacings.Inline scale="s">
+                        <Text.Body isBold={true}>Total:</Text.Body>
+                        <Text.Body>
+                          {formatMoneyCurrency(
+                            cart?.totalPrice,
+                            dataLocale || projectLanguages[0]
+                          )}
+                        </Text.Body>
+                      </Spacings.Inline>
+                    </Spacings.Stack>
+                  </Spacings.Stack>
                 </Card>
                 <Card type="raised" theme="light" insetScale="s">
-                  <Text.Headline
-                    as="h3"
-                    intlMessage={messages.cartShippingLabel}
-                  />
-                  <Text.Caption>
-                    {cart?.shippingInfo?.shippingMethodName ??
-                      NO_VALUE_FALLBACK}
-                  </Text.Caption>
-                  <Text.Wrap>
-                    <Text.Body>
-                      {cart?.customer?.salutation +
-                        ' ' +
-                        cart?.customer?.firstName +
-                        ' ' +
-                        cart?.customer?.lastName}
-                    </Text.Body>
-                    <Text.Body>
-                      {cart?.shippingAddress?.streetNumber +
-                        ' ' +
-                        cart?.shippingAddress?.streetName}
-                    </Text.Body>
-                    <Text.Body>
-                      {cart?.shippingAddress?.city +
-                        ', ' +
-                        cart?.shippingAddress?.state +
-                        ' ' +
-                        cart?.shippingAddress?.postalCode}
-                    </Text.Body>
-                  </Text.Wrap>
+                  <Spacings.Stack scale="l">
+                    <Spacings.Stack scale="xs">
+                      <Text.Headline
+                        as="h2"
+                        intlMessage={messages.cartShippingLabel}
+                      />
+                      <Text.Subheadline as="h4">
+                        {cart?.shippingInfo?.shippingMethodName ??
+                          NO_VALUE_FALLBACK}
+                      </Text.Subheadline>
+                    </Spacings.Stack>
+                    <Text.Wrap>
+                      <Text.Body>
+                        {cart?.customer?.salutation +
+                          '. ' +
+                          cart?.shippingAddress?.firstName +
+                          ' ' +
+                          cart?.shippingAddress?.lastName}
+                      </Text.Body>
+                      <Text.Body>
+                        {cart?.shippingAddress?.streetNumber +
+                          ' ' +
+                          cart?.shippingAddress?.streetName}
+                      </Text.Body>
+                      <Text.Body>
+                        {cart?.shippingAddress?.city +
+                          ', ' +
+                          cart?.shippingAddress?.state +
+                          ' ' +
+                          cart?.shippingAddress?.postalCode}
+                      </Text.Body>
+                    </Text.Wrap>
+                  </Spacings.Stack>
                 </Card>
               </Spacings.Stack>
             </Spacings.Inline>
-          </Card>
-        </Spacings.Stack>
-      )}
-    </Spacings.Stack>
+          </Spacings.Stack>
+        )}
+      </Spacings.Stack>
+    </InfoModalPage>
   );
 };
 CartDetails.displayName = 'Cart Details';

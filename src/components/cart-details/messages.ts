@@ -3,15 +3,11 @@ import { defineMessages } from 'react-intl';
 export default defineMessages({
   backToCartsList: {
     id: 'CartDetails.backToCartsList',
-    defaultMessage: 'Back to carts list',
+    defaultMessage: 'Back to Carts List',
   },
   cartKeyLabel: {
-    id: 'CartDetails.cartKeyLabel',
-    defaultMessage: 'Cart key',
-  },
-  cartNameLabel: {
-    id: 'CartDetails.cartNameLabel',
-    defaultMessage: 'Cart name',
+    id: 'CartDetails.cartIdLabel',
+    defaultMessage: 'Cart ID',
   },
   cartSummaryLabel: {
     id: 'CartDetails.cartSummaryLabel',

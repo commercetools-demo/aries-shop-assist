@@ -4,19 +4,20 @@ query FetchCartDetails($cartId: String!) {
     key
     locale
     shippingAddress {
-      firstName
-      lastName
       streetName
       streetNumber
       postalCode
       city
+      state
       country
+      firstName
+      lastName
+    }
+    customer {
+      salutation
     }
     shippingInfo {
-      shippingMethodName {
-        locale
-        value
-      }
+      shippingMethodName
       price {
         currencyCode
         centAmount

@@ -1,6 +1,5 @@
 import { useIntl } from 'react-intl';
 import {
-  Route,
   Link as RouterLink,
   Switch,
   useHistory,
@@ -93,7 +92,7 @@ const Carts = (props: TCartsProps) => {
   const tableSorting = useDataTableSortingState({ key: 'key', order: 'asc' });
   const { dataLocale, projectLanguages } = useApplicationContext((context) => ({
     dataLocale: context.dataLocale,
-    projectLanguages: context.project?.languages,
+    projectLanguages: context.project?.languages ?? [],
   }));
   const { cartsPaginatedResult, total, error, loading } = useCartsFetcher({
     page,
@@ -162,7 +161,7 @@ const Carts = (props: TCartsProps) => {
                 case 'totalPrice':
                   return formatMoneyCurrency(
                     item.totalPrice,
-                    item.locale || 'en-US'
+                    item.locale || projectLanguages[0]
                   );
                 case 'cartState':
                   return item.cartState;
@@ -185,9 +184,9 @@ const Carts = (props: TCartsProps) => {
             totalItems={total || 0}
           />
           <Switch>
-            <Route path={`${match.url}/:id`}>
+            <SuspendedRoute path={`${match.url}/:id`}>
               <CartDetails linkToCarts={match.url} />
-            </Route>
+            </SuspendedRoute>
           </Switch>
         </Spacings.Stack>
       ) : null}

@@ -47,12 +47,12 @@ export const useCartsFetcher: TUseCartsFetcher = ({
     },
   });
 
-   return {
+  return {
     cartsPaginatedResult: data?.carts?.results,
     total: data?.carts?.total,
     error,
     loading,
-  }
+  };
 };
 
 type TUseCartDetailsFetcher = (cartId: string) => {
@@ -61,9 +61,7 @@ type TUseCartDetailsFetcher = (cartId: string) => {
   loading: boolean;
 };
 
-export const useCartDetailsFetcher: TUseCartDetailsFetcher = (
-  cartId
-) => {
+export const useCartDetailsFetcher: TUseCartDetailsFetcher = (cartId) => {
   const { data, error, loading } = useMcQuery<
     TFetchCartDetailsQuery,
     TFetchCartDetailsQueryVariables
