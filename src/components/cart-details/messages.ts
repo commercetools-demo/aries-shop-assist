@@ -13,6 +13,14 @@ export default defineMessages({
     id: 'CartDetails.cartNameLabel',
     defaultMessage: 'Cart name',
   },
+  cartSummaryLabel: {
+    id: 'CartDetails.cartSummaryLabel',
+    defaultMessage: 'Summary',
+  },
+  cartShippingLabel: {
+    id: 'CartDetails.cartShippingLabel',
+    defaultMessage: 'Shipping',
+  },
   cartDetailsErrorMessage: {
     id: 'CartDetails.errorMessage',
     defaultMessage:

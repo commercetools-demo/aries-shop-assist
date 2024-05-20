@@ -2,13 +2,51 @@ query FetchCartDetails($cartId: String!) {
   cart(id: $cartId) {
     id
     key
-    customerEmail
-    totalLineItemQuantity
     locale
+    shippingAddress {
+      firstName
+      lastName
+      streetName
+      streetNumber
+      postalCode
+      city
+      country
+    }
+    shippingInfo {
+      shippingMethodName {
+        locale
+        value
+      }
+      price {
+        currencyCode
+        centAmount
+        fractionDigits
+      }
+    }
     totalPrice {
       currencyCode
       centAmount
       fractionDigits
+    }
+    lineItems {
+      id
+      nameAllLocales {
+        locale
+        value
+      }
+      quantity
+      totalPrice {
+        currencyCode
+        centAmount
+        fractionDigits
+      }
+      variant {
+        id
+        sku
+        images {
+          url
+        }
+      }
     }
   }
 }

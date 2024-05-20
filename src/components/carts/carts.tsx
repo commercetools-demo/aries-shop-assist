@@ -1,6 +1,8 @@
 import { useIntl } from 'react-intl';
 import {
+  Route,
   Link as RouterLink,
+  Switch,
   useHistory,
   useRouteMatch,
 } from 'react-router-dom';
@@ -26,6 +28,8 @@ import type { TCartQueryResult } from '../../types/generated/ctp';
 import { useCartsFetcher } from '../../hooks/use-carts-connector';
 import { formatMoneyCurrency, getErrorMessage } from '../../helpers';
 import messages from './messages';
+import { SuspendedRoute } from '@commercetools-frontend/application-shell';
+import CartDetails from '../cart-details';
 
 const columns = [
   { key: 'id', label: 'ID', isSortable: true },
@@ -38,7 +42,7 @@ const columns = [
   {
     key: 'customerGroup',
     label: 'Customer group',
-    isSortable: true,
+    isSortable: false,
   },
   {
     key: 'anonymousId',
@@ -53,17 +57,17 @@ const columns = [
   {
     key: 'store',
     label: 'Store',
-    isSortable: true,
+    isSortable: false,
   },
   {
     key: 'totalLineItemQuantity',
     label: 'Total line item quantity',
-    isSortable: true,
+    isSortable: false,
   },
   {
     key: 'totalPrice',
     label: 'Total price',
-    isSortable: true,
+    isSortable: false,
   },
   {
     key: 'cartState',
@@ -180,6 +184,11 @@ const Carts = (props: TCartsProps) => {
             onPerPageChange={perPage.onChange}
             totalItems={total || 0}
           />
+          <Switch>
+            <Route path={`${match.url}/:id`}>
+              <CartDetails linkToCarts={match.url} />
+            </Route>
+          </Switch>
         </Spacings.Stack>
       ) : null}
     </Spacings.Stack>
