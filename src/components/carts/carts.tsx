@@ -103,7 +103,7 @@ const Carts = (props: TCartsProps) => {
   if (error) {
     return (
       <ContentNotification type="error">
-        <Text.Body>{getErrorMessage(error)}</Text.Body>
+        <Text.Body tone="negative">{getErrorMessage(error)}</Text.Body>
       </ContentNotification>
     );
   }

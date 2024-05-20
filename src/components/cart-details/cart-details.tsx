@@ -17,6 +17,7 @@ import messages from './messages';
 import Card from '@commercetools-uikit/card';
 import CartLineItem from './cart-line-item';
 import { InfoModalPage } from '@commercetools-frontend/application-components';
+import Grid from '@commercetools-uikit/grid';
 
 type TCartDetailsProps = {
   linkToCarts: string;
@@ -46,7 +47,7 @@ const CartDetails = (props: TCartDetailsProps) => {
   if (error) {
     return (
       <ContentNotification type="error">
-        <Text.Body>{getErrorMessage(error)}</Text.Body>
+        <Text.Body tone="negative">{getErrorMessage(error)}</Text.Body>
       </ContentNotification>
     );
   }
@@ -73,8 +74,13 @@ const CartDetails = (props: TCartDetailsProps) => {
           </ContentNotification>
         )}
         {cart && (
-          <Spacings.Stack scale="xs">
-            <Spacings.Inline scale="l">
+          <Grid
+            gridGap="20px"
+            gridRowGap="20px"
+            gridAutoFlow="row"
+            gridTemplateColumns="10fr 4fr"
+          >
+            <Grid.Item>
               <Spacings.Stack scale="m">
                 {cart &&
                   cart?.lineItems &&
@@ -113,6 +119,8 @@ const CartDetails = (props: TCartDetailsProps) => {
                     />
                   ))}
               </Spacings.Stack>
+            </Grid.Item>
+            <Grid.Item>
               <Spacings.Stack scale="m">
                 <Card type="raised" theme="light" insetScale="s">
                   <Spacings.Stack scale="m">
@@ -206,8 +214,8 @@ const CartDetails = (props: TCartDetailsProps) => {
                   </Spacings.Stack>
                 </Card>
               </Spacings.Stack>
-            </Spacings.Inline>
-          </Spacings.Stack>
+            </Grid.Item>
+          </Grid>
         )}
       </Spacings.Stack>
     </InfoModalPage>

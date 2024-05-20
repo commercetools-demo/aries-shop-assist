@@ -43,7 +43,7 @@ const CartLineItem = ({
               <img
                 src={imageUrl}
                 alt={`${itemName}-${color || 'nocolor'}-${size || 'onesize'}`}
-                width="200"
+                width="206"
               />
             </Spacings.Stack>
             <Spacings.Stack scale="m">
@@ -76,7 +76,7 @@ const CartLineItem = ({
         <Grid.Item alignSelf="end">
           <Spacings.Stack scale="xs">
             {discountedPrice && (
-              <Text.Body isStrikethrough={true}>
+              <Text.Body isStrikethrough={true} tone="negative">
                 {formatMoneyCurrency(
                   discountedPrice,
                   dataLocale || projectLanguages[0]
