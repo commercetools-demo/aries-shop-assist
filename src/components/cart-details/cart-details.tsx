@@ -56,6 +56,8 @@ const CartDetails = (props: TCartDetailsProps) => {
     );
   }
 
+  // TO DO: Fix how to get from commerce-tools api the discounts data
+
   return (
     <InfoModalPage
       isOpen={true}
