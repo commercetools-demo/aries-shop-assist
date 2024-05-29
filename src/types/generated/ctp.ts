@@ -3060,6 +3060,13 @@ export type TDiscountCodeUpdateAction = {
   setValidUntil?: InputMaybe<TSetDiscountCodeValidUntil>;
 };
 
+export type TCartDiscountReference = {
+  __typename?: 'CartDiscountReference';
+  id: Scalars['String'];
+  tyepeId: 'cart-discount';
+  obj: TCartDiscount;
+};
+
 export type TDiscountedLineItemPortion = {
   __typename?: 'DiscountedLineItemPortion';
   discount?: Maybe<TCartDiscount>;

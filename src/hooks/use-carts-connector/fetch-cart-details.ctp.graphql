@@ -24,6 +24,13 @@ query FetchCartDetails($cartId: String!) {
         fractionDigits
       }
     }
+    taxedPrice {
+      totalTax {
+        currencyCode
+        centAmount
+        fractionDigits
+      }
+    }
     totalPrice {
       currencyCode
       centAmount
@@ -42,7 +49,7 @@ query FetchCartDetails($cartId: String!) {
         fractionDigits
       }
       variant {
-        id
+        key
         sku
         images {
           url

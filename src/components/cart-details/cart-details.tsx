@@ -18,6 +18,7 @@ import Card from '@commercetools-uikit/card';
 import CartLineItem from './cart-line-item';
 import { InfoModalPage } from '@commercetools-frontend/application-components';
 import Grid from '@commercetools-uikit/grid';
+import { useMemo } from 'react';
 
 type TCartDetailsProps = {
   linkToCarts: string;
@@ -28,6 +29,9 @@ const CartDetails = (props: TCartDetailsProps) => {
   const params = useParams<{ id: string }>();
   const { push } = useHistory();
   const { loading, error, cart } = useCartDetailsFetcher(params.id);
+
+  const items = useMemo(() => (cart && cart.lineItems) || [], [cart]);
+
   const { dataLocale, projectLanguages } = useApplicationContext((context) => ({
     dataLocale: context.dataLocale,
     projectLanguages: context.project?.languages ?? [],
@@ -82,42 +86,38 @@ const CartDetails = (props: TCartDetailsProps) => {
           >
             <Grid.Item>
               <Spacings.Stack scale="m">
-                {cart &&
-                  cart?.lineItems &&
-                  cart.lineItems.map((item, key) => (
-                    <CartLineItem
-                      key={`item-${key}`}
-                      itemName={
-                        item?.nameAllLocales &&
-                        formatLocalizedString(
-                          {
-                            name: transformLocalizedFieldToLocalizedString(
-                              item.nameAllLocales ?? []
-                            ),
-                          },
-                          {
-                            key: 'name',
-                            locale: dataLocale,
-                            fallbackOrder: projectLanguages,
-                            fallback: NO_VALUE_FALLBACK,
-                          }
-                        )
-                      }
-                      imageUrl={item?.variant?.images[0]?.url ?? ''}
-                      sku={item?.variant?.sku ?? NO_VALUE_FALLBACK}
-                      color={'No Color'}
-                      size={'One Size'}
-                      quantity={item.quantity}
-                      price={
-                        item?.totalPrice ?? {
-                          type: 'centPrecision',
-                          currencyCode: cart?.totalPrice?.currencyCode,
-                          centAmount: 0,
-                          fractionDigits: cart?.totalPrice?.fractionDigits,
+                {items?.map((item, idx) => (
+                  <CartLineItem
+                    key={`idx-${item?.id}-${idx}`}
+                    itemName={
+                      item?.nameAllLocales &&
+                      formatLocalizedString(
+                        {
+                          name: transformLocalizedFieldToLocalizedString(
+                            item.nameAllLocales ?? []
+                          ),
+                        },
+                        {
+                          key: 'name',
+                          locale: dataLocale,
+                          fallbackOrder: projectLanguages,
+                          fallback: NO_VALUE_FALLBACK,
                         }
+                      )
+                    }
+                    imageUrl={item?.variant?.images[0]?.url ?? ''}
+                    sku={item?.variant?.key ?? ''}
+                    quantity={item.quantity}
+                    price={
+                      item?.totalPrice ?? {
+                        type: 'centPrecision',
+                        currencyCode: cart?.totalPrice?.currencyCode,
+                        centAmount: 0,
+                        fractionDigits: cart?.totalPrice?.fractionDigits,
                       }
-                    />
-                  ))}
+                    }
+                  />
+                ))}
               </Spacings.Stack>
             </Grid.Item>
             <Grid.Item>
@@ -138,6 +138,17 @@ const CartDetails = (props: TCartDetailsProps) => {
                           )}
                         </Text.Body>
                       </Spacings.Inline>
+                      {cart?.taxedPrice?.totalTax && (
+                        <Spacings.Inline scale="s">
+                          <Text.Body isBold={true}>Total Tax:</Text.Body>
+                          <Text.Body>
+                            {formatMoneyCurrency(
+                              cart?.taxedPrice?.totalTax,
+                              dataLocale || projectLanguages[0]
+                            )}
+                          </Text.Body>
+                        </Spacings.Inline>
+                      )}
                       <Spacings.Inline scale="s">
                         <Text.Body isBold={true}>Discounts:</Text.Body>
                         <Text.Body>
