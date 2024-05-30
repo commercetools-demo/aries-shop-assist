@@ -1,6 +1,7 @@
 import { useIntl } from 'react-intl';
 import {
   Link as RouterLink,
+  Switch,
   useHistory,
   useRouteMatch,
 } from 'react-router-dom';
@@ -26,6 +27,8 @@ import type { TCartQueryResult } from '../../types/generated/ctp';
 import { useCartsFetcher } from '../../hooks/use-carts-connector';
 import { formatMoneyCurrency, getErrorMessage } from '../../helpers';
 import messages from './messages';
+import { SuspendedRoute } from '@commercetools-frontend/application-shell';
+import CartDetails from '../cart-details';
 
 const columns = [
   { key: 'id', label: 'ID', isSortable: true },
@@ -38,7 +41,7 @@ const columns = [
   {
     key: 'customerGroup',
     label: 'Customer group',
-    isSortable: true,
+    isSortable: false,
   },
   {
     key: 'anonymousId',
@@ -53,17 +56,17 @@ const columns = [
   {
     key: 'store',
     label: 'Store',
-    isSortable: true,
+    isSortable: false,
   },
   {
     key: 'totalLineItemQuantity',
     label: 'Total line item quantity',
-    isSortable: true,
+    isSortable: false,
   },
   {
     key: 'totalPrice',
     label: 'Total price',
-    isSortable: true,
+    isSortable: false,
   },
   {
     key: 'cartState',
@@ -89,7 +92,7 @@ const Carts = (props: TCartsProps) => {
   const tableSorting = useDataTableSortingState({ key: 'key', order: 'asc' });
   const { dataLocale, projectLanguages } = useApplicationContext((context) => ({
     dataLocale: context.dataLocale,
-    projectLanguages: context.project?.languages,
+    projectLanguages: context.project?.languages ?? [],
   }));
   const { cartsPaginatedResult, total, error, loading } = useCartsFetcher({
     page,
@@ -100,7 +103,7 @@ const Carts = (props: TCartsProps) => {
   if (error) {
     return (
       <ContentNotification type="error">
-        <Text.Body>{getErrorMessage(error)}</Text.Body>
+        <Text.Body tone="negative">{getErrorMessage(error)}</Text.Body>
       </ContentNotification>
     );
   }
@@ -158,7 +161,7 @@ const Carts = (props: TCartsProps) => {
                 case 'totalPrice':
                   return formatMoneyCurrency(
                     item.totalPrice,
-                    item.locale || 'en-US'
+                    item.locale || projectLanguages[0]
                   );
                 case 'cartState':
                   return item.cartState;
@@ -180,6 +183,11 @@ const Carts = (props: TCartsProps) => {
             onPerPageChange={perPage.onChange}
             totalItems={total || 0}
           />
+          <Switch>
+            <SuspendedRoute path={`${match.url}/:id`}>
+              <CartDetails linkToCarts={match.url} />
+            </SuspendedRoute>
+          </Switch>
         </Spacings.Stack>
       ) : null}
     </Spacings.Stack>

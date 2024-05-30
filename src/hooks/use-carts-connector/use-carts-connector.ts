@@ -6,10 +6,13 @@ import { useMcQuery } from '@commercetools-frontend/application-shell';
 import { GRAPHQL_TARGETS } from '@commercetools-frontend/constants';
 import type { TDataTableSortingState } from '@commercetools-uikit/hooks';
 import type {
+  TFetchCartDetailsQuery,
+  TFetchCartDetailsQueryVariables,
   TFetchCartsQuery,
   TFetchCartsQueryVariables,
 } from '../../types/generated/ctp';
 import FetchCartsQuery from './fetch-carts.ctp.graphql';
+import FetchCartDetailsQuery from './fetch-cart-details.ctp.graphql';
 
 type PaginationAndSortingProps = {
   page: { value: number };
@@ -47,6 +50,32 @@ export const useCartsFetcher: TUseCartsFetcher = ({
   return {
     cartsPaginatedResult: data?.carts?.results,
     total: data?.carts?.total,
+    error,
+    loading,
+  };
+};
+
+type TUseCartDetailsFetcher = (cartId: string) => {
+  cart?: TFetchCartDetailsQuery['cart'];
+  error?: ApolloError;
+  loading: boolean;
+};
+
+export const useCartDetailsFetcher: TUseCartDetailsFetcher = (cartId) => {
+  const { data, error, loading } = useMcQuery<
+    TFetchCartDetailsQuery,
+    TFetchCartDetailsQueryVariables
+  >(FetchCartDetailsQuery, {
+    variables: {
+      cartId,
+    },
+    context: {
+      target: GRAPHQL_TARGETS.COMMERCETOOLS_PLATFORM,
+    },
+  });
+
+  return {
+    cart: data?.cart,
     error,
     loading,
   };

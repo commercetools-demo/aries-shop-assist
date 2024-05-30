@@ -32,3 +32,11 @@ declare module '*/fetch-carts.ctp.graphql' {
 
   export default defaultDocument;
 }
+
+declare module '*/fetch-cart-details.ctp.graphql' {
+  import { DocumentNode } from 'graphql';
+  const defaultDocument: DocumentNode;
+  export const FetchCartDetails: DocumentNode;
+
+  export default defaultDocument;
+}

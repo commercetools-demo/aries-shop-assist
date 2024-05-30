@@ -3060,6 +3060,13 @@ export type TDiscountCodeUpdateAction = {
   setValidUntil?: InputMaybe<TSetDiscountCodeValidUntil>;
 };
 
+export type TCartDiscountReference = {
+  __typename?: 'CartDiscountReference';
+  id: Scalars['String'];
+  tyepeId: 'cart-discount';
+  obj: TCartDiscount;
+};
+
 export type TDiscountedLineItemPortion = {
   __typename?: 'DiscountedLineItemPortion';
   discount?: Maybe<TCartDiscount>;
@@ -12547,4 +12554,13 @@ export type TFetchCartsQuery = {
     offset: number;
     results: Array<TCart>;
   };
+};
+
+export type TFetchCartDetailsQueryVariables = Exact<{
+  cartId: Scalars['String'];
+}>;
+
+export type TFetchCartDetailsQuery = {
+  __typename?: 'Query';
+  cart?: TCart | null;
 };

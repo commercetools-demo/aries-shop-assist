@@ -2401,6 +2401,21 @@
     "@types/react-router-dom" "^5.3.3"
     prop-types "15.8.1"
 
+"@commercetools-uikit/card@^19.3.1":
+  version "19.3.1"
+  resolved "https://registry.yarnpkg.com/@commercetools-uikit/card/-/card-19.3.1.tgz#92cc132bc363286a98cc2a43e8ef792603d82384"
+  integrity sha512-tlONnJuSchMIQBl6T6jrGCLc2+KH3808ZcBOPfR72/U/rQThFdba9zD4NV9xXQd1dC5HjINNFcekKRWFXwZA3w==
+  dependencies:
+    "@babel/runtime" "^7.20.13"
+    "@babel/runtime-corejs3" "^7.20.13"
+    "@commercetools-uikit/design-system" "19.3.1"
+    "@commercetools-uikit/spacings-inset" "19.3.1"
+    "@commercetools-uikit/utils" "19.3.1"
+    "@emotion/react" "^11.10.5"
+    "@emotion/styled" "^11.10.5"
+    "@types/react-router-dom" "^5.3.3"
+    prop-types "15.8.1"
+
 "@commercetools-uikit/constraints@19.1.0", "@commercetools-uikit/constraints@^19.0.0":
   version "19.1.0"
   resolved "https://registry.yarnpkg.com/@commercetools-uikit/constraints/-/constraints-19.1.0.tgz#28f0714d4523121f756d9d711f49ff8073b79bd5"
@@ -2441,6 +2456,19 @@
     "@babel/runtime" "^7.20.13"
     "@babel/runtime-corejs3" "^7.20.13"
     "@commercetools-uikit/hooks" "19.1.0"
+    "@emotion/react" "^11.10.5"
+    lodash "4.17.21"
+    prop-types "15.8.1"
+    react "17.0.2"
+
+"@commercetools-uikit/design-system@19.3.1":
+  version "19.3.1"
+  resolved "https://registry.yarnpkg.com/@commercetools-uikit/design-system/-/design-system-19.3.1.tgz#32693695082c05e83b6855fd949be6c19f803f7a"
+  integrity sha512-aPuW1XTWaBpA3BnCgs/cC2IH7CrFZDnmPlGK74+Yn2gSvaXOml5gwwZIqxj1qPFY1ADBt+LLLFmqslnvY0z1xA==
+  dependencies:
+    "@babel/runtime" "^7.20.13"
+    "@babel/runtime-corejs3" "^7.20.13"
+    "@commercetools-uikit/hooks" "19.3.1"
     "@emotion/react" "^11.10.5"
     lodash "4.17.21"
     prop-types "15.8.1"
@@ -2529,6 +2557,18 @@
     "@babel/runtime" "^7.20.13"
     "@babel/runtime-corejs3" "^7.20.13"
     "@commercetools-uikit/utils" "19.1.0"
+    "@types/raf-schd" "^4.0.1"
+    lodash "4.17.21"
+    raf-schd "^4.0.3"
+
+"@commercetools-uikit/hooks@19.3.1":
+  version "19.3.1"
+  resolved "https://registry.yarnpkg.com/@commercetools-uikit/hooks/-/hooks-19.3.1.tgz#ed2990e4748a9f8f0923597c11d4b6ed7949cc69"
+  integrity sha512-dfhkwlJuLHus8yFL+Z5pDaQVw1LN+TKT0dpR2oAKoIy3WpTX7FLhyvET/qIRu84isuc3uLlx7IynssPuDTcr5g==
+  dependencies:
+    "@babel/runtime" "^7.20.13"
+    "@babel/runtime-corejs3" "^7.20.13"
+    "@commercetools-uikit/utils" "19.3.1"
     "@types/raf-schd" "^4.0.1"
     lodash "4.17.21"
     raf-schd "^4.0.3"
@@ -2903,6 +2943,18 @@
     "@emotion/react" "^11.10.5"
     prop-types "15.8.1"
 
+"@commercetools-uikit/spacings-inset@19.3.1":
+  version "19.3.1"
+  resolved "https://registry.yarnpkg.com/@commercetools-uikit/spacings-inset/-/spacings-inset-19.3.1.tgz#1635e3d728c15fb4322f936c37213ec5c6bc711a"
+  integrity sha512-1F3yghHk8fw/RMpFMiXJKfoo4RQYOkd7pUNygDULNqaZAwDIYqpn8xsUjkKlodZLaTVDspuSv9e5nBDUsfxBoA==
+  dependencies:
+    "@babel/runtime" "^7.20.13"
+    "@babel/runtime-corejs3" "^7.20.13"
+    "@commercetools-uikit/design-system" "19.3.1"
+    "@commercetools-uikit/utils" "19.3.1"
+    "@emotion/react" "^11.10.5"
+    prop-types "15.8.1"
+
 "@commercetools-uikit/spacings-stack@19.1.0":
   version "19.1.0"
   resolved "https://registry.yarnpkg.com/@commercetools-uikit/spacings-stack/-/spacings-stack-19.1.0.tgz#aaa18d80b837ca953e3db5cfb3e22307c3a5a1c9"
@@ -2998,6 +3050,15 @@
     "@babel/runtime" "^7.20.13"
     "@babel/runtime-corejs3" "^7.20.13"
     "@emotion/is-prop-valid" "1.2.1"
+
+"@commercetools-uikit/utils@19.3.1":
+  version "19.3.1"
+  resolved "https://registry.yarnpkg.com/@commercetools-uikit/utils/-/utils-19.3.1.tgz#eb34d099286c99f7adc39a7c50e47f364c51832b"
+  integrity sha512-A6XOZNcXB7p5XDn3vaQUshTPqSDRNjFDGHWpzJFqw+9pDwK9U4WVzVAZBGGFvxrOBn7PFLqSMIAueRJxvYKcng==
+  dependencies:
+    "@babel/runtime" "^7.20.13"
+    "@babel/runtime-corejs3" "^7.20.13"
+    "@emotion/is-prop-valid" "1.2.2"
 
 "@commercetools/api-request-builder@6.0.0":
   version "6.0.0"
@@ -3169,7 +3230,7 @@
   dependencies:
     "@emotion/memoize" "^0.8.1"
 
-"@emotion/is-prop-valid@^1.2.2":
+"@emotion/is-prop-valid@1.2.2", "@emotion/is-prop-valid@^1.2.2":
   version "1.2.2"
   resolved "https://registry.yarnpkg.com/@emotion/is-prop-valid/-/is-prop-valid-1.2.2.tgz#d4175076679c6a26faa92b03bb786f9e52612337"
   integrity sha512-uNsoYd37AFmaCdXlg6EYD1KaPOaRWRByMCYzbKUX4+hhMfrxdVSelShywL4JVaAeM/eHUOSprYBQls+/neX3pw==
