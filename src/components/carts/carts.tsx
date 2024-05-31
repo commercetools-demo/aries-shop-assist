@@ -29,6 +29,10 @@ import { formatMoneyCurrency, getErrorMessage } from '../../helpers';
 import messages from './messages';
 import { SuspendedRoute } from '@commercetools-frontend/application-shell';
 import CartDetails from '../cart-details';
+import Grid from '@commercetools-uikit/grid';
+import SelectField, { TCustomEvent } from '@commercetools-uikit/select-field';
+import SearchSelectField from '@commercetools-uikit/search-select-field';
+import { useState } from 'react';
 
 const columns = [
   { key: 'id', label: 'ID', isSortable: true },
@@ -94,11 +98,40 @@ const Carts = (props: TCartsProps) => {
     dataLocale: context.dataLocale,
     projectLanguages: context.project?.languages ?? [],
   }));
+  const [inputValue, setInputValue] = useState('');
+  const [typing, setTyping] = useState(false);
   const { cartsPaginatedResult, total, error, loading } = useCartsFetcher({
     page,
     perPage,
     tableSorting,
+    cartId: inputValue,
   });
+
+  const [isAll, setAll] = useState(true);
+  const [selectedOption, setSelectedOption] = useState('allCarts');
+
+  const options = [
+    { value: 'allCarts', label: 'All Fields' },
+    { value: 'cartId', label: 'Cart ID' },
+  ];
+
+  const handleSearchChange = (event: TCustomEvent) => {
+    const newValue = event?.target?.value as string;
+    setInputValue(newValue);
+    setTyping(false);
+  };
+
+  const handleInputChange = (newValue: string) => {
+    setInputValue(newValue);
+    setTyping(true);
+  };
+
+  const handleSelectChange = (event: TCustomEvent) => {
+    const value = event?.target?.value;
+    setSelectedOption(Array.isArray(value) ? value.join('') : value || '');
+    setAll(event.target.value === 'allCarts');
+    setInputValue(''); // Reset search input when changing the select option
+  };
 
   if (error) {
     return (
@@ -107,6 +140,9 @@ const Carts = (props: TCartsProps) => {
       </ContentNotification>
     );
   }
+
+  const showNoResultsMessage =
+    !loading && inputValue && cartsPaginatedResult?.length === 0 && !typing;
 
   return (
     <Spacings.Stack scale="xl">
@@ -119,77 +155,118 @@ const Carts = (props: TCartsProps) => {
         />
         <Text.Headline as="h2" intlMessage={messages.title} />
       </Spacings.Stack>
+      <Grid gridAutoFlow="row" gridTemplateColumns="4fr 16fr">
+        <Grid.Item>
+          <Spacings.Inline scale="m">
+            <SelectField
+              title=""
+              options={options}
+              placeholder="All Fields"
+              value={selectedOption}
+              onChange={handleSelectChange}
+              horizontalConstraint={6}
+            />
+          </Spacings.Inline>
+        </Grid.Item>
+        <Grid.Item>
+          <Spacings.Inline scale="xl">
+            <SearchSelectField
+              title=""
+              id="searchBar"
+              name="searchBar"
+              backspaceRemovesValue={true}
+              isClearable={true}
+              isDisabled={isAll}
+              placeholder="Search for Carts"
+              cacheOptions={false}
+              onInputChange={(inputValue) => handleInputChange(inputValue)}
+              onChange={() => handleSearchChange}
+              noOptionsMessage={() => null} // Evitar mensaje por defecto
+            />
+          </Spacings.Inline>
+        </Grid.Item>
+      </Grid>
 
       {loading && <LoadingSpinner />}
 
-      {cartsPaginatedResult ? (
-        <Spacings.Stack scale="l">
-          <DataTable<NonNullable<TCartQueryResult['results']>[0]>
-            isCondensed
-            columns={columns}
-            rows={cartsPaginatedResult}
-            itemRenderer={(item, column) => {
-              switch (column.key) {
-                case 'id':
-                  return item.id;
-                case 'key':
-                  return item.key;
-                case 'customerEmail':
-                  return item.customerEmail;
-                case 'customerGroup':
-                  return item.customerGroup?.id || NO_VALUE_FALLBACK;
-                case 'anonymousId':
-                  return item.anonymousId;
-                case 'businessUnit':
-                  return item.businessUnit?.id || NO_VALUE_FALLBACK;
-                case 'store':
-                  return formatLocalizedString(
-                    {
-                      name: transformLocalizedFieldToLocalizedString(
-                        item.store?.nameAllLocales ?? []
-                      ),
-                    },
-                    {
-                      key: 'name',
-                      locale: dataLocale,
-                      fallbackOrder: projectLanguages,
-                      fallback: NO_VALUE_FALLBACK,
-                    }
-                  );
-                case 'totalLineItemQuantity':
-                  return item.totalLineItemQuantity;
-                case 'totalPrice':
-                  return formatMoneyCurrency(
-                    item.totalPrice,
-                    item.locale || projectLanguages[0]
-                  );
-                case 'cartState':
-                  return item.cartState;
-                case 'origin':
-                  return item.origin;
-                default:
-                  return null;
-              }
-            }}
-            sortedBy={tableSorting.value.key}
-            sortDirection={tableSorting.value.order}
-            onSortChange={tableSorting.onChange}
-            onRowClick={(row) => push(`${match.url}/${row.id}`)}
-          />
-          <Pagination
-            page={page.value}
-            onPageChange={page.onChange}
-            perPage={perPage.value}
-            onPerPageChange={perPage.onChange}
-            totalItems={total || 0}
-          />
-          <Switch>
-            <SuspendedRoute path={`${match.url}/:id`}>
-              <CartDetails linkToCarts={match.url} />
-            </SuspendedRoute>
-          </Switch>
-        </Spacings.Stack>
-      ) : null}
+      {showNoResultsMessage ? (
+        <ContentNotification type="warning">
+          <Text.Body tone="primary">
+            No matches found for your search term
+          </Text.Body>
+        </ContentNotification>
+      ) : (
+        cartsPaginatedResult && (
+          <Spacings.Stack scale="l">
+            <DataTable<NonNullable<TCartQueryResult['results']>[0]>
+              isCondensed
+              columns={columns}
+              rows={cartsPaginatedResult}
+              itemRenderer={(item, column) => {
+                switch (column.key) {
+                  case 'id':
+                    return item.id;
+                  case 'key':
+                    return item.key;
+                  case 'customerEmail':
+                    return item.customerEmail;
+                  case 'customerGroup':
+                    return item.customerGroup?.id || NO_VALUE_FALLBACK;
+                  case 'anonymousId':
+                    return item.anonymousId;
+                  case 'businessUnit':
+                    return item.businessUnit?.id || NO_VALUE_FALLBACK;
+                  case 'store':
+                    return formatLocalizedString(
+                      {
+                        name: transformLocalizedFieldToLocalizedString(
+                          item.store?.nameAllLocales ?? []
+                        ),
+                      },
+                      {
+                        key: 'name',
+                        locale: dataLocale,
+                        fallbackOrder: projectLanguages,
+                        fallback: NO_VALUE_FALLBACK,
+                      }
+                    );
+                  case 'totalLineItemQuantity':
+                    return item.totalLineItemQuantity;
+                  case 'totalPrice':
+                    return formatMoneyCurrency(
+                      item.totalPrice,
+                      item.locale || projectLanguages[0]
+                    );
+                  case 'cartState':
+                    return item.cartState;
+                  case 'origin':
+                    return item.origin;
+                  default:
+                    return null;
+                }
+              }}
+              sortedBy={tableSorting.value.key}
+              sortDirection={tableSorting.value.order}
+              onSortChange={tableSorting.onChange}
+              onRowClick={(row) => {
+                push(`${match.url}/${row.id}`);
+              }}
+            />
+            <Pagination
+              page={page.value}
+              onPageChange={page.onChange}
+              perPage={perPage.value}
+              onPerPageChange={perPage.onChange}
+              totalItems={total || 0}
+            />
+            <Switch>
+              <SuspendedRoute path={`${match.url}/:id`}>
+                <CartDetails linkToCarts={match.url} />
+              </SuspendedRoute>
+            </Switch>
+          </Spacings.Stack>
+        )
+      )}
     </Spacings.Stack>
   );
 };
