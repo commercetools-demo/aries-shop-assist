@@ -61,6 +61,7 @@
     "@commercetools-uikit/pagination": "^19.0.0",
     "@commercetools-uikit/search-select-field": "^19.4.0",
     "@commercetools-uikit/select-field": "^19.4.0",
+    "@commercetools-uikit/selectable-search-input": "^19.4.0",
     "@commercetools-uikit/spacings": "^19.0.0",
     "@commercetools-uikit/text": "^19.0.0",
     "@commercetools-uikit/text-field": "^19.0.0",

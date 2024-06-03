@@ -22,24 +22,11 @@ const config = {
   },
   icon: '${path:@commercetools-frontend/assets/application-icons/rocket.svg}',
   mainMenuLink: {
-    defaultLabel: 'Template starter',
+    uriPath: 'carts',
+    defaultLabel: 'Carts',
     labelAllLocales: [],
     permissions: [PERMISSIONS.View],
   },
-  submenuLinks: [
-    {
-      uriPath: 'channels',
-      defaultLabel: 'Channels',
-      labelAllLocales: [],
-      permissions: [PERMISSIONS.View],
-    },
-    {
-      uriPath: 'carts',
-      defaultLabel: 'Carts',
-      labelAllLocales: [],
-      permissions: [PERMISSIONS.View],
-    },
-  ],
 };
 
 export default config;

@@ -1,6 +1,5 @@
 import { useIntl } from 'react-intl';
 import {
-  Link as RouterLink,
   Switch,
   useHistory,
   useRouteMatch,
@@ -11,8 +10,6 @@ import {
   usePaginationState,
   useDataTableSortingState,
 } from '@commercetools-uikit/hooks';
-import { BackIcon } from '@commercetools-uikit/icons';
-import FlatButton from '@commercetools-uikit/flat-button';
 import LoadingSpinner from '@commercetools-uikit/loading-spinner';
 import DataTable from '@commercetools-uikit/data-table';
 import { ContentNotification } from '@commercetools-uikit/notifications';
@@ -29,9 +26,7 @@ import { formatMoneyCurrency, getErrorMessage } from '../../helpers';
 import messages from './messages';
 import { SuspendedRoute } from '@commercetools-frontend/application-shell';
 import CartDetails from '../cart-details';
-import Grid from '@commercetools-uikit/grid';
-import SelectField, { TCustomEvent } from '@commercetools-uikit/select-field';
-import SearchSelectField from '@commercetools-uikit/search-select-field';
+import SelectableSearchInput from '@commercetools-uikit/selectable-search-input';
 import { useState } from 'react';
 
 const columns = [
@@ -106,9 +101,13 @@ const Carts = (props: TCartsProps) => {
     tableSorting,
     cartId: inputValue,
   });
+  const [dropdownValue, setDropdownValue] = useState();
+  const [textInputValue, setTextInputValue] = useState();
 
-  const [isAll, setAll] = useState(true);
-  const [selectedOption, setSelectedOption] = useState('allCarts');
+  const value = {
+    text: textInputValue,
+    option: dropdownValue,
+  };
 
   const options = [
     { value: 'allCarts', label: 'All Fields' },
@@ -147,45 +146,35 @@ const Carts = (props: TCartsProps) => {
   return (
     <Spacings.Stack scale="xl">
       <Spacings.Stack scale="xs">
-        <FlatButton
-          as={RouterLink}
-          to={props.linkToWelcome}
-          label={intl.formatMessage(messages.backToWelcome)}
-          icon={<BackIcon />}
-        />
         <Text.Headline as="h2" intlMessage={messages.title} />
       </Spacings.Stack>
-      <Grid gridAutoFlow="row" gridTemplateColumns="4fr 16fr">
-        <Grid.Item>
-          <Spacings.Inline scale="m">
-            <SelectField
-              title=""
-              options={options}
-              placeholder="All Fields"
-              value={selectedOption}
-              onChange={handleSelectChange}
-              horizontalConstraint={6}
-            />
-          </Spacings.Inline>
-        </Grid.Item>
-        <Grid.Item>
-          <Spacings.Inline scale="xl">
-            <SearchSelectField
-              title=""
-              id="searchBar"
-              name="searchBar"
-              backspaceRemovesValue={true}
-              isClearable={true}
-              isDisabled={isAll}
-              placeholder="Search for Carts"
-              cacheOptions={false}
-              onInputChange={(inputValue) => handleInputChange(inputValue)}
-              onChange={() => handleSearchChange}
-              noOptionsMessage={() => null} // Evitar mensaje por defecto
-            />
-          </Spacings.Inline>
-        </Grid.Item>
-      </Grid>
+      <Spacings.Stack scale="m">
+        <SelectableSearchInput
+          id="searchBar"
+          name='All Fields'
+          value={value}
+          onChange={(event) => {
+            const eventValue = event?.target?.value;
+            const value = Array.isArray(eventValue) ? eventValue.join('') : eventValue || '';
+            if (value?.endsWith('.textInput')) {
+              setTextInputValue(true);
+            }
+            if (value?.endsWith('.dropdown')) {
+              setDropdownValue(true);
+            }
+          }}
+          isClearable={true}
+          showSubmitButton={true}
+          hasError={false}
+          placeholder="Search for Carts"
+          horizontalConstraint={'scale'}
+          menuHorizontalConstraint={5}
+          options={options}
+          onSubmit={(submitValues) => {
+            setInputValue(submitValues);
+          }}
+        />
+      </Spacings.Stack>
 
       {loading && <LoadingSpinner />}
 
