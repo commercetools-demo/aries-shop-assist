@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { Switch, Route, useRouteMatch } from 'react-router-dom';
+import { Switch, Route, useRouteMatch, Redirect } from 'react-router-dom';
 import Spacings from '@commercetools-uikit/spacings';
 import Carts from './components/carts';
 
@@ -24,8 +24,9 @@ const ApplicationRoutes = (_props: ApplicationRoutesProps) => {
     <Spacings.Inset scale="l">
       <Switch>
         <Route path={`${match.path}/carts`}>
-          <Carts linkToWelcome={match.url} />
+          <Carts />
         </Route>
+        <Redirect exact from={`${match.path}`} to={`${match.path}/carts`} />
       </Switch>
     </Spacings.Inset>
   );

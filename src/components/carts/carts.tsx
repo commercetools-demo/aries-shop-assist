@@ -1,9 +1,5 @@
-import { useIntl } from 'react-intl';
-import {
-  Switch,
-  useHistory,
-  useRouteMatch,
-} from 'react-router-dom';
+import { useState } from 'react';
+import { Switch, useHistory, useRouteMatch } from 'react-router-dom';
 import { useApplicationContext } from '@commercetools-frontend/application-shell-connectors';
 import { NO_VALUE_FALLBACK } from '@commercetools-frontend/constants';
 import {
@@ -26,8 +22,9 @@ import { formatMoneyCurrency, getErrorMessage } from '../../helpers';
 import messages from './messages';
 import { SuspendedRoute } from '@commercetools-frontend/application-shell';
 import CartDetails from '../cart-details';
-import SelectableSearchInput from '@commercetools-uikit/selectable-search-input';
-import { useState } from 'react';
+import SelectableSearchInput, {
+  TSelectableSearchInputProps,
+} from '@commercetools-uikit/selectable-search-input';
 
 const columns = [
   { key: 'id', label: 'ID', isSortable: true },
@@ -79,12 +76,7 @@ const columns = [
   },
 ];
 
-type TCartsProps = {
-  linkToWelcome: string;
-};
-
-const Carts = (props: TCartsProps) => {
-  const intl = useIntl();
+const Carts = () => {
   const match = useRouteMatch();
   const { push } = useHistory();
   const { page, perPage } = usePaginationState();
@@ -93,43 +85,27 @@ const Carts = (props: TCartsProps) => {
     dataLocale: context.dataLocale,
     projectLanguages: context.project?.languages ?? [],
   }));
-  const [inputValue, setInputValue] = useState('');
-  const [typing, setTyping] = useState(false);
+  const [textInputValue, setTextInputValue] = useState<string>('');
+  const [dropdownValue, setDropdownValue] = useState<string>('allCarts');
+
+  const where =
+    dropdownValue === 'cartId' && textInputValue ? textInputValue : undefined;
+
   const { cartsPaginatedResult, total, error, loading } = useCartsFetcher({
     page,
     perPage,
     tableSorting,
-    cartId: inputValue,
+    where,
   });
-  const [dropdownValue, setDropdownValue] = useState();
-  const [textInputValue, setTextInputValue] = useState();
 
-  const value = {
-    text: textInputValue,
-    option: dropdownValue,
-  };
-
-  const options = [
+  const options: TSelectableSearchInputProps['options'] = [
     { value: 'allCarts', label: 'All Fields' },
     { value: 'cartId', label: 'Cart ID' },
   ];
 
-  const handleSearchChange = (event: TCustomEvent) => {
-    const newValue = event?.target?.value as string;
-    setInputValue(newValue);
-    setTyping(false);
-  };
-
-  const handleInputChange = (newValue: string) => {
-    setInputValue(newValue);
-    setTyping(true);
-  };
-
-  const handleSelectChange = (event: TCustomEvent) => {
-    const value = event?.target?.value;
-    setSelectedOption(Array.isArray(value) ? value.join('') : value || '');
-    setAll(event.target.value === 'allCarts');
-    setInputValue(''); // Reset search input when changing the select option
+  const value = {
+    text: textInputValue,
+    option: dropdownValue,
   };
 
   if (error) {
@@ -141,7 +117,7 @@ const Carts = (props: TCartsProps) => {
   }
 
   const showNoResultsMessage =
-    !loading && inputValue && cartsPaginatedResult?.length === 0 && !typing;
+    !loading && textInputValue && cartsPaginatedResult?.length === 0;
 
   return (
     <Spacings.Stack scale="xl">
@@ -151,17 +127,34 @@ const Carts = (props: TCartsProps) => {
       <Spacings.Stack scale="m">
         <SelectableSearchInput
           id="searchBar"
-          name='All Fields'
+          name="searchBar"
           value={value}
           onChange={(event) => {
-            const eventValue = event?.target?.value;
-            const value = Array.isArray(eventValue) ? eventValue.join('') : eventValue || '';
-            if (value?.endsWith('.textInput')) {
-              setTextInputValue(true);
+            if (
+              event?.target?.name !== undefined &&
+              event?.target?.name.endsWith('.textInput')
+            ) {
+              const searchText = event?.target?.value;
+              setTextInputValue(
+                Array.isArray(searchText)
+                  ? searchText.join('')
+                  : searchText || ''
+              );
             }
-            if (value?.endsWith('.dropdown')) {
-              setDropdownValue(true);
+            if (
+              event?.target?.name !== undefined &&
+              event?.target?.name.endsWith('.dropdown')
+            ) {
+              const selectValue = event?.target?.value;
+              setDropdownValue(
+                Array.isArray(selectValue)
+                  ? selectValue.join('')
+                  : selectValue || ''
+              );
             }
+          }}
+          onSubmit={(submitValues) => {
+            console.log(JSON.stringify(submitValues));
           }}
           isClearable={true}
           showSubmitButton={true}
@@ -170,9 +163,6 @@ const Carts = (props: TCartsProps) => {
           horizontalConstraint={'scale'}
           menuHorizontalConstraint={5}
           options={options}
-          onSubmit={(submitValues) => {
-            setInputValue(submitValues);
-          }}
         />
       </Spacings.Stack>
 
