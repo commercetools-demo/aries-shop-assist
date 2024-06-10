@@ -23,7 +23,7 @@
     "generate-types:core": "graphql-codegen -r dotenv/config --config codegen.core.yml",
     "generate-types:settings": "graphql-codegen -r dotenv/config --config codegen.settings.yml",
     "generate-types:proxy": "graphql-codegen -r dotenv/config --config codegen.proxy.yml",
-    "generate-types": "pnpm generate-types:mc && pnpm generate-types:ctp && pnpm generate-types:core && pnpm generate-types:settings && pnpm generate-types:proxy"
+    "generate-types": "generate-types:mc && generate-types:ctp && generate-types:core && generate-types:settings && generate-types:proxy"
   },
   "dependencies": {
     "@apollo/client": "3.7.14",
@@ -60,7 +60,9 @@
     "@commercetools-uikit/notifications": "^19.0.0",
     "@commercetools-uikit/pagination": "^19.0.0",
     "@commercetools-uikit/search-text-input": "^19.5.0",
-    "@commercetools-uikit/select-field": "^19.0.0",
+    "@commercetools-uikit/search-select-field": "^19.4.0",
+    "@commercetools-uikit/select-field": "^19.4.0",
+    "@commercetools-uikit/selectable-search-input": "^19.4.0",
     "@commercetools-uikit/spacings": "^19.0.0",
     "@commercetools-uikit/text": "^19.0.0",
     "@commercetools-uikit/text-field": "^19.0.0",
