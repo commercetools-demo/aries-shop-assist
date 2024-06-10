@@ -19,6 +19,7 @@ import CartLineItem from './cart-line-item';
 import { InfoModalPage } from '@commercetools-frontend/application-components';
 import Grid from '@commercetools-uikit/grid';
 import { useMemo } from 'react';
+import SearchTextInput from '@commercetools-uikit/search-text-input';
 
 type TCartDetailsProps = {
   linkToCarts: string;
@@ -80,6 +81,16 @@ const CartDetails = (props: TCartDetailsProps) => {
           </ContentNotification>
         )}
         {cart && (
+          <SearchTextInput
+            isClearable={true}
+            placeholder="Search by SKU"
+            name="Add items to your shopping cart."
+            value={value}
+            onReset={}
+            onSubmit={}
+          />
+        )}
+        {cart && (
           <Grid
             gridGap="20px"
             gridRowGap="20px"
@@ -108,7 +119,7 @@ const CartDetails = (props: TCartDetailsProps) => {
                       )
                     }
                     imageUrl={item?.variant?.images[0]?.url ?? ''}
-                    sku={item?.variant?.key ?? ''}
+                    sku={item?.variant?.sku ?? ''}
                     quantity={item.quantity}
                     price={
                       item?.totalPrice ?? {
