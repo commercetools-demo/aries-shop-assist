@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useIntl } from 'react-intl';
 import { Switch, useHistory, useRouteMatch } from 'react-router-dom';
 import { useApplicationContext } from '@commercetools-frontend/application-shell-connectors';
 import { NO_VALUE_FALLBACK } from '@commercetools-frontend/constants';
@@ -78,6 +79,7 @@ const columns = [
 
 const Carts = () => {
   const match = useRouteMatch();
+  const intl = useIntl();
   const { push } = useHistory();
   const { page, perPage } = usePaginationState();
   const tableSorting = useDataTableSortingState({ key: 'key', order: 'asc' });
@@ -99,8 +101,8 @@ const Carts = () => {
   });
 
   const options: TSelectableSearchInputProps['options'] = [
-    { value: 'allCarts', label: 'All Fields' },
-    { value: 'cartId', label: 'Cart ID' },
+    { value: 'allCarts', label: intl.formatMessage(messages.allFieldsLabel) },
+    { value: 'cartId', label: intl.formatMessage(messages.cartIDLabel) },
   ];
 
   const value = {
