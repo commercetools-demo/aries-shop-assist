@@ -1,18 +1,12 @@
+import { useState } from 'react';
 import { useIntl } from 'react-intl';
-import {
-  Link as RouterLink,
-  Switch,
-  useHistory,
-  useRouteMatch,
-} from 'react-router-dom';
+import { Switch, useHistory, useRouteMatch } from 'react-router-dom';
 import { useApplicationContext } from '@commercetools-frontend/application-shell-connectors';
 import { NO_VALUE_FALLBACK } from '@commercetools-frontend/constants';
 import {
   usePaginationState,
   useDataTableSortingState,
 } from '@commercetools-uikit/hooks';
-import { BackIcon } from '@commercetools-uikit/icons';
-import FlatButton from '@commercetools-uikit/flat-button';
 import LoadingSpinner from '@commercetools-uikit/loading-spinner';
 import DataTable from '@commercetools-uikit/data-table';
 import { ContentNotification } from '@commercetools-uikit/notifications';
@@ -29,6 +23,9 @@ import { formatMoneyCurrency, getErrorMessage } from '../../helpers';
 import messages from './messages';
 import { SuspendedRoute } from '@commercetools-frontend/application-shell';
 import CartDetails from '../cart-details';
+import SelectableSearchInput, {
+  TSelectableSearchInputProps,
+} from '@commercetools-uikit/selectable-search-input';
 
 const columns = [
   { key: 'id', label: 'ID', isSortable: true },
@@ -80,13 +77,9 @@ const columns = [
   },
 ];
 
-type TCartsProps = {
-  linkToWelcome: string;
-};
-
-const Carts = (props: TCartsProps) => {
-  const intl = useIntl();
+const Carts = () => {
   const match = useRouteMatch();
+  const intl = useIntl();
   const { push } = useHistory();
   const { page, perPage } = usePaginationState();
   const tableSorting = useDataTableSortingState({ key: 'key', order: 'asc' });
@@ -94,11 +87,28 @@ const Carts = (props: TCartsProps) => {
     dataLocale: context.dataLocale,
     projectLanguages: context.project?.languages ?? [],
   }));
+  const [textInputValue, setTextInputValue] = useState<string>('');
+  const [dropdownValue, setDropdownValue] = useState<string>('allCarts');
+
+  const where =
+    dropdownValue === 'cartId' && textInputValue ? textInputValue : undefined;
+
   const { cartsPaginatedResult, total, error, loading } = useCartsFetcher({
     page,
     perPage,
     tableSorting,
+    where,
   });
+
+  const options: TSelectableSearchInputProps['options'] = [
+    { value: 'allCarts', label: intl.formatMessage(messages.allFieldsLabel) },
+    { value: 'cartId', label: intl.formatMessage(messages.cartIDLabel) },
+  ];
+
+  const value = {
+    text: textInputValue,
+    option: dropdownValue,
+  };
 
   if (error) {
     return (
@@ -108,88 +118,136 @@ const Carts = (props: TCartsProps) => {
     );
   }
 
+  const showNoResultsMessage =
+    !loading && textInputValue && cartsPaginatedResult?.length === 0;
+
   return (
     <Spacings.Stack scale="xl">
       <Spacings.Stack scale="xs">
-        <FlatButton
-          as={RouterLink}
-          to={props.linkToWelcome}
-          label={intl.formatMessage(messages.backToWelcome)}
-          icon={<BackIcon />}
-        />
         <Text.Headline as="h2" intlMessage={messages.title} />
+      </Spacings.Stack>
+      <Spacings.Stack scale="m">
+        <SelectableSearchInput
+          id="searchBar"
+          name="searchBar"
+          value={value}
+          onChange={(event) => {
+            if (
+              event?.target?.name !== undefined &&
+              event?.target?.name.endsWith('.textInput')
+            ) {
+              const searchText = event?.target?.value;
+              setTextInputValue(
+                Array.isArray(searchText)
+                  ? searchText.join('')
+                  : searchText || ''
+              );
+            }
+            if (
+              event?.target?.name !== undefined &&
+              event?.target?.name.endsWith('.dropdown')
+            ) {
+              const selectValue = event?.target?.value;
+              setDropdownValue(
+                Array.isArray(selectValue)
+                  ? selectValue.join('')
+                  : selectValue || ''
+              );
+            }
+          }}
+          onSubmit={(submitValues) => {
+            console.log(JSON.stringify(submitValues));
+          }}
+          isClearable={true}
+          showSubmitButton={true}
+          hasError={false}
+          placeholder="Search for Carts"
+          horizontalConstraint={'scale'}
+          menuHorizontalConstraint={5}
+          options={options}
+        />
       </Spacings.Stack>
 
       {loading && <LoadingSpinner />}
 
-      {cartsPaginatedResult ? (
-        <Spacings.Stack scale="l">
-          <DataTable<NonNullable<TCartQueryResult['results']>[0]>
-            isCondensed
-            columns={columns}
-            rows={cartsPaginatedResult}
-            itemRenderer={(item, column) => {
-              switch (column.key) {
-                case 'id':
-                  return item.id;
-                case 'key':
-                  return item.key;
-                case 'customerEmail':
-                  return item.customerEmail;
-                case 'customerGroup':
-                  return item.customerGroup?.id || NO_VALUE_FALLBACK;
-                case 'anonymousId':
-                  return item.anonymousId;
-                case 'businessUnit':
-                  return item.businessUnit?.id || NO_VALUE_FALLBACK;
-                case 'store':
-                  return formatLocalizedString(
-                    {
-                      name: transformLocalizedFieldToLocalizedString(
-                        item.store?.nameAllLocales ?? []
-                      ),
-                    },
-                    {
-                      key: 'name',
-                      locale: dataLocale,
-                      fallbackOrder: projectLanguages,
-                      fallback: NO_VALUE_FALLBACK,
-                    }
-                  );
-                case 'totalLineItemQuantity':
-                  return item.totalLineItemQuantity;
-                case 'totalPrice':
-                  return formatMoneyCurrency(
-                    item.totalPrice,
-                    item.locale || projectLanguages[0]
-                  );
-                case 'cartState':
-                  return item.cartState;
-                case 'origin':
-                  return item.origin;
-                default:
-                  return null;
-              }
-            }}
-            sortedBy={tableSorting.value.key}
-            sortDirection={tableSorting.value.order}
-            onSortChange={tableSorting.onChange}
-            onRowClick={(row) => push(`${match.url}/${row.id}`)}
-          />
-          <Pagination
-            page={page.value}
-            onPageChange={page.onChange}
-            perPage={perPage.value}
-            onPerPageChange={perPage.onChange}
-            totalItems={total || 0}
-          />
-          <Switch>
-            <SuspendedRoute path={`${match.url}/:id`}>
-              <CartDetails linkToCarts={match.url} />
-            </SuspendedRoute>
-          </Switch>
-        </Spacings.Stack>
-      ) : null}
+      {showNoResultsMessage ? (
+        <ContentNotification type="warning">
+          <Text.Body tone="primary">
+            No matches found for your search term
+          </Text.Body>
+        </ContentNotification>
+      ) : (
+        cartsPaginatedResult && (
+          <Spacings.Stack scale="l">
+            <DataTable<NonNullable<TCartQueryResult['results']>[0]>
+              isCondensed
+              columns={columns}
+              rows={cartsPaginatedResult}
+              itemRenderer={(item, column) => {
+                switch (column.key) {
+                  case 'id':
+                    return item.id;
+                  case 'key':
+                    return item.key;
+                  case 'customerEmail':
+                    return item.customerEmail;
+                  case 'customerGroup':
+                    return item.customerGroup?.id || NO_VALUE_FALLBACK;
+                  case 'anonymousId':
+                    return item.anonymousId;
+                  case 'businessUnit':
+                    return item.businessUnit?.id || NO_VALUE_FALLBACK;
+                  case 'store':
+                    return formatLocalizedString(
+                      {
+                        name: transformLocalizedFieldToLocalizedString(
+                          item.store?.nameAllLocales ?? []
+                        ),
+                      },
+                      {
+                        key: 'name',
+                        locale: dataLocale,
+                        fallbackOrder: projectLanguages,
+                        fallback: NO_VALUE_FALLBACK,
+                      }
+                    );
+                  case 'totalLineItemQuantity':
+                    return item.totalLineItemQuantity;
+                  case 'totalPrice':
+                    return formatMoneyCurrency(
+                      item.totalPrice,
+                      item.locale || projectLanguages[0]
+                    );
+                  case 'cartState':
+                    return item.cartState;
+                  case 'origin':
+                    return item.origin;
+                  default:
+                    return null;
+                }
+              }}
+              sortedBy={tableSorting.value.key}
+              sortDirection={tableSorting.value.order}
+              onSortChange={tableSorting.onChange}
+              onRowClick={(row) => {
+                push(`${match.url}/${row.id}`);
+              }}
+            />
+            <Pagination
+              page={page.value}
+              onPageChange={page.onChange}
+              perPage={perPage.value}
+              onPerPageChange={perPage.onChange}
+              totalItems={total || 0}
+            />
+            <Switch>
+              <SuspendedRoute path={`${match.url}/:id`}>
+                <CartDetails linkToCarts={match.url} />
+              </SuspendedRoute>
+            </Switch>
+          </Spacings.Stack>
+        )
+      )}
     </Spacings.Stack>
   );
 };

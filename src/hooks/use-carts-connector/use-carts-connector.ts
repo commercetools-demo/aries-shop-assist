@@ -18,7 +18,9 @@ type PaginationAndSortingProps = {
   page: { value: number };
   perPage: { value: number };
   tableSorting: TDataTableSortingState;
+  where?: string;
 };
+
 type TUseCartsFetcher = (
   paginationAndSortingProps: PaginationAndSortingProps
 ) => {
@@ -32,6 +34,7 @@ export const useCartsFetcher: TUseCartsFetcher = ({
   page,
   perPage,
   tableSorting,
+  where,
 }) => {
   const { data, error, loading } = useMcQuery<
     TFetchCartsQuery,
@@ -41,6 +44,7 @@ export const useCartsFetcher: TUseCartsFetcher = ({
       limit: perPage.value,
       offset: (page.value - 1) * perPage.value,
       sort: [`${tableSorting.value.key} ${tableSorting.value.order}`],
+      where: where ? `id="${where}"` : null,
     },
     context: {
       target: GRAPHQL_TARGETS.COMMERCETOOLS_PLATFORM,

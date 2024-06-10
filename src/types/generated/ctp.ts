@@ -12543,6 +12543,7 @@ export type TFetchCartsQueryVariables = Exact<{
   limit: Scalars['Int'];
   offset: Scalars['Int'];
   sort?: InputMaybe<Array<Scalars['String']> | Scalars['String']>;
+  where?: Maybe<Scalars['String']>;
 }>;
 
 export type TFetchCartsQuery = {
