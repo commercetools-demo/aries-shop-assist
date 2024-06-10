@@ -178,17 +178,12 @@ const CartDetails = (props: TCartDetailsProps) => {
                       </Spacings.Inline>
                       <Spacings.Inline scale="s">
                         <Text.Body isBold={true}>Shipping:</Text.Body>
-                        <Text.Body>
+                        {cart?.shippingInfo?.price && (<Text.Body>
                           {formatMoneyCurrency(
-                            cart?.shippingInfo?.price ?? {
-                              type: 'centPrecision',
-                              centAmount: 0,
-                              currencyCode: cart?.totalPrice?.currencyCode,
-                              fractionDigits: cart?.totalPrice?.fractionDigits,
-                            },
+                            cart?.shippingInfo?.price,
                             dataLocale || projectLanguages[0]
                           )}
-                        </Text.Body>
+                        </Text.Body>)}
                       </Spacings.Inline>
                       <Spacings.Inline scale="s">
                         <Text.Body isBold={true}>Total:</Text.Body>

@@ -16550,114 +16550,24 @@ export type TFetchCartDetailsQueryVariables = Exact<{
 
 export type TFetchCartDetailsQuery = {
   __typename?: 'Query';
-  cart?: {
-    __typename?: 'Cart';
-    id: string;
-    key?: string | null;
-    locale?: string | null;
-    shippingAddress?: {
-      __typename?: 'Address';
-      streetName?: string | null;
-      streetNumber?: string | null;
-      postalCode?: string | null;
-      city?: string | null;
-      state?: string | null;
-      country: string;
-      firstName?: string | null;
-      lastName?: string | null;
-    } | null;
-    customer?: { __typename?: 'Customer'; salutation?: string | null } | null;
-    shippingInfo?: {
-      __typename?: 'ShippingInfo';
-      shippingMethodName: string;
-      price: {
-        __typename?: 'Money';
-        currencyCode: string;
-        centAmount: number;
-        fractionDigits: number;
-      };
-    } | null;
-    taxedPrice?: {
-      __typename?: 'TaxedPrice';
-      totalTax?: {
-        __typename?: 'Money';
-        currencyCode: string;
-        centAmount: number;
-        fractionDigits: number;
-      } | null;
-    } | null;
-    totalPrice: {
-      __typename?: 'Money';
-      currencyCode: string;
-      centAmount: number;
-      fractionDigits: number;
-    };
-    lineItems: Array<{
-      __typename?: 'LineItem';
-      id: string;
-      quantity: number;
-      nameAllLocales: Array<{
-        __typename?: 'LocalizedString';
-        locale: string;
-        value: string;
-      }>;
-      totalPrice?: {
-        __typename?: 'Money';
-        currencyCode: string;
-        centAmount: number;
-        fractionDigits: number;
-      } | null;
-      variant?: {
-        __typename?: 'ProductVariant';
-        key?: string | null;
-        sku?: string | null;
-        images: Array<{ __typename?: 'Image'; url: string }>;
-      } | null;
-    }>;
-  } | null;
+  cart?: TCart;
 };
 
 export type TFetchCartsQueryVariables = Exact<{
   limit: Scalars['Int'];
   offset: Scalars['Int'];
   sort?: InputMaybe<Array<Scalars['String']> | Scalars['String']>;
+  where?: Maybe<Scalars['String']>;
 }>;
 
 export type TFetchCartsQuery = {
   __typename?: 'Query';
   carts: {
-    __typename?: 'CartQueryResult';
+    __typename?: 'CartsQueryResult';
     total: number;
     count: number;
     offset: number;
-    results: Array<{
-      __typename?: 'Cart';
-      id: string;
-      key?: string | null;
-      customerEmail?: string | null;
-      anonymousId?: string | null;
-      totalLineItemQuantity?: number | null;
-      locale?: string | null;
-      cartState: TCartState;
-      origin: TCartOrigin;
-      customerGroup?: { __typename?: 'CustomerGroup'; id: string } | null;
-      businessUnit?: { __typename?: 'BusinessUnit'; id: string } | null;
-      store?: {
-        __typename?: 'Store';
-        key: string;
-        nameAllLocales?: Array<{
-          __typename?: 'LocalizedString';
-          locale: string;
-          value: string;
-        }> | null;
-      } | null;
-      totalPrice: {
-        __typename?: 'Money';
-        currencyCode: string;
-        centAmount: number;
-        fractionDigits: number;
-      };
-    }>;
+    results: Array<TCart>;
   };
 };
 
