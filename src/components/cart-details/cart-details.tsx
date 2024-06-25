@@ -11,15 +11,19 @@ import {
   transformLocalizedFieldToLocalizedString,
 } from '@commercetools-frontend/l10n';
 import type { TMoney } from '../../types/generated/ctp';
-import { useCartDetailsFetcher } from '../../hooks/use-carts-connector';
+import {
+  useCartDetailsFetcher,
+  useUpdateCart,
+} from '../../hooks/use-carts-connector';
 import { formatMoneyCurrency, getErrorMessage } from '../../helpers';
 import messages from './messages';
 import Card from '@commercetools-uikit/card';
 import CartLineItem from './cart-line-item';
 import { InfoModalPage } from '@commercetools-frontend/application-components';
 import Grid from '@commercetools-uikit/grid';
-import { useMemo } from 'react';
-import SearchTextInput from '@commercetools-uikit/search-text-input';
+import { useMemo, useState } from 'react';
+import { useProductBySkuFetcher } from '../../hooks/use-products-connector';
+import SearchSelectInput from '@commercetools-uikit/search-select-field';
 
 type TCartDetailsProps = {
   linkToCarts: string;
@@ -30,8 +34,17 @@ const CartDetails = (props: TCartDetailsProps) => {
   const params = useParams<{ id: string }>();
   const { push } = useHistory();
   const { loading, error, cart } = useCartDetailsFetcher(params.id);
+  const [searchValue, setSearchValue] = useState<string>('');
+  const { product } = useProductBySkuFetcher(searchValue);
+  const { updateCart } = useUpdateCart(params?.id, cart?.version ?? 0, []);
 
   const items = useMemo(() => (cart && cart.lineItems) || [], [cart]);
+
+/*   const discounts = useMemo(() => {
+    return cart?.lineItems.reduce((acc, lineItem) => {
+      return acc + lineItem?.discountedPricePerQuantity.discountedPrice.includedDiscounts.discountedAmount;
+    }, 0);
+  }, [cart]); */
 
   const { dataLocale, projectLanguages } = useApplicationContext((context) => ({
     dataLocale: context.dataLocale,
@@ -47,6 +60,44 @@ const CartDetails = (props: TCartDetailsProps) => {
         0
       ) ?? 0,
     fractionDigits: cart?.totalPrice?.fractionDigits ?? 0,
+  };
+
+  const handleAddProduct = async () => {
+    if (product && product.length > 0) {
+      const existingLineItem = cart?.lineItems.find(
+        (item) =>
+          item?.variant?.sku ===
+          product?.masterData?.current?.masterVariant?.sku
+      );
+      const actions = existingLineItem
+        ? [
+            {
+              changeLineItemQuantity: {
+                lineItemId: existingLineItem.id,
+                quantity: existingLineItem.quantity + 1,
+              },
+            },
+          ]
+        : [
+            {
+              addLineItem: {
+                sku: product?.masterData?.current?.masterVariant?.sku,
+                quantity: 1,
+              },
+            },
+          ];
+
+      await updateCart({
+        cartId: params?.id,
+        version: cart?.version || 0,
+        actions,
+      });
+    }
+  };
+
+  const handleChange = (event: { target: any; persist?: () => void }) => {
+    setSearchValue(event.target.value);
+    handleAddProduct();
   };
 
   if (error) {
@@ -81,13 +132,25 @@ const CartDetails = (props: TCartDetailsProps) => {
           </ContentNotification>
         )}
         {cart && (
-          <SearchTextInput
+          <SearchSelectInput
             isClearable={true}
             placeholder="Search by SKU"
-            name="Add items to your shopping cart."
-            value={value}
-            onReset={}
-            onSubmit={}
+            title="Add items to your shopping cart."
+            value={searchValue}
+            onChange={handleChange}
+            loadingMessage="loading exact matches"
+            horizontalConstraint={14}
+            optionType="single-property"
+            isAutofocussed={false}
+            backspaceRemovesValue={true}
+            loadOptions={async (inputValue) => {
+              if (inputValue) {
+                setSearchValue(inputValue);
+              }
+              return [];
+            }
+            }
+            id="searchBySkuBar"
           />
         )}
         {cart && (
@@ -178,12 +241,14 @@ const CartDetails = (props: TCartDetailsProps) => {
                       </Spacings.Inline>
                       <Spacings.Inline scale="s">
                         <Text.Body isBold={true}>Shipping:</Text.Body>
-                        {cart?.shippingInfo?.price && (<Text.Body>
-                          {formatMoneyCurrency(
-                            cart?.shippingInfo?.price,
-                            dataLocale || projectLanguages[0]
-                          )}
-                        </Text.Body>)}
+                        {cart?.shippingInfo?.price && (
+                          <Text.Body>
+                            {formatMoneyCurrency(
+                              cart?.shippingInfo?.price,
+                              dataLocale || projectLanguages[0]
+                            )}
+                          </Text.Body>
+                        )}
                       </Spacings.Inline>
                       <Spacings.Inline scale="s">
                         <Text.Body isBold={true}>Total:</Text.Body>

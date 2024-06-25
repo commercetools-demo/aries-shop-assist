@@ -1,1 +1,1 @@
-export { useCartsFetcher, useCartDetailsFetcher } from './use-carts-connector';
+export { useCartsFetcher, useCartDetailsFetcher, useUpdateCart } from './use-carts-connector';

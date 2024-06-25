@@ -42,6 +42,17 @@ query FetchCartDetails($cartId: String!) {
         locale
         value
       }
+      discountedPricePerQuantity {
+        discountedPrice {
+          includedDiscounts {
+            discountedAmount {
+              currencyCode
+              centAmount
+              fractionDigits
+            }
+          }
+        }
+      }
       quantity
       totalPrice {
         currencyCode

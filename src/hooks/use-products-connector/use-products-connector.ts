@@ -10,16 +10,16 @@ type TUseProductBySkuFetcher = (where: string) => {
   loading: boolean;
 };
 
-export const useProductBySkuFetcher: TUseProductBySkuFetcher = ( where ) => {
+export const useProductBySkuFetcher: TUseProductBySkuFetcher = (where) => {
   const { data, error, loading } = useMcQuery<
     TFetchProductBySkuQuery,
     TFetchProductBySkuQueryVariables
   >(FetchProductBySkuQuery, {
     variables: { 
-        where,
-        currency: 'USD',
-        locale: 'en-US',
-     },
+      where,
+      currency: 'USD',
+      locale: 'en-US',
+    },
     context: {
       target: GRAPHQL_TARGETS.COMMERCETOOLS_PLATFORM,
     },

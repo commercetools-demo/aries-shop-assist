@@ -1,7 +1,7 @@
 /// <reference path="../../../@types/commercetools__sync-actions/index.d.ts" />
 /// <reference path="../../../@types-extensions/graphql-ctp/index.d.ts" />
 
-import type { ApolloError } from '@apollo/client';
+import { useMutation, type ApolloError } from '@apollo/client';
 import { useMcQuery } from '@commercetools-frontend/application-shell';
 import { GRAPHQL_TARGETS } from '@commercetools-frontend/constants';
 import type { TDataTableSortingState } from '@commercetools-uikit/hooks';
@@ -10,9 +10,12 @@ import type {
   TFetchCartDetailsQueryVariables,
   TFetchCartsQuery,
   TFetchCartsQueryVariables,
+  TUpdateCartMutationVariables,
+  TUpdateCartMutation
 } from '../../types/generated/ctp';
 import FetchCartsQuery from './fetch-carts.ctp.graphql';
 import FetchCartDetailsQuery from './fetch-cart-details.ctp.graphql';
+import UpdateCartMutation from './update-cart.ctp.graphql';
 
 type PaginationAndSortingProps = {
   page: { value: number };
@@ -80,6 +83,35 @@ export const useCartDetailsFetcher: TUseCartDetailsFetcher = (cartId) => {
 
   return {
     cart: data?.cart,
+    error,
+    loading,
+  };
+};
+
+type TUseUpdateCart = (
+  cartId: string,
+  version: number,
+  actions: Array<{ addLineItem?: { sku: string, quantity: number } } | { changeLineItemQuantity?: { lineItemId: string, quantity: number } }>
+) => {
+  updateCart: (variables: TUpdateCartMutationVariables) => Promise<void>;
+  error?: ApolloError;
+  loading: boolean;
+};
+
+export const useUpdateCart: TUseUpdateCart = (cartId, version, actions) => {
+  const [updateCartMutation, { error, loading }] = useMutation<
+    TUpdateCartMutation,
+    TUpdateCartMutationVariables
+  >(UpdateCartMutation);
+
+  const updateCart = async (variables: TUpdateCartMutationVariables) => {
+    await updateCartMutation({
+      variables,
+    });
+  };
+
+  return {
+    updateCart,
     error,
     loading,
   };

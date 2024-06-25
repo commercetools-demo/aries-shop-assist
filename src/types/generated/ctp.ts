@@ -16571,72 +16571,36 @@ export type TFetchCartsQuery = {
   };
 };
 
-export type TFetchChannelDetailsQueryVariables = Exact<{
-  channelId: Scalars['String'];
-}>;
 
-export type TFetchChannelDetailsQuery = {
-  __typename?: 'Query';
-  channel?: {
-    __typename?: 'Channel';
-    id: string;
-    version: number;
-    key: string;
-    roles: Array<TChannelRole>;
-    nameAllLocales?: Array<{
-      __typename?: 'LocalizedString';
-      locale: string;
-      value: string;
-    }> | null;
-  } | null;
-};
-
-export type TFetchChannelsQueryVariables = Exact<{
-  limit: Scalars['Int'];
-  offset: Scalars['Int'];
-  sort?: InputMaybe<Array<Scalars['String']> | Scalars['String']>;
-}>;
-
-export type TFetchChannelsQuery = {
-  __typename?: 'Query';
-  channels: {
-    __typename?: 'ChannelQueryResult';
-    total: number;
-    count: number;
-    offset: number;
-    results: Array<{
-      __typename?: 'Channel';
-      id: string;
-      key: string;
-      roles: Array<TChannelRole>;
-      nameAllLocales?: Array<{
-        __typename?: 'LocalizedString';
-        locale: string;
-        value: string;
-      }> | null;
-    }>;
-  };
-};
-
-export type TUpdateChannelDetailsMutationVariables = Exact<{
-  channelId: Scalars['String'];
+export type TUpdateCartMutationVariables = Exact<{
+  cartId: Scalars['String'];
   version: Scalars['Long'];
-  actions: Array<TChannelUpdateAction> | TChannelUpdateAction;
+  actions: Array<TMyCartUpdateAction> | TMyCartUpdateAction;
 }>;
 
-export type TUpdateChannelDetailsMutation = {
+export type TUpdateCartMutation = {
   __typename?: 'Mutation';
-  updateChannel?: {
-    __typename?: 'Channel';
+  updateMyCart?: {
+    __typename?: 'Cart';
     id: string;
     version: number;
-    key: string;
-    roles: Array<TChannelRole>;
-    nameAllLocales?: Array<{
-      __typename?: 'LocalizedString';
-      locale: string;
-      value: string;
-    }> | null;
+    lineItems: Array<{
+      __typename?: 'LineItem';
+      id: string;
+      quantity: number;
+      totalPrice?: {
+        __typename?: 'Money';
+        currencyCode: string;
+        centAmount: number;
+        fractionDigits: number;
+      } | null;
+    }>;
+    totalPrice: {
+      __typename?: 'Money';
+      currencyCode: string;
+      centAmount: number;
+      fractionDigits: number;
+    };
   } | null;
 };
 
