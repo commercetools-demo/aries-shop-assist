@@ -17,4 +17,8 @@ export default defineMessages({
     id: 'Carts.cartIDLabel',
     defaultMessage: 'Cart ID',
   },
+  emailIDLabel: {
+    id: 'Carts.emailIDLabel',
+    defaultMessage: 'Email ID',
+  },
 });
