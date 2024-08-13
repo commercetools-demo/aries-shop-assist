@@ -90,10 +90,8 @@ const Carts = () => {
   const [textInputValue, setTextInputValue] = useState<string>('');
   const [dropdownValue, setDropdownValue] = useState<string>('allCarts');
 
-  const cartId =
-    dropdownValue === 'cartId'  && textInputValue ? textInputValue : undefined;
-  const emailId =
-    dropdownValue === 'emailId' && textInputValue ? textInputValue : undefined;
+  const cartId = dropdownValue === 'cartId'  && textInputValue ? textInputValue : undefined;
+  const emailId = dropdownValue === 'emailId' && textInputValue ? textInputValue : undefined;
 
   const where = cartId ? cartId : emailId;
 
