@@ -39,7 +39,6 @@ export const useCartsFetcher: TUseCartsFetcher = ({
   labelKey
 }) => {
   const searchQuery = labelKey === 'cartId' ? `id="${where}"` : `customerEmail="${where}"`;
-  
   const { data, error, loading } = useMcQuery<
     TFetchCartsQuery,
     TFetchCartsQueryVariables
@@ -54,7 +53,6 @@ export const useCartsFetcher: TUseCartsFetcher = ({
       target: GRAPHQL_TARGETS.COMMERCETOOLS_PLATFORM,
     },
   });
-  
   return {
     cartsPaginatedResult: data?.carts?.results,
     total: data?.carts?.total,

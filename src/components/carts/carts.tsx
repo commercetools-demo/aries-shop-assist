@@ -102,7 +102,7 @@ const Carts = () => {
     perPage,
     tableSorting,
     where,
-    labelKey : dropdownValue
+    labelKey : dropdownValue,
   });
 
   const options: TSelectableSearchInputProps['options'] = [
@@ -138,8 +138,7 @@ const Carts = () => {
           name="searchBar"
           value={value}
           onChange={(event) => {
-            setTextInputValue("");
-            console.log(textInputValue)
+            setTextInputValue('');
             if (
               event?.target?.name !== undefined &&
               event?.target?.name.endsWith('.textInput')
@@ -155,7 +154,6 @@ const Carts = () => {
               event?.target?.name !== undefined &&
               event?.target?.name.endsWith('.dropdown')
             ) {
-              
               const selectValue = event?.target?.value;
               setDropdownValue(
                 Array.isArray(selectValue)
