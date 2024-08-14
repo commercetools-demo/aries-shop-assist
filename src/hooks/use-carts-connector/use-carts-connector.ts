@@ -38,8 +38,8 @@ export const useCartsFetcher: TUseCartsFetcher = ({
   where,
   labelKey,
 }) => {
-  
-  const searchQuery = labelKey === 'cartId' ? `id="${where}"` : `customerEmail="${where}"`;
+  const searchQuery =
+    labelKey === 'cartId' ? `id="${where}"` : `customerEmail="${where}"`;
   const { data, error, loading } = useMcQuery<
     TFetchCartsQuery,
     TFetchCartsQueryVariables
