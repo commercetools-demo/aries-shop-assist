@@ -93,7 +93,7 @@ const Carts = () => {
   const cartId = dropdownValue === 'cartId'  && textInputValue ? textInputValue : undefined;
   const emailId = dropdownValue === 'emailId' && textInputValue ? textInputValue : undefined;
 
-  const where = cartId ? cartId : emailId;
+  const where = cartId || emailId;
 
   const { cartsPaginatedResult, total, error, loading } = useCartsFetcher({
     page,
