@@ -93,7 +93,9 @@ const Carts = () => {
   const cartId =
     dropdownValue === 'cartId' && textInputValue ? textInputValue : undefined;
   const emailAddress =
-    dropdownValue === 'emailAddress' && textInputValue ? textInputValue : undefined;
+    dropdownValue === 'emailAddress' && textInputValue
+      ? textInputValue
+      : undefined;
 
   const where = cartId || emailAddress;
 
@@ -107,7 +109,10 @@ const Carts = () => {
   const options: TSelectableSearchInputProps['options'] = [
     { value: 'allCarts', label: intl.formatMessage(messages.allFieldsLabel) },
     { value: 'cartId', label: intl.formatMessage(messages.cartIDLabel) },
-    { value: 'emailAddress', label: intl.formatMessage(messages.emailAddressLabel) },
+    {
+      value: 'emailAddress',
+      label: intl.formatMessage(messages.emailAddressLabel),
+    },
   ];
 
   const value = {
