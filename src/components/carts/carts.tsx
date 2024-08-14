@@ -92,10 +92,10 @@ const Carts = () => {
 
   const cartId =
     dropdownValue === 'cartId' && textInputValue ? textInputValue : undefined;
-  const emailId =
-    dropdownValue === 'emailId' && textInputValue ? textInputValue : undefined;
+  const emailAddress =
+    dropdownValue === 'emailAddress' && textInputValue ? textInputValue : undefined;
 
-  const where = cartId || emailId;
+  const where = cartId || emailAddress;
 
   const { cartsPaginatedResult, total, error, loading } = useCartsFetcher({
     page,
@@ -107,7 +107,7 @@ const Carts = () => {
   const options: TSelectableSearchInputProps['options'] = [
     { value: 'allCarts', label: intl.formatMessage(messages.allFieldsLabel) },
     { value: 'cartId', label: intl.formatMessage(messages.cartIDLabel) },
-    { value: 'emailId', label: intl.formatMessage(messages.emailIDLabel) },
+    { value: 'emailAddress', label: intl.formatMessage(messages.emailAddressLabel) },
   ];
 
   const value = {
