@@ -90,8 +90,10 @@ const Carts = () => {
   const [textInputValue, setTextInputValue] = useState<string>('');
   const [dropdownValue, setDropdownValue] = useState<string>('allCarts');
 
-  const cartId = dropdownValue === 'cartId'  && textInputValue ? textInputValue : undefined;
-  const emailId = dropdownValue === 'emailId' && textInputValue ? textInputValue : undefined;
+  const cartId =
+    dropdownValue === 'cartId' && textInputValue ? textInputValue : undefined;
+  const emailId =
+    dropdownValue === 'emailId' && textInputValue ? textInputValue : undefined;
 
   const where = cartId || emailId;
 
@@ -100,9 +102,8 @@ const Carts = () => {
     perPage,
     tableSorting,
     where,
-    labelKey : dropdownValue,
+    labelKey: dropdownValue,
   });
-
   const options: TSelectableSearchInputProps['options'] = [
     { value: 'allCarts', label: intl.formatMessage(messages.allFieldsLabel) },
     { value: 'cartId', label: intl.formatMessage(messages.cartIDLabel) },
