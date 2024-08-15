@@ -90,19 +90,29 @@ const Carts = () => {
   const [textInputValue, setTextInputValue] = useState<string>('');
   const [dropdownValue, setDropdownValue] = useState<string>('allCarts');
 
-  const where =
+  const cartId =
     dropdownValue === 'cartId' && textInputValue ? textInputValue : undefined;
+  const emailAddress =
+    dropdownValue === 'emailAddress' && textInputValue
+      ? textInputValue
+      : undefined;
+
+  const where = cartId || emailAddress;
 
   const { cartsPaginatedResult, total, error, loading } = useCartsFetcher({
     page,
     perPage,
     tableSorting,
     where,
+    labelKey: dropdownValue,
   });
-
   const options: TSelectableSearchInputProps['options'] = [
     { value: 'allCarts', label: intl.formatMessage(messages.allFieldsLabel) },
     { value: 'cartId', label: intl.formatMessage(messages.cartIDLabel) },
+    {
+      value: 'emailAddress',
+      label: intl.formatMessage(messages.emailAddressLabel),
+    },
   ];
 
   const value = {
@@ -132,6 +142,7 @@ const Carts = () => {
           name="searchBar"
           value={value}
           onChange={(event) => {
+            setTextInputValue('');
             if (
               event?.target?.name !== undefined &&
               event?.target?.name.endsWith('.textInput')
