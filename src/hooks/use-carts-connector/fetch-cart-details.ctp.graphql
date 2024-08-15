@@ -2,6 +2,7 @@ query FetchCartDetails($cartId: String!) {
   cart(id: $cartId) {
     id
     key
+    version
     locale
     shippingAddress {
       streetName

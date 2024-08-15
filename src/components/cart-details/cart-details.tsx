@@ -24,6 +24,7 @@ import Grid from '@commercetools-uikit/grid';
 import { useMemo, useState } from 'react';
 import { useProductBySkuFetcher } from '../../hooks/use-products-connector';
 import SearchSelectInput from '@commercetools-uikit/search-select-field';
+import PrimaryButton from '@commercetools-uikit/primary-button';
 
 type TCartDetailsProps = {
   linkToCarts: string;
@@ -36,11 +37,15 @@ const CartDetails = (props: TCartDetailsProps) => {
   const { loading, error, cart } = useCartDetailsFetcher(params.id);
   const [searchValue, setSearchValue] = useState<string>('');
   const { product } = useProductBySkuFetcher(searchValue);
-  const { updateCart } = useUpdateCart(params?.id, cart?.version ?? 0, []);
+  const { updateCart, loadingCart, errorCart } = useUpdateCart(
+    params.id,
+    cart?.version ?? 0,
+    []
+  );
 
   const items = useMemo(() => (cart && cart.lineItems) || [], [cart]);
 
-/*   const discounts = useMemo(() => {
+  /*   const discounts = useMemo(() => {
     return cart?.lineItems.reduce((acc, lineItem) => {
       return acc + lineItem?.discountedPricePerQuantity.discountedPrice.includedDiscounts.discountedAmount;
     }, 0);
@@ -67,12 +72,13 @@ const CartDetails = (props: TCartDetailsProps) => {
       const existingLineItem = cart?.lineItems.find(
         (item) =>
           item?.variant?.sku ===
-          product?.masterData?.current?.masterVariant?.sku
+          product[0]?.masterData?.current?.masterVariant?.sku
       );
       const actions = existingLineItem
         ? [
             {
               changeLineItemQuantity: {
+                action: 'changeLineItemQuantity',
                 lineItemId: existingLineItem.id,
                 quantity: existingLineItem.quantity + 1,
               },
@@ -81,22 +87,27 @@ const CartDetails = (props: TCartDetailsProps) => {
         : [
             {
               addLineItem: {
-                sku: product?.masterData?.current?.masterVariant?.sku,
+                action: 'addLineItem',
+                sku: product[0]?.masterData?.current?.masterVariant?.sku,
                 quantity: 1,
               },
             },
           ];
-
-      await updateCart({
-        cartId: params?.id,
-        version: cart?.version || 0,
-        actions,
-      });
+      try {
+        await updateCart({
+          cartId: params.id,
+          version: cart?.version || 0,
+          actions,
+        });
+      } catch (error) {
+        console.log(loadingCart, errorCart);
+      }
     }
   };
 
   const handleChange = (event: { target: any; persist?: () => void }) => {
     setSearchValue(event.target.value);
+    console.log('here');
     handleAddProduct();
   };
 
@@ -132,26 +143,35 @@ const CartDetails = (props: TCartDetailsProps) => {
           </ContentNotification>
         )}
         {cart && (
-          <SearchSelectInput
-            isClearable={true}
-            placeholder="Search by SKU"
-            title="Add items to your shopping cart."
-            value={searchValue}
-            onChange={handleChange}
-            loadingMessage="loading exact matches"
-            horizontalConstraint={14}
-            optionType="single-property"
-            isAutofocussed={false}
-            backspaceRemovesValue={true}
-            loadOptions={async (inputValue) => {
-              if (inputValue) {
-                setSearchValue(inputValue);
-              }
-              return [];
-            }
-            }
-            id="searchBySkuBar"
-          />
+          <Spacings.Inline scale="s" alignItems="flex-end">
+            <SearchSelectInput
+              isClearable={true}
+              placeholder="Search by SKU"
+              title="Add items to your shopping cart."
+              value={searchValue}
+              onChange={handleChange}
+              loadingMessage="loading exact matches"
+              horizontalConstraint={14}
+              optionType="single-property"
+              isAutofocussed={false}
+              backspaceRemovesValue={true}
+              filterOption={() => true}
+              loadOptions={async (inputValue) => {
+                console.log(inputValue);
+                if (inputValue) {
+                  setSearchValue(inputValue);
+                }
+                return [];
+              }}
+              id="searchBySkuBar"
+            />
+
+            <PrimaryButton
+              label="Add to cart"
+              onClick={handleAddProduct}
+              isDisabled={false}
+            />
+          </Spacings.Inline>
         )}
         {cart && (
           <Grid

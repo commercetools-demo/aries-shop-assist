@@ -10,7 +10,7 @@ query FetchProductBySku(
         current {
           name(locale: $locale)
           masterVariant {
-            sku
+            sku 
             key
             images {
               url

@@ -11,7 +11,7 @@ import type {
   TFetchCartsQuery,
   TFetchCartsQueryVariables,
   TUpdateCartMutationVariables,
-  TUpdateCartMutation
+  TUpdateCartMutation,
 } from '../../types/generated/ctp';
 import FetchCartsQuery from './fetch-carts.ctp.graphql';
 import FetchCartDetailsQuery from './fetch-cart-details.ctp.graphql';
@@ -91,11 +91,14 @@ export const useCartDetailsFetcher: TUseCartDetailsFetcher = (cartId) => {
 type TUseUpdateCart = (
   cartId: string,
   version: number,
-  actions: Array<{ addLineItem?: { sku: string, quantity: number } } | { changeLineItemQuantity?: { lineItemId: string, quantity: number } }>
+  actions: Array<
+    | { addLineItem?: { sku: string; quantity: number } }
+    | { changeLineItemQuantity?: { lineItemId: string; quantity: number } }
+  >
 ) => {
   updateCart: (variables: TUpdateCartMutationVariables) => Promise<void>;
-  error?: ApolloError;
-  loading: boolean;
+  errorCart?: ApolloError;
+  loadingCart: boolean;
 };
 
 export const useUpdateCart: TUseUpdateCart = (cartId, version, actions) => {
@@ -103,16 +106,21 @@ export const useUpdateCart: TUseUpdateCart = (cartId, version, actions) => {
     TUpdateCartMutation,
     TUpdateCartMutationVariables
   >(UpdateCartMutation);
+  
 
   const updateCart = async (variables: TUpdateCartMutationVariables) => {
-    await updateCartMutation({
-      variables,
-    });
+    try {
+      await updateCartMutation({
+        variables
+      })
+    } catch (error) {
+      error = error;
+    }
   };
 
   return {
     updateCart,
-    error,
-    loading,
+    errorCart: error,
+    loadingCart: loading,
   };
 };
