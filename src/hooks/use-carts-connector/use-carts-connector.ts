@@ -114,6 +114,7 @@ export const useUpdateCart: TUseUpdateCart = (cartId, version, actions) => {
         variables
       })
     } catch (error) {
+      console.log(error)
       error = error;
     }
   };
