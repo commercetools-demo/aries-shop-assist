@@ -2,7 +2,10 @@
 /// <reference path="../../../@types-extensions/graphql-ctp/index.d.ts" />
 
 import { useMutation, type ApolloError } from '@apollo/client';
-import { useMcQuery, useMcMutation } from '@commercetools-frontend/application-shell';
+import {
+  useMcQuery,
+  useMcMutation,
+} from '@commercetools-frontend/application-shell';
 import { GRAPHQL_TARGETS } from '@commercetools-frontend/constants';
 import type { TDataTableSortingState } from '@commercetools-uikit/hooks';
 import type {
@@ -106,7 +109,6 @@ export const useUpdateCart: TUseUpdateCart = (cartId, version, actions) => {
     TUpdateCartMutation,
     TUpdateCartMutationVariables
   >(UpdateCartMutation);
-  
 
   const updateCart = async (variables: TUpdateCartMutationVariables) => {
     try {
@@ -114,10 +116,10 @@ export const useUpdateCart: TUseUpdateCart = (cartId, version, actions) => {
         context: {
           target: GRAPHQL_TARGETS.COMMERCETOOLS_PLATFORM,
         },
-        variables
-      })
+        variables,
+      });
     } catch (error) {
-      console.log(error)
+      console.log(error);
       error = error;
     }
   };

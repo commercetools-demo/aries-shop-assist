@@ -1,7 +1,10 @@
 import { useMcQuery } from '@commercetools-frontend/application-shell';
 import { GRAPHQL_TARGETS } from '@commercetools-frontend/constants';
 import type { ApolloError } from '@apollo/client';
-import type { TFetchProductBySkuQuery, TFetchProductBySkuQueryVariables } from '../../types/generated/ctp';
+import type {
+  TFetchProductBySkuQuery,
+  TFetchProductBySkuQueryVariables,
+} from '../../types/generated/ctp';
 import FetchProductBySkuQuery from './fetch-product-by-sku.ctp.graphql';
 
 type TUseProductBySkuFetcher = (where: string) => {
@@ -15,7 +18,7 @@ export const useProductBySkuFetcher: TUseProductBySkuFetcher = (where) => {
     TFetchProductBySkuQuery,
     TFetchProductBySkuQueryVariables
   >(FetchProductBySkuQuery, {
-    variables: { 
+    variables: {
       where: where ? `masterData(current(variants(sku="${where}")))` : '',
       // where: where ? `id="${where}"` : '',
       currency: 'USD',

@@ -70,15 +70,18 @@ const CartDetails = (props: TCartDetailsProps) => {
 
   const handleAddProduct = async () => {
     if (product && product.length > 0) {
-      const sku = product[0]?.masterData?.current?.masterVariant?.sku
+      const sku = product[0]?.masterData?.current?.masterVariant?.sku;
       const existingLineItem = cart?.lineItems.find(
-        (item) =>
-          item?.variant?.sku ===
-          sku
+        (item) => item?.variant?.sku === sku
       );
       const actions = existingLineItem
-        ? handleChangeLineItemQuantity(existingLineItem, existingLineItem.quantity + 1)
-        : sku ? handleAddLineItem(sku) : '';
+        ? handleChangeLineItemQuantity(
+            existingLineItem,
+            existingLineItem.quantity + 1
+          )
+        : sku
+        ? handleAddLineItem(sku)
+        : '';
       handleUpdateCart(actions);
     }
   };
@@ -92,7 +95,8 @@ const CartDetails = (props: TCartDetailsProps) => {
     lineItem: { id: string; quantity: number },
     quantity: string
   ) => {
-    const updatedQuantity = quantity === INCREASE ? lineItem.quantity + 1 : lineItem.quantity - 1;
+    const updatedQuantity =
+      quantity === INCREASE ? lineItem.quantity + 1 : lineItem.quantity - 1;
     handleChangeLineItemQuantity(lineItem, updatedQuantity);
   };
 
@@ -121,7 +125,7 @@ const CartDetails = (props: TCartDetailsProps) => {
       },
     ];
     await handleUpdateCart(actions);
-  }
+  };
 
   const handleUpdateCart = async (actions: any) => {
     try {
@@ -133,7 +137,7 @@ const CartDetails = (props: TCartDetailsProps) => {
     } catch (error) {
       console.log(loadingCart, errorCart);
     }
-  }
+  };
 
   if (error) {
     return (
@@ -209,7 +213,7 @@ const CartDetails = (props: TCartDetailsProps) => {
               <Spacings.Stack scale="m">
                 {items?.map((item, idx) => (
                   <CartLineItem
-                    removeItem={() => handleChangeLineItemQuantity(item,0)}
+                    removeItem={() => handleChangeLineItemQuantity(item, 0)}
                     updateItemQuantity={(quantity: string) =>
                       updateItemQuantity(item, quantity)
                     }
