@@ -12,6 +12,7 @@ import {
   AngleUpIcon,
   CheckInactiveIcon,
 } from '@commercetools-uikit/icons';
+import { DECREASE, INCREASE } from './constants';
 
 type TLineItemProps = {
   key: string;
@@ -85,7 +86,7 @@ const CartLineItem = ({
                           type="button"
                           size="small"
                           theme="default"
-                          onClick={() => updateItemQuantity('increase')}
+                          onClick={() => updateItemQuantity(INCREASE)}
                           // onClick={() => {
                           //   setQuantity(quantity + 1);
                           //   setPrice({
@@ -103,7 +104,7 @@ const CartLineItem = ({
                           type="button"
                           size="small"
                           theme="default"
-                          onClick={() => updateItemQuantity('decrease')}
+                          onClick={() => updateItemQuantity(DECREASE)}
                           // onClick={() => {
                           //   setQuantity(quantityState - 1);
                           //   setPrice({

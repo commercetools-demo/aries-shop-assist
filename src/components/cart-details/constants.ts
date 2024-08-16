@@ -6,3 +6,6 @@ export const CHANNEL_ROLES = {
   orderImport: 'OrderImport',
   primary: 'Primary',
 };
+
+export const INCREASE = 'increase';
+export const DECREASE = 'decrease';

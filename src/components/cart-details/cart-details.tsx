@@ -25,6 +25,7 @@ import { useMemo, useState } from 'react';
 import { useProductBySkuFetcher } from '../../hooks/use-products-connector';
 import SearchSelectInput from '@commercetools-uikit/search-select-field';
 import PrimaryButton from '@commercetools-uikit/primary-button';
+import { INCREASE } from './constants';
 
 type TCartDetailsProps = {
   linkToCarts: string;
@@ -69,45 +70,70 @@ const CartDetails = (props: TCartDetailsProps) => {
 
   const handleAddProduct = async () => {
     if (product && product.length > 0) {
+      const sku = product[0]?.masterData?.current?.masterVariant?.sku
       const existingLineItem = cart?.lineItems.find(
         (item) =>
           item?.variant?.sku ===
-          product[0]?.masterData?.current?.masterVariant?.sku
+          sku
       );
       const actions = existingLineItem
-        ? [
-            {
-              changeLineItemQuantity: {
-                lineItemId: existingLineItem.id,
-                quantity: existingLineItem.quantity + 1,
-              },
-            },
-          ]
-        : [
-            {
-              addLineItem: {
-                sku: product[0]?.masterData?.current?.masterVariant?.sku,
-                quantity: 1,
-              },
-            },
-          ];
-      try {
-        await updateCart({
-          cartId: params.id,
-          version: cart?.version || 0,
-          actions,
-        });
-      } catch (error) {
-        console.log(loadingCart, errorCart);
-      }
+        ? handleChangeLineItemQuantity(existingLineItem, existingLineItem.quantity + 1)
+        : sku ? handleAddLineItem(sku) : '';
+      handleUpdateCart(actions);
     }
   };
 
   const handleChange = (event: { target: any; persist?: () => void }) => {
     setSearchValue(event.target.value);
-    console.log('here');
     handleAddProduct();
   };
+
+  const updateItemQuantity = async (
+    lineItem: { id: string; quantity: number },
+    quantity: string
+  ) => {
+    const updatedQuantity = quantity === INCREASE ? lineItem.quantity + 1 : lineItem.quantity - 1;
+    handleChangeLineItemQuantity(lineItem, updatedQuantity);
+  };
+
+  const handleChangeLineItemQuantity = async (
+    lineItem: { id: string; quantity: number },
+    quantity: number
+  ) => {
+    const actions = [
+      {
+        changeLineItemQuantity: {
+          lineItemId: lineItem.id,
+          quantity: quantity,
+        },
+      },
+    ];
+    await handleUpdateCart(actions);
+  };
+
+  const handleAddLineItem = async (sku: string) => {
+    const actions = [
+      {
+        addLineItem: {
+          sku: sku,
+          quantity: 1,
+        },
+      },
+    ];
+    await handleUpdateCart(actions);
+  }
+
+  const handleUpdateCart = async (actions: any) => {
+    try {
+      await updateCart({
+        cartId: params.id,
+        version: cart?.version || 0,
+        actions,
+      });
+    } catch (error) {
+      console.log(loadingCart, errorCart);
+    }
+  }
 
   if (error) {
     return (
@@ -115,46 +141,6 @@ const CartDetails = (props: TCartDetailsProps) => {
         <Text.Body tone="negative">{getErrorMessage(error)}</Text.Body>
       </ContentNotification>
     );
-  }
-
-  const removeItem = async (lineItem: {id: string, quantity:number}) => {
-    const actions = [
-      {
-        changeLineItemQuantity: {
-          lineItemId: lineItem.id,
-          quantity: 0,
-        },
-      },
-    ]
-    try {
-      await updateCart({
-        cartId: params.id,
-        version: cart?.version || 0,
-        actions,
-      });
-    } catch (error) {
-      console.log(loadingCart, errorCart);
-    }
-  }
-
-  const updateItemQuantity = async (lineItem: {id: string, quantity:number}, quantity: string) => {
-    const actions = [
-      {
-        changeLineItemQuantity: {
-          lineItemId: lineItem.id,
-          quantity: quantity === 'increase' ? lineItem.quantity + 1 : lineItem.quantity - 1,
-        },
-      },
-    ]
-    try {
-      await updateCart({
-        cartId: params.id,
-        version: cart?.version || 0,
-        actions,
-      });
-    } catch (error) {
-      console.log(loadingCart, errorCart);
-    }
   }
 
   // TO DO: Fix how to get from commerce-tools api the discounts data
@@ -223,8 +209,10 @@ const CartDetails = (props: TCartDetailsProps) => {
               <Spacings.Stack scale="m">
                 {items?.map((item, idx) => (
                   <CartLineItem
-                    removeItem={() => removeItem(item)}
-                    updateItemQuantity={(quantity:string) => updateItemQuantity(item, quantity)}
+                    removeItem={() => handleChangeLineItemQuantity(item,0)}
+                    updateItemQuantity={(quantity: string) =>
+                      updateItemQuantity(item, quantity)
+                    }
                     key={`idx-${item?.id}-${idx}`}
                     itemName={
                       item?.nameAllLocales &&
