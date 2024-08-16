@@ -21,6 +21,8 @@ type TLineItemProps = {
   quantity: number;
   price: TMoney;
   discountedPrice?: TMoney;
+  removeItem: () => void;
+  updateItemQuantity: (quantity: string) => void;
 };
 
 const CartLineItem = ({
@@ -31,6 +33,8 @@ const CartLineItem = ({
   quantity,
   price,
   discountedPrice,
+  removeItem,
+  updateItemQuantity,
 }: TLineItemProps) => {
   const { dataLocale, projectLanguages } = useApplicationContext((context) => ({
     dataLocale: context.dataLocale,
@@ -73,7 +77,7 @@ const CartLineItem = ({
                   <Spacings.Inline scale="s" alignItems="center">
                     <Text.Body isBold={true}>Quantity </Text.Body>
                     <Spacings.Inline scale="m" alignItems="center">
-                      <Text.Body>{quantityState}</Text.Body>
+                      <Text.Body>{quantity}</Text.Body>
                       <Spacings.Stack scale="xs">
                         <IconButton
                           label="Increase quantity"
@@ -81,16 +85,17 @@ const CartLineItem = ({
                           type="button"
                           size="small"
                           theme="default"
-                          onClick={() => {
-                            setQuantity(quantityState + 1);
-                            setPrice({
-                              centAmount:
-                                lineItemPrice.centAmount * (quantityState + 1),
-                              currencyCode: price.currencyCode,
-                              fractionDigits: price.fractionDigits,
-                              type: price.type,
-                            });
-                          }}
+                          onClick={() => updateItemQuantity('increase')}
+                          // onClick={() => {
+                          //   setQuantity(quantity + 1);
+                          //   setPrice({
+                          //     centAmount:
+                          //       lineItemPrice.centAmount * (quantity + 1),
+                          //     currencyCode: price.currencyCode,
+                          //     fractionDigits: price.fractionDigits,
+                          //     type: price.type,
+                          //   });
+                          // }}
                         />
                         <IconButton
                           label="Decrease quantity"
@@ -98,16 +103,17 @@ const CartLineItem = ({
                           type="button"
                           size="small"
                           theme="default"
-                          onClick={() => {
-                            setQuantity(quantityState - 1);
-                            setPrice({
-                              centAmount:
-                                lineItemPrice.centAmount * (quantityState - 1),
-                              currencyCode: price.currencyCode,
-                              fractionDigits: price.fractionDigits,
-                              type: price.type,
-                            });
-                          }}
+                          onClick={() => updateItemQuantity('decrease')}
+                          // onClick={() => {
+                          //   setQuantity(quantityState - 1);
+                          //   setPrice({
+                          //     centAmount:
+                          //       lineItemPrice.centAmount * (quantityState - 1),
+                          //     currencyCode: price.currencyCode,
+                          //     fractionDigits: price.fractionDigits,
+                          //     type: price.type,
+                          //   });
+                          // }}
                         />
                       </Spacings.Stack>
                     </Spacings.Inline>
@@ -125,7 +131,7 @@ const CartLineItem = ({
                 shape="round"
                 size="big"
                 theme="default"
-                onClick={() => console.log('Remove from cart')}
+                onClick={removeItem}
               />
               <Spacings.Stack scale="xs" alignItems="flex-end">
                 {discountedPrice && (
@@ -138,7 +144,7 @@ const CartLineItem = ({
                 )}
                 <Text.Body fontWeight="medium">
                   {formatMoneyCurrency(
-                    priceState,
+                    price,
                     dataLocale || projectLanguages[0]
                   )}
                 </Text.Body>

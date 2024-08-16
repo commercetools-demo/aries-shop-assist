@@ -117,6 +117,46 @@ const CartDetails = (props: TCartDetailsProps) => {
     );
   }
 
+  const removeItem = async (lineItem: {id: string, quantity:number}) => {
+    const actions = [
+      {
+        changeLineItemQuantity: {
+          lineItemId: lineItem.id,
+          quantity: 0,
+        },
+      },
+    ]
+    try {
+      await updateCart({
+        cartId: params.id,
+        version: cart?.version || 0,
+        actions,
+      });
+    } catch (error) {
+      console.log(loadingCart, errorCart);
+    }
+  }
+
+  const updateItemQuantity = async (lineItem: {id: string, quantity:number}, quantity: string) => {
+    const actions = [
+      {
+        changeLineItemQuantity: {
+          lineItemId: lineItem.id,
+          quantity: quantity === 'increase' ? lineItem.quantity + 1 : lineItem.quantity - 1,
+        },
+      },
+    ]
+    try {
+      await updateCart({
+        cartId: params.id,
+        version: cart?.version || 0,
+        actions,
+      });
+    } catch (error) {
+      console.log(loadingCart, errorCart);
+    }
+  }
+
   // TO DO: Fix how to get from commerce-tools api the discounts data
 
   return (
@@ -183,6 +223,8 @@ const CartDetails = (props: TCartDetailsProps) => {
               <Spacings.Stack scale="m">
                 {items?.map((item, idx) => (
                   <CartLineItem
+                    removeItem={() => removeItem(item)}
+                    updateItemQuantity={(quantity:string) => updateItemQuantity(item, quantity)}
                     key={`idx-${item?.id}-${idx}`}
                     itemName={
                       item?.nameAllLocales &&
