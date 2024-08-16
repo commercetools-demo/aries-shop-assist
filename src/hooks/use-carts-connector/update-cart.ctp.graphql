@@ -1,5 +1,5 @@
-mutation UpdateCart($cartId: String!, $version: Long!, $actions: [MyCartUpdateAction!]!) {
-  updateMyCart(id: $cartId, version: $version, actions: $actions) {
+mutation UpdateCart($cartId: String!, $version: Long!, $actions: [CartUpdateAction!]!) {
+  updateCart(id: $cartId, version: $version, actions: $actions) {
     id
     version
     lineItems {

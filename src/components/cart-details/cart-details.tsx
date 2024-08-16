@@ -78,7 +78,6 @@ const CartDetails = (props: TCartDetailsProps) => {
         ? [
             {
               changeLineItemQuantity: {
-                action: 'changeLineItemQuantity',
                 lineItemId: existingLineItem.id,
                 quantity: existingLineItem.quantity + 1,
               },
@@ -87,7 +86,6 @@ const CartDetails = (props: TCartDetailsProps) => {
         : [
             {
               addLineItem: {
-                action: 'addLineItem',
                 sku: product[0]?.masterData?.current?.masterVariant?.sku,
                 quantity: 1,
               },
@@ -130,11 +128,12 @@ const CartDetails = (props: TCartDetailsProps) => {
       onClose={() => push(props.linkToCarts)}
     >
       <Spacings.Stack scale="xl">
-        {loading && (
-          <Spacings.Stack alignItems="center">
-            <LoadingSpinner />
-          </Spacings.Stack>
-        )}
+        {loading ||
+          (loadingCart && (
+            <Spacings.Stack alignItems="center">
+              <LoadingSpinner />
+            </Spacings.Stack>
+          ))}
         {error && (
           <ContentNotification type="error">
             <Text.Body>
