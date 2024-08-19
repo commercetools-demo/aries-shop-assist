@@ -1,0 +1,75 @@
+query FetchProductBySku(
+  $where: String!
+  $locale: Locale!
+  $currency: Currency!
+) {
+  products(where: $where) {
+    results {
+      id
+      masterData {
+        current {
+          name(locale: $locale)
+          masterVariant {
+            sku 
+            key
+            images {
+              url
+              label
+            }
+            price(currency: $currency) {
+              value {
+                centAmount
+                currencyCode
+                fractionDigits
+              }
+              discounted {
+                value {
+                  centAmount
+                  currencyCode
+                  fractionDigits
+                }
+                discount {
+                  id
+                  nameAllLocales {
+                    value
+                    locale
+                  }
+                }
+              }
+            }
+          }
+          variants {
+            sku
+            key
+            images {
+              url
+              label
+            }
+            price(currency: $currency) {
+              value {
+                centAmount
+                currencyCode
+                fractionDigits
+              }
+              discounted {
+                value {
+                  centAmount
+                  currencyCode
+                  fractionDigits
+                }
+                discount {
+                  id
+                  nameAllLocales {
+                    value
+                    locale
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+

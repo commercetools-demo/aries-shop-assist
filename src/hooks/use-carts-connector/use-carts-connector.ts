@@ -1,8 +1,11 @@
 /// <reference path="../../../@types/commercetools__sync-actions/index.d.ts" />
 /// <reference path="../../../@types-extensions/graphql-ctp/index.d.ts" />
 
-import type { ApolloError } from '@apollo/client';
-import { useMcQuery } from '@commercetools-frontend/application-shell';
+import { type ApolloError } from '@apollo/client';
+import {
+  useMcQuery,
+  useMcMutation,
+} from '@commercetools-frontend/application-shell';
 import { GRAPHQL_TARGETS } from '@commercetools-frontend/constants';
 import type { TDataTableSortingState } from '@commercetools-uikit/hooks';
 import type {
@@ -10,9 +13,12 @@ import type {
   TFetchCartDetailsQueryVariables,
   TFetchCartsQuery,
   TFetchCartsQueryVariables,
+  TUpdateCartMutationVariables,
+  TUpdateCartMutation,
 } from '../../types/generated/ctp';
 import FetchCartsQuery from './fetch-carts.ctp.graphql';
 import FetchCartDetailsQuery from './fetch-cart-details.ctp.graphql';
+import UpdateCartMutation from './update-cart.ctp.graphql';
 
 type PaginationAndSortingProps = {
   page: { value: number };
@@ -85,5 +91,45 @@ export const useCartDetailsFetcher: TUseCartDetailsFetcher = (cartId) => {
     cart: data?.cart,
     error,
     loading,
+  };
+};
+
+type TUseUpdateCart = (
+  cartId: string,
+  version: number,
+  actions: Array<
+    | { addLineItem?: { sku: string; quantity: number } }
+    | { changeLineItemQuantity?: { lineItemId: string; quantity: number } }
+  >
+) => {
+  updateCart: (variables: TUpdateCartMutationVariables) => Promise<void>;
+  errorCart?: ApolloError;
+  loadingCart: boolean;
+};
+
+export const useUpdateCart: TUseUpdateCart = (cartId, version, actions) => {
+  const [updateCartMutation, { error, loading }] = useMcMutation<
+    TUpdateCartMutation,
+    TUpdateCartMutationVariables
+  >(UpdateCartMutation);
+
+  const updateCart = async (variables: TUpdateCartMutationVariables) => {
+    try {
+      await updateCartMutation({
+        context: {
+          target: GRAPHQL_TARGETS.COMMERCETOOLS_PLATFORM,
+        },
+        variables,
+      });
+    } catch (error) {
+      console.log(error);
+      error = error;
+    }
+  };
+
+  return {
+    updateCart,
+    errorCart: error,
+    loadingCart: loading,
   };
 };

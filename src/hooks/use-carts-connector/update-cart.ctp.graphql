@@ -1,0 +1,20 @@
+mutation UpdateCart($cartId: String!, $version: Long!, $actions: [CartUpdateAction!]!) {
+  updateCart(id: $cartId, version: $version, actions: $actions) {
+    id
+    version
+    lineItems {
+      id
+      quantity
+      totalPrice {
+        currencyCode
+        centAmount
+        fractionDigits
+      }
+    }
+    totalPrice {
+      currencyCode
+      centAmount
+      fractionDigits
+    }
+  }
+}

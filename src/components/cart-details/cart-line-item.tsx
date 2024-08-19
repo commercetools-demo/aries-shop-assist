@@ -5,6 +5,13 @@ import type { TMoney } from '../../types/generated/ctp';
 import { formatMoneyCurrency } from '../../helpers';
 import Card from '@commercetools-uikit/card';
 import Grid from '@commercetools-uikit/grid';
+import IconButton from '@commercetools-uikit/icon-button';
+import {
+  AngleDownIcon,
+  AngleUpIcon,
+  CheckInactiveIcon,
+} from '@commercetools-uikit/icons';
+import { DECREASE, INCREASE } from './constants';
 
 type TLineItemProps = {
   key: string;
@@ -14,6 +21,8 @@ type TLineItemProps = {
   quantity: number;
   price: TMoney;
   discountedPrice?: TMoney;
+  removeItem: () => void;
+  updateItemQuantity: (quantity: string) => void;
 };
 
 const CartLineItem = ({
@@ -24,6 +33,8 @@ const CartLineItem = ({
   quantity,
   price,
   discountedPrice,
+  removeItem,
+  updateItemQuantity,
 }: TLineItemProps) => {
   const { dataLocale, projectLanguages } = useApplicationContext((context) => ({
     dataLocale: context.dataLocale,
@@ -37,36 +48,70 @@ const CartLineItem = ({
           <Grid.Item>
             <Spacings.Inline scale="m">
               <Spacings.Stack scale="m">
-                <img src={imageUrl} alt={sku} width="246" />
+                <img src={imageUrl} alt={sku} width="246" height="190" />
               </Spacings.Stack>
               <Spacings.Stack scale="m">
                 <Text.Headline as="h3">{itemName}</Text.Headline>
                 <Spacings.Stack scale="xs">
                   <Spacings.Inline scale="s">
-                    <Text.Body isBold={true}>SKU: </Text.Body>
+                    <Text.Body isBold={true}>SKU </Text.Body>
                     <Text.Body>{sku}</Text.Body>
                   </Spacings.Inline>
-                  <Spacings.Inline scale="s">
-                    <Text.Body isBold={true}>Quantity: </Text.Body>
-                    <Text.Body>{quantity}</Text.Body>
+                  <Spacings.Inline scale="s" alignItems="center">
+                    <Text.Body isBold={true}>Quantity </Text.Body>
+                    <Spacings.Inline scale="m" alignItems="center">
+                      <Text.Body>{quantity}</Text.Body>
+                      <Spacings.Stack scale="xs">
+                        <IconButton
+                          label="Increase quantity"
+                          icon={<AngleUpIcon />}
+                          type="button"
+                          size="small"
+                          theme="default"
+                          onClick={() => updateItemQuantity(INCREASE)}
+                        />
+                        <IconButton
+                          label="Decrease quantity"
+                          icon={<AngleDownIcon />}
+                          type="button"
+                          size="small"
+                          theme="default"
+                          onClick={() => updateItemQuantity(DECREASE)}
+                        />
+                      </Spacings.Stack>
+                    </Spacings.Inline>
                   </Spacings.Inline>
                 </Spacings.Stack>
               </Spacings.Stack>
             </Spacings.Inline>
           </Grid.Item>
-          <Grid.Item alignSelf="end">
-            <Spacings.Stack scale="xs">
-              {discountedPrice && (
-                <Text.Body isStrikethrough={true} tone="negative">
+          <Grid.Item>
+            <Spacings.Stack scale="xxxl" alignItems="flex-end">
+              <IconButton
+                label="Remove from cart"
+                icon={<CheckInactiveIcon />}
+                type="button"
+                shape="round"
+                size="big"
+                theme="default"
+                onClick={removeItem}
+              />
+              <Spacings.Stack scale="xs" alignItems="flex-end">
+                {discountedPrice && (
+                  <Text.Body isStrikethrough={true} tone="negative">
+                    {formatMoneyCurrency(
+                      discountedPrice,
+                      dataLocale || projectLanguages[0]
+                    )}
+                  </Text.Body>
+                )}
+                <Text.Body fontWeight="medium">
                   {formatMoneyCurrency(
-                    discountedPrice,
+                    price,
                     dataLocale || projectLanguages[0]
                   )}
                 </Text.Body>
-              )}
-              <Text.Body fontWeight="medium">
-                {formatMoneyCurrency(price, dataLocale || projectLanguages[0])}
-              </Text.Body>
+              </Spacings.Stack>
             </Spacings.Stack>
           </Grid.Item>
         </Grid>

@@ -1,3 +1,4 @@
+// External imports
 import { useIntl } from 'react-intl';
 import { useHistory, useParams } from 'react-router-dom';
 import { useApplicationContext } from '@commercetools-frontend/application-shell-connectors';
@@ -10,15 +11,24 @@ import {
   formatLocalizedString,
   transformLocalizedFieldToLocalizedString,
 } from '@commercetools-frontend/l10n';
-import type { TMoney } from '../../types/generated/ctp';
-import { useCartDetailsFetcher } from '../../hooks/use-carts-connector';
-import { formatMoneyCurrency, getErrorMessage } from '../../helpers';
-import messages from './messages';
 import Card from '@commercetools-uikit/card';
-import CartLineItem from './cart-line-item';
 import { InfoModalPage } from '@commercetools-frontend/application-components';
 import Grid from '@commercetools-uikit/grid';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
+import SearchSelectInput from '@commercetools-uikit/search-select-field';
+import PrimaryButton from '@commercetools-uikit/primary-button';
+
+// Local imports
+import type { TMoney, TMyCartUpdateAction } from '../../types/generated/ctp';
+import {
+  useCartDetailsFetcher,
+  useUpdateCart,
+} from '../../hooks/use-carts-connector';
+import { formatMoneyCurrency, getErrorMessage } from '../../helpers';
+import messages from './messages';
+import CartLineItem from './cart-line-item';
+import { useProductBySkuFetcher } from '../../hooks/use-products-connector';
+import { INCREASE } from './constants';
 
 type TCartDetailsProps = {
   linkToCarts: string;
@@ -29,6 +39,13 @@ const CartDetails = (props: TCartDetailsProps) => {
   const params = useParams<{ id: string }>();
   const { push } = useHistory();
   const { loading, error, cart } = useCartDetailsFetcher(params.id);
+  const [searchValue, setSearchValue] = useState<string>('');
+  const { product } = useProductBySkuFetcher(searchValue);
+  const { updateCart, loadingCart, errorCart } = useUpdateCart(
+    params.id,
+    cart?.version ?? 0,
+    []
+  );
 
   const items = useMemo(() => (cart && cart.lineItems) || [], [cart]);
 
@@ -47,11 +64,77 @@ const CartDetails = (props: TCartDetailsProps) => {
       ) ?? 0,
     fractionDigits: cart?.totalPrice?.fractionDigits ?? 0,
   };
+  const handleUpdateCart = async (
+    actions: Array<TMyCartUpdateAction> | TMyCartUpdateAction
+  ) => {
+    try {
+      await updateCart({
+        cartId: params.id,
+        version: cart?.version || 0,
+        actions,
+      });
+    } catch (error) {}
+  };
 
-  if (error) {
+  const handleChangeLineItemQuantity = async (
+    lineItem: { id: string; quantity: number },
+    quantity: number
+  ) => {
+    const actions = [
+      {
+        changeLineItemQuantity: {
+          lineItemId: lineItem.id,
+          quantity: quantity,
+        },
+      },
+    ];
+    await handleUpdateCart(actions);
+  };
+
+  const handleAddLineItem = async (sku: string) => {
+    const actions = [
+      {
+        addLineItem: {
+          sku: sku,
+          quantity: 1,
+        },
+      },
+    ];
+    await handleUpdateCart(actions);
+  };
+  const handleAddProduct = async () => {
+    if (product && product.length > 0) {
+      const sku = product[0]?.masterData?.current?.masterVariant?.sku;
+      const existingLineItem = cart?.lineItems.find(
+        (item) => item?.variant?.sku === sku
+      );
+      existingLineItem
+        ? await handleChangeLineItemQuantity(
+            existingLineItem,
+            existingLineItem.quantity + 1
+          )
+        : sku && (await handleAddLineItem(sku));
+    }
+  };
+
+  const updateItemQuantity = async (
+    lineItem: { id: string; quantity: number },
+    quantity: string
+  ) => {
+    const updatedQuantity =
+      quantity === INCREASE ? lineItem.quantity + 1 : lineItem.quantity - 1;
+    handleChangeLineItemQuantity(lineItem, updatedQuantity);
+  };
+
+  if (error || errorCart) {
     return (
       <ContentNotification type="error">
-        <Text.Body tone="negative">{getErrorMessage(error)}</Text.Body>
+        {error && (
+          <Text.Body tone="negative">{getErrorMessage(error)} </Text.Body>
+        )}
+        {errorCart && (
+          <Text.Body tone="negative">{getErrorMessage(errorCart)} </Text.Body>
+        )}
       </ContentNotification>
     );
   }
@@ -67,17 +150,48 @@ const CartDetails = (props: TCartDetailsProps) => {
       onClose={() => push(props.linkToCarts)}
     >
       <Spacings.Stack scale="xl">
-        {loading && (
-          <Spacings.Stack alignItems="center">
-            <LoadingSpinner />
-          </Spacings.Stack>
-        )}
+        {loading ||
+          (loadingCart && (
+            <Spacings.Stack alignItems="center">
+              <LoadingSpinner />
+            </Spacings.Stack>
+          ))}
         {error && (
           <ContentNotification type="error">
             <Text.Body>
               {intl.formatMessage(messages.cartDetailsErrorMessage)}
             </Text.Body>
           </ContentNotification>
+        )}
+        {cart && (
+          <Spacings.Inline scale="s" alignItems="flex-end">
+            <SearchSelectInput
+              isClearable={true}
+              placeholder="Search by SKU"
+              title="Add items to your shopping cart."
+              value={searchValue}
+              loadingMessage="loading exact matches"
+              horizontalConstraint={14}
+              optionType="single-property"
+              isAutofocussed={false}
+              backspaceRemovesValue={true}
+              filterOption={() => true}
+              loadOptions={async (inputValue) => {
+                console.log(inputValue);
+                if (inputValue) {
+                  setSearchValue(inputValue);
+                }
+                return [];
+              }}
+              id="searchBySkuBar"
+            />
+
+            <PrimaryButton
+              label="Add to cart"
+              onClick={handleAddProduct}
+              isDisabled={false}
+            />
+          </Spacings.Inline>
         )}
         {cart && (
           <Grid
@@ -90,6 +204,10 @@ const CartDetails = (props: TCartDetailsProps) => {
               <Spacings.Stack scale="m">
                 {items?.map((item, idx) => (
                   <CartLineItem
+                    removeItem={() => handleChangeLineItemQuantity(item, 0)}
+                    updateItemQuantity={(quantity: string) =>
+                      updateItemQuantity(item, quantity)
+                    }
                     key={`idx-${item?.id}-${idx}`}
                     itemName={
                       item?.nameAllLocales &&
@@ -108,7 +226,7 @@ const CartDetails = (props: TCartDetailsProps) => {
                       )
                     }
                     imageUrl={item?.variant?.images[0]?.url ?? ''}
-                    sku={item?.variant?.key ?? ''}
+                    sku={item?.variant?.sku ?? ''}
                     quantity={item.quantity}
                     price={
                       item?.totalPrice ?? {
@@ -167,17 +285,14 @@ const CartDetails = (props: TCartDetailsProps) => {
                       </Spacings.Inline>
                       <Spacings.Inline scale="s">
                         <Text.Body isBold={true}>Shipping:</Text.Body>
-                        <Text.Body>
-                          {formatMoneyCurrency(
-                            cart?.shippingInfo?.price ?? {
-                              type: 'centPrecision',
-                              centAmount: 0,
-                              currencyCode: cart?.totalPrice?.currencyCode,
-                              fractionDigits: cart?.totalPrice?.fractionDigits,
-                            },
-                            dataLocale || projectLanguages[0]
-                          )}
-                        </Text.Body>
+                        {cart?.shippingInfo?.price && (
+                          <Text.Body>
+                            {formatMoneyCurrency(
+                              cart?.shippingInfo?.price,
+                              dataLocale || projectLanguages[0]
+                            )}
+                          </Text.Body>
+                        )}
                       </Spacings.Inline>
                       <Spacings.Inline scale="s">
                         <Text.Body isBold={true}>Total:</Text.Body>

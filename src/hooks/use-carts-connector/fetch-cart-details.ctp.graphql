@@ -2,6 +2,7 @@ query FetchCartDetails($cartId: String!) {
   cart(id: $cartId) {
     id
     key
+    version
     locale
     shippingAddress {
       streetName
@@ -41,6 +42,17 @@ query FetchCartDetails($cartId: String!) {
       nameAllLocales {
         locale
         value
+      }
+      discountedPricePerQuantity {
+        discountedPrice {
+          includedDiscounts {
+            discountedAmount {
+              currencyCode
+              centAmount
+              fractionDigits
+            }
+          }
+        }
       }
       quantity
       totalPrice {
