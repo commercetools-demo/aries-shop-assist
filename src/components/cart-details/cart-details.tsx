@@ -64,7 +64,9 @@ const CartDetails = (props: TCartDetailsProps) => {
       ) ?? 0,
     fractionDigits: cart?.totalPrice?.fractionDigits ?? 0,
   };
-  const handleUpdateCart = async (actions: Array<TMyCartUpdateAction> | TMyCartUpdateAction) => {
+  const handleUpdateCart = async (
+    actions: Array<TMyCartUpdateAction> | TMyCartUpdateAction
+  ) => {
     try {
       await updateCart({
         cartId: params.id,
@@ -115,11 +117,6 @@ const CartDetails = (props: TCartDetailsProps) => {
         ? await handleAddLineItem(sku)
         : '';
     }
-  };
-
-  const handleChange = (event: { target: any; persist?: () => void }) => {
-    setSearchValue(event.target.value);
-    handleAddProduct();
   };
 
   const updateItemQuantity = async (
@@ -175,7 +172,6 @@ const CartDetails = (props: TCartDetailsProps) => {
               placeholder="Search by SKU"
               title="Add items to your shopping cart."
               value={searchValue}
-              onChange={handleChange}
               loadingMessage="loading exact matches"
               horizontalConstraint={14}
               optionType="single-property"
