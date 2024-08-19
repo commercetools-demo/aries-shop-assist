@@ -113,9 +113,7 @@ const CartDetails = (props: TCartDetailsProps) => {
             existingLineItem,
             existingLineItem.quantity + 1
           )
-        : sku
-        ? await handleAddLineItem(sku)
-        : '';
+        : sku && (await handleAddLineItem(sku));
     }
   };
 
