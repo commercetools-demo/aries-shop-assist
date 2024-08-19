@@ -1,7 +1,7 @@
 /// <reference path="../../../@types/commercetools__sync-actions/index.d.ts" />
 /// <reference path="../../../@types-extensions/graphql-ctp/index.d.ts" />
 
-import { useMutation, type ApolloError } from '@apollo/client';
+import { type ApolloError } from '@apollo/client';
 import {
   useMcQuery,
   useMcMutation,

@@ -1,3 +1,4 @@
+// External imports
 import { useIntl } from 'react-intl';
 import { useHistory, useParams } from 'react-router-dom';
 import { useApplicationContext } from '@commercetools-frontend/application-shell-connectors';
@@ -10,6 +11,14 @@ import {
   formatLocalizedString,
   transformLocalizedFieldToLocalizedString,
 } from '@commercetools-frontend/l10n';
+import Card from '@commercetools-uikit/card';
+import { InfoModalPage } from '@commercetools-frontend/application-components';
+import Grid from '@commercetools-uikit/grid';
+import { useMemo, useState } from 'react';
+import SearchSelectInput from '@commercetools-uikit/search-select-field';
+import PrimaryButton from '@commercetools-uikit/primary-button';
+
+// Local imports
 import type { TMoney } from '../../types/generated/ctp';
 import {
   useCartDetailsFetcher,
@@ -17,14 +26,8 @@ import {
 } from '../../hooks/use-carts-connector';
 import { formatMoneyCurrency, getErrorMessage } from '../../helpers';
 import messages from './messages';
-import Card from '@commercetools-uikit/card';
 import CartLineItem from './cart-line-item';
-import { InfoModalPage } from '@commercetools-frontend/application-components';
-import Grid from '@commercetools-uikit/grid';
-import { useMemo, useState } from 'react';
 import { useProductBySkuFetcher } from '../../hooks/use-products-connector';
-import SearchSelectInput from '@commercetools-uikit/search-select-field';
-import PrimaryButton from '@commercetools-uikit/primary-button';
 import { INCREASE } from './constants';
 
 type TCartDetailsProps = {
@@ -45,12 +48,6 @@ const CartDetails = (props: TCartDetailsProps) => {
   );
 
   const items = useMemo(() => (cart && cart.lineItems) || [], [cart]);
-
-  /*   const discounts = useMemo(() => {
-    return cart?.lineItems.reduce((acc, lineItem) => {
-      return acc + lineItem?.discountedPricePerQuantity.discountedPrice.includedDiscounts.discountedAmount;
-    }, 0);
-  }, [cart]); */
 
   const { dataLocale, projectLanguages } = useApplicationContext((context) => ({
     dataLocale: context.dataLocale,
@@ -134,15 +131,18 @@ const CartDetails = (props: TCartDetailsProps) => {
         version: cart?.version || 0,
         actions,
       });
-    } catch (error) {
-      console.log(loadingCart, errorCart);
-    }
+    } catch (error) {}
   };
 
-  if (error) {
+  if (error || errorCart) {
     return (
       <ContentNotification type="error">
-        <Text.Body tone="negative">{getErrorMessage(error)}</Text.Body>
+        {error && (
+          <Text.Body tone="negative">{getErrorMessage(error)} </Text.Body>
+        )}
+        {errorCart && (
+          <Text.Body tone="negative">{getErrorMessage(errorCart)} </Text.Body>
+        )}
       </ContentNotification>
     );
   }

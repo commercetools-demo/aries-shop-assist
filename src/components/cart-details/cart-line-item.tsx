@@ -1,5 +1,4 @@
 import { useApplicationContext } from '@commercetools-frontend/application-shell-connectors';
-import { useReducer } from 'react';
 import Spacings from '@commercetools-uikit/spacings';
 import Text from '@commercetools-uikit/text';
 import type { TMoney } from '../../types/generated/ctp';
@@ -41,23 +40,6 @@ const CartLineItem = ({
     dataLocale: context.dataLocale,
     projectLanguages: context.project?.languages ?? [],
   }));
-  const [quantityState, dispatchQuantity] = useReducer(
-    (state: number, action: number) => action,
-    quantity
-  );
-  const setQuantity = (newQuantity: number) => dispatchQuantity(newQuantity);
-
-  const [priceState, dispatchPrice] = useReducer(
-    (state: TMoney, action: TMoney) => action,
-    price
-  );
-  const setPrice = (newPrice: TMoney) => dispatchPrice(newPrice);
-
-  const lineItemPrice = {
-    centAmount: price.centAmount / quantity,
-    currencyCode: price.currencyCode,
-    fractionDigits: price.fractionDigits,
-  };
 
   return (
     <div key={key}>
@@ -87,16 +69,6 @@ const CartLineItem = ({
                           size="small"
                           theme="default"
                           onClick={() => updateItemQuantity(INCREASE)}
-                          // onClick={() => {
-                          //   setQuantity(quantity + 1);
-                          //   setPrice({
-                          //     centAmount:
-                          //       lineItemPrice.centAmount * (quantity + 1),
-                          //     currencyCode: price.currencyCode,
-                          //     fractionDigits: price.fractionDigits,
-                          //     type: price.type,
-                          //   });
-                          // }}
                         />
                         <IconButton
                           label="Decrease quantity"
@@ -105,16 +77,6 @@ const CartLineItem = ({
                           size="small"
                           theme="default"
                           onClick={() => updateItemQuantity(DECREASE)}
-                          // onClick={() => {
-                          //   setQuantity(quantityState - 1);
-                          //   setPrice({
-                          //     centAmount:
-                          //       lineItemPrice.centAmount * (quantityState - 1),
-                          //     currencyCode: price.currencyCode,
-                          //     fractionDigits: price.fractionDigits,
-                          //     type: price.type,
-                          //   });
-                          // }}
                         />
                       </Spacings.Stack>
                     </Spacings.Inline>
