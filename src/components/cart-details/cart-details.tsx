@@ -19,7 +19,7 @@ import SearchSelectInput from '@commercetools-uikit/search-select-field';
 import PrimaryButton from '@commercetools-uikit/primary-button';
 
 // Local imports
-import type { TMoney } from '../../types/generated/ctp';
+import type { TMoney, TMyCartUpdateAction } from '../../types/generated/ctp';
 import {
   useCartDetailsFetcher,
   useUpdateCart,
@@ -64,37 +64,14 @@ const CartDetails = (props: TCartDetailsProps) => {
       ) ?? 0,
     fractionDigits: cart?.totalPrice?.fractionDigits ?? 0,
   };
-
-  const handleAddProduct = async () => {
-    if (product && product.length > 0) {
-      const sku = product[0]?.masterData?.current?.masterVariant?.sku;
-      const existingLineItem = cart?.lineItems.find(
-        (item) => item?.variant?.sku === sku
-      );
-      const actions = existingLineItem
-        ? handleChangeLineItemQuantity(
-            existingLineItem,
-            existingLineItem.quantity + 1
-          )
-        : sku
-        ? handleAddLineItem(sku)
-        : '';
-      handleUpdateCart(actions);
-    }
-  };
-
-  const handleChange = (event: { target: any; persist?: () => void }) => {
-    setSearchValue(event.target.value);
-    handleAddProduct();
-  };
-
-  const updateItemQuantity = async (
-    lineItem: { id: string; quantity: number },
-    quantity: string
-  ) => {
-    const updatedQuantity =
-      quantity === INCREASE ? lineItem.quantity + 1 : lineItem.quantity - 1;
-    handleChangeLineItemQuantity(lineItem, updatedQuantity);
+  const handleUpdateCart = async (actions: Array<TMyCartUpdateAction> | TMyCartUpdateAction) => {
+    try {
+      await updateCart({
+        cartId: params.id,
+        version: cart?.version || 0,
+        actions,
+      });
+    } catch (error) {}
   };
 
   const handleChangeLineItemQuantity = async (
@@ -123,15 +100,35 @@ const CartDetails = (props: TCartDetailsProps) => {
     ];
     await handleUpdateCart(actions);
   };
+  const handleAddProduct = async () => {
+    if (product && product.length > 0) {
+      const sku = product[0]?.masterData?.current?.masterVariant?.sku;
+      const existingLineItem = cart?.lineItems.find(
+        (item) => item?.variant?.sku === sku
+      );
+      existingLineItem
+        ? await handleChangeLineItemQuantity(
+            existingLineItem,
+            existingLineItem.quantity + 1
+          )
+        : sku
+        ? await handleAddLineItem(sku)
+        : '';
+    }
+  };
 
-  const handleUpdateCart = async (actions: any) => {
-    try {
-      await updateCart({
-        cartId: params.id,
-        version: cart?.version || 0,
-        actions,
-      });
-    } catch (error) {}
+  const handleChange = (event: { target: any; persist?: () => void }) => {
+    setSearchValue(event.target.value);
+    handleAddProduct();
+  };
+
+  const updateItemQuantity = async (
+    lineItem: { id: string; quantity: number },
+    quantity: string
+  ) => {
+    const updatedQuantity =
+      quantity === INCREASE ? lineItem.quantity + 1 : lineItem.quantity - 1;
+    handleChangeLineItemQuantity(lineItem, updatedQuantity);
   };
 
   if (error || errorCart) {
