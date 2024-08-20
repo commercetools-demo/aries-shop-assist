@@ -26,25 +26,28 @@ const DropdownInputField = ({
   useEffect(() => {
     if (product) {
       handleProducts(product);
-      let allSkus = product?.map((p) => {
-        if (p) {
-          return [
-            p.masterData.current?.masterVariant.sku,
-            p.masterData.current?.variants.map((v) => v.sku),
-          ];
-        } else {
-          return null;
-        }
-      });
-      const flattenSku = allSkus?.flat(2);
+      let allSkus = product
+        ?.map((p) => {
+          if (p) {
+            return [
+              p.masterData.current?.masterVariant.sku,
+              p.masterData.current?.variants.map((v) => v && v.sku),
+            ];
+          } else {
+            return '';
+          }
+        })
+        .flat(2)?.filter(
+          (sku) => sku !== undefined && sku !== null
+        );
+
       if (
-        Array.isArray(flattenSku) &&
-        flattenSku.length > 0 &&
-        flattenSku !== undefined &&
-        flattenSku !== null
+        Array.isArray(allSkus) &&
+        allSkus.length > 0 &&
+        allSkus !== undefined &&
+        allSkus !== null
       ) {
-        console.log(flattenSku);
-        setSkus([...flattenSku]);
+        setSkus([...allSkus]);
       }
     }
   }, [product]);

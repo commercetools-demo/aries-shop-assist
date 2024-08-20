@@ -105,13 +105,10 @@ const CartDetails = (props: TCartDetailsProps) => {
     await handleUpdateCart(actions);
   };
   const handleAddProduct = async (sku: string) => {
-    console.log(products, sku);
     if (products) {
-      // const sku = product[0]?.masterData?.current?.masterVariant?.sku;
       const existingLineItem = cart?.lineItems.find(
         (item) => item?.variant?.sku === sku
       );
-      console.log('item', existingLineItem);
       existingLineItem
         ? await handleChangeLineItemQuantity(
             existingLineItem,
