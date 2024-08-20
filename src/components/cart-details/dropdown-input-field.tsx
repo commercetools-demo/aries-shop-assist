@@ -37,9 +37,8 @@ const DropdownInputField = ({
             return '';
           }
         })
-        .flat(2)?.filter(
-          (sku) => sku !== undefined && sku !== null
-        );
+        .flat(2)
+        ?.filter((sku) => sku !== undefined && sku !== null);
 
       if (
         Array.isArray(allSkus) &&
