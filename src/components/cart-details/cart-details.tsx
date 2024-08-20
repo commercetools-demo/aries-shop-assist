@@ -29,6 +29,7 @@ import messages from './messages';
 import CartLineItem from './cart-line-item';
 import { useProductBySkuFetcher } from '../../hooks/use-products-connector';
 import { INCREASE } from './constants';
+import DropdownInputField from './dropdown-input-field';
 
 type TCartDetailsProps = {
   linkToCarts: string;
@@ -39,8 +40,8 @@ const CartDetails = (props: TCartDetailsProps) => {
   const params = useParams<{ id: string }>();
   const { push } = useHistory();
   const { loading, error, cart } = useCartDetailsFetcher(params.id);
-  const [searchValue, setSearchValue] = useState<string>('');
-  const { product } = useProductBySkuFetcher(searchValue);
+  const [products, setProducts] = useState();
+  // const { product } = useProductBySkuFetcher(searchValue);
   const { updateCart, loadingCart, errorCart } = useUpdateCart(
     params.id,
     cart?.version ?? 0,
@@ -102,12 +103,14 @@ const CartDetails = (props: TCartDetailsProps) => {
     ];
     await handleUpdateCart(actions);
   };
-  const handleAddProduct = async () => {
-    if (product && product.length > 0) {
-      const sku = product[0]?.masterData?.current?.masterVariant?.sku;
+  const handleAddProduct = async (sku:string) => {
+    console.log(products, sku)
+    if (products) {
+      // const sku = product[0]?.masterData?.current?.masterVariant?.sku;
       const existingLineItem = cart?.lineItems.find(
         (item) => item?.variant?.sku === sku
       );
+      console.log('item', existingLineItem);
       existingLineItem
         ? await handleChangeLineItemQuantity(
             existingLineItem,
@@ -165,7 +168,8 @@ const CartDetails = (props: TCartDetailsProps) => {
         )}
         {cart && (
           <Spacings.Inline scale="s" alignItems="flex-end">
-            <SearchSelectInput
+            <DropdownInputField handleProducts={(products) => setProducts(products)} handleSkuValue={(sku:string) => handleAddProduct(sku)} />
+            {/* <SearchSelectInput
               isClearable={true}
               placeholder="Search by SKU"
               title="Add items to your shopping cart."
@@ -184,13 +188,13 @@ const CartDetails = (props: TCartDetailsProps) => {
                 return [];
               }}
               id="searchBySkuBar"
-            />
+            /> */}
 
-            <PrimaryButton
+            {/* <PrimaryButton
               label="Add to cart"
               onClick={handleAddProduct}
               isDisabled={false}
-            />
+            /> */}
           </Spacings.Inline>
         )}
         {cart && (
