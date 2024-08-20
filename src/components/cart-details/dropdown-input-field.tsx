@@ -2,19 +2,31 @@
 import { useEffect, useState } from 'react';
 import DropdownMenu from '@commercetools-uikit/dropdown-menu';
 import TextField from '@commercetools-uikit/text-field';
+import PrimaryButton from '@commercetools-uikit/primary-button';
+import Spacings from '@commercetools-uikit/spacings';
+
 // local imports
 import { useProductBySkuFetcher } from '../../hooks/use-products-connector';
+import { TFetchProductBySkuQuery } from '../../types/generated/ctp';
 
-const DropdownInputField = ({handleSkuValue, handleProducts}: {handleSkuValue: (val:string) => void, handleProducts: (products: any) => void}) => {
+const DropdownInputField = ({
+  handleSkuValue,
+  handleProducts,
+}: {
+  handleSkuValue: (val: string) => void;
+  handleProducts: (
+    product: TFetchProductBySkuQuery['products']['results']
+  ) => void;
+}) => {
   const [searchValue, setSearchValue] = useState<string>('');
   const { product } = useProductBySkuFetcher(searchValue);
-  const [skus, setSkus] = useState<any>([]);
+  const [skus, setSkus] = useState<string[] | null>(null);
+  const [selectedSku, setSelectedSku] = useState<string>('');
 
   useEffect(() => {
-    handleProducts(product);
-    if(product) {
-      let allSkus = product
-      ?.map((p) => {
+    if (product) {
+      handleProducts(product);
+      let allSkus = product?.map((p) => {
         if (p) {
           return [
             p.masterData.current?.masterVariant.sku,
@@ -25,35 +37,48 @@ const DropdownInputField = ({handleSkuValue, handleProducts}: {handleSkuValue: (
         }
       });
       const flattenSku = allSkus?.flat(2);
-      if(Array.isArray(flattenSku) && flattenSku.length > 0 && flattenSku !== undefined && flattenSku !== null) {
+      if (
+        Array.isArray(flattenSku) &&
+        flattenSku.length > 0 &&
+        flattenSku !== undefined &&
+        flattenSku !== null
+      ) {
+        console.log(flattenSku);
         setSkus([...flattenSku]);
       }
     }
-    
   }, [product]);
   return (
-    <div>
+    <Spacings.Inline scale="s" alignItems="flex-end">
       <DropdownMenu
         triggerElement={
           <TextField
-            title="Username"
+            title="Add items to your shopping cart."
             value={searchValue}
             onChange={(event) => setSearchValue(event.target.value)}
+            placeholder="Search by Product Id"
           />
         }
         menuHorizontalConstraint={6}
         menuPosition="left"
         menuType="list"
       >
-        {
-            skus && skus.map((sku: string) => (
-              <DropdownMenu.ListMenuItem key={sku} onClick={() => handleSkuValue(sku)}>
-                {sku}
-              </DropdownMenu.ListMenuItem>
-            ))
-        }
+        {skus &&
+          skus.map((sku: string) => (
+            <DropdownMenu.ListMenuItem
+              key={sku}
+              onClick={() => setSelectedSku(sku)}
+            >
+              {sku}
+            </DropdownMenu.ListMenuItem>
+          ))}
       </DropdownMenu>
-    </div>
+      <PrimaryButton
+        label="Add to cart"
+        onClick={() => handleSkuValue(selectedSku)}
+        isDisabled={false}
+      />
+    </Spacings.Inline>
   );
 };
 
