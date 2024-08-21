@@ -23,6 +23,11 @@ const DropdownInputField = ({
   const [skus, setSkus] = useState<string[] | null>(null);
   const [selectedSku, setSelectedSku] = useState<string>('');
 
+  // Here in the useEffect we are checking if the product is available or not
+  // If the product is available then we are calling the handleProducts function
+  // to set the product in the state and also we are getting all the skus of the product
+  // and setting it in the state
+
   useEffect(() => {
     if (product) {
       handleProducts(product);
