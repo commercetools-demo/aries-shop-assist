@@ -114,16 +114,12 @@ export const useUpdateCart: TUseUpdateCart = (cartId, version, actions) => {
   >(UpdateCartMutation);
 
   const updateCart = async (variables: TUpdateCartMutationVariables) => {
-    try {
-      await updateCartMutation({
-        context: {
-          target: GRAPHQL_TARGETS.COMMERCETOOLS_PLATFORM,
-        },
-        variables,
-      });
-    } catch (error) {
-      error = error;
-    }
+    await updateCartMutation({
+      context: {
+        target: GRAPHQL_TARGETS.COMMERCETOOLS_PLATFORM,
+      },
+      variables,
+    });
   };
 
   return {

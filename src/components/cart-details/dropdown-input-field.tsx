@@ -27,26 +27,19 @@ const DropdownInputField = ({
     if (product) {
       handleProducts(product);
       let allSkus = product
-        ?.map((p) => {
-          if (p) {
-            return [
-              p.masterData.current?.masterVariant.sku,
-              p.masterData.current?.variants.map((v) => v && v.sku),
-            ];
-          } else {
-            return '';
-          }
-        })
+        ?.map((p) =>
+          p
+            ? [
+                p.masterData.current?.masterVariant.sku,
+                p.masterData.current?.variants.map((v) => v?.sku),
+              ]
+            : ''
+        )
         .flat(2)
-        ?.filter((sku) => sku !== undefined && sku !== null);
+        .filter((sku) => sku !== undefined && sku !== null);
 
-      if (
-        Array.isArray(allSkus) &&
-        allSkus.length > 0 &&
-        allSkus !== undefined &&
-        allSkus !== null
-      ) {
-        setSkus([...allSkus]);
+      if (allSkus) {
+        setSkus(allSkus);
       }
     }
   }, [product]);
