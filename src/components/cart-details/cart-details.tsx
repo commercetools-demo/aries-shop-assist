@@ -15,11 +15,13 @@ import Card from '@commercetools-uikit/card';
 import { InfoModalPage } from '@commercetools-frontend/application-components';
 import Grid from '@commercetools-uikit/grid';
 import { useMemo, useState } from 'react';
-import SearchSelectInput from '@commercetools-uikit/search-select-field';
-import PrimaryButton from '@commercetools-uikit/primary-button';
 
 // Local imports
-import type { TMoney, TMyCartUpdateAction } from '../../types/generated/ctp';
+import type {
+  TFetchProductBySkuQuery,
+  TMoney,
+  TMyCartUpdateAction,
+} from '../../types/generated/ctp';
 import {
   useCartDetailsFetcher,
   useUpdateCart,
@@ -27,8 +29,8 @@ import {
 import { formatMoneyCurrency, getErrorMessage } from '../../helpers';
 import messages from './messages';
 import CartLineItem from './cart-line-item';
-import { useProductBySkuFetcher } from '../../hooks/use-products-connector';
 import { INCREASE } from './constants';
+import DropdownInputField from './dropdown-input-field';
 
 type TCartDetailsProps = {
   linkToCarts: string;
@@ -39,8 +41,8 @@ const CartDetails = (props: TCartDetailsProps) => {
   const params = useParams<{ id: string }>();
   const { push } = useHistory();
   const { loading, error, cart } = useCartDetailsFetcher(params.id);
-  const [searchValue, setSearchValue] = useState<string>('');
-  const { product } = useProductBySkuFetcher(searchValue);
+  const [products, setProducts] =
+    useState<TFetchProductBySkuQuery['products']['results']>();
   const { updateCart, loadingCart, errorCart } = useUpdateCart(
     params.id,
     cart?.version ?? 0,
@@ -102,9 +104,8 @@ const CartDetails = (props: TCartDetailsProps) => {
     ];
     await handleUpdateCart(actions);
   };
-  const handleAddProduct = async () => {
-    if (product && product.length > 0) {
-      const sku = product[0]?.masterData?.current?.masterVariant?.sku;
+  const handleAddProduct = async (sku: string) => {
+    if (products) {
       const existingLineItem = cart?.lineItems.find(
         (item) => item?.variant?.sku === sku
       );
@@ -164,34 +165,10 @@ const CartDetails = (props: TCartDetailsProps) => {
           </ContentNotification>
         )}
         {cart && (
-          <Spacings.Inline scale="s" alignItems="flex-end">
-            <SearchSelectInput
-              isClearable={true}
-              placeholder="Search by SKU"
-              title="Add items to your shopping cart."
-              value={searchValue}
-              loadingMessage="loading exact matches"
-              horizontalConstraint={14}
-              optionType="single-property"
-              isAutofocussed={false}
-              backspaceRemovesValue={true}
-              filterOption={() => true}
-              loadOptions={async (inputValue) => {
-                console.log(inputValue);
-                if (inputValue) {
-                  setSearchValue(inputValue);
-                }
-                return [];
-              }}
-              id="searchBySkuBar"
-            />
-
-            <PrimaryButton
-              label="Add to cart"
-              onClick={handleAddProduct}
-              isDisabled={false}
-            />
-          </Spacings.Inline>
+          <DropdownInputField
+            handleProducts={(products) => setProducts(products)}
+            handleSkuValue={(sku: string) => handleAddProduct(sku)}
+          />
         )}
         {cart && (
           <Grid

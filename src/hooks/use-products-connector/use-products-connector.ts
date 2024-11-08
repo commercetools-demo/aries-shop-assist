@@ -19,8 +19,7 @@ export const useProductBySkuFetcher: TUseProductBySkuFetcher = (where) => {
     TFetchProductBySkuQueryVariables
   >(FetchProductBySkuQuery, {
     variables: {
-      where: where ? `masterData(current(variants(sku="${where}")))` : '',
-      // where: where ? `id="${where}"` : '',
+      where: where ? `masterData(current(masterVariant(sku="${where}")))` : '',
       currency: 'USD',
       locale: 'en-US',
     },
