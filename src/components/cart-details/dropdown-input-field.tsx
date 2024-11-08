@@ -28,6 +28,7 @@ const DropdownInputField = ({
   // to set the product in the state and also we are getting all the skus of the product
   // and setting it in the state
 
+  // TODO: This section is complex enough to warrant a unit test and some comments. Consider using a flatMap() to simplify the logic, if feasible.
   useEffect(() => {
     if (product) {
       handleProducts(product);
@@ -47,7 +48,7 @@ const DropdownInputField = ({
         setSkus(allSkus);
       }
     }
-  }, [product]);
+  }, [handleProducts, product]);
   return (
     <Spacings.Inline scale="s" alignItems="flex-end">
       <DropdownMenu
@@ -56,7 +57,7 @@ const DropdownInputField = ({
             title="Add items to your shopping cart."
             value={searchValue}
             onChange={(event) => setSearchValue(event.target.value)}
-            placeholder="Search by Product Id"
+            placeholder="Search Product by sku"
           />
         }
         menuHorizontalConstraint={6}
