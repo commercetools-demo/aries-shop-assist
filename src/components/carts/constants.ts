@@ -9,6 +9,7 @@ export const dataTableColumns = [
     key: 'cartState',
     label: 'Cart state',
     isSortable: true,
+    disableResizing: true,
   },
   {
     key: 'customerGroup',

@@ -66,7 +66,7 @@ it('should render carts and paginate to second page', async () => {
   renderApp();
 
   // First page
-  await screen.findByText('cart-key-0');
+  await screen.findByText('cart-key-1');
   expect(screen.queryByText('cart-key-22')).not.toBeInTheDocument();
 
   // Go to second page
@@ -74,5 +74,5 @@ it('should render carts and paginate to second page', async () => {
 
   // Second page
   await screen.findByText('cart-key-22');
-  expect(screen.queryByText('cart-key-0')).not.toBeInTheDocument();
+  expect(screen.queryByText('cart-key-1')).not.toBeInTheDocument();
 });
