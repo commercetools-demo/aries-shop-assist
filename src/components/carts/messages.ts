@@ -21,4 +21,20 @@ export default defineMessages({
     id: 'Carts.emailAddressLabel',
     defaultMessage: 'Email Address',
   },
+  searchTermNotFound: {
+    id: 'Carts.searchTermNotFound',
+    defaultMessage: 'No matches found for your search term.',
+  },
+  searchTermNotFoundOnError: {
+    id: 'Carts.searchTermNotFoundOnError',
+    defaultMessage: 'Search term is not properly formed. No matches found.',
+  },
+  searchForCartsByAllFields: {
+    id: 'Carts.searchForCartsByAllFields',
+    defaultMessage: 'Search by ID or Customer email',
+  },
+  searchForCarts: {
+    id: 'Carts.searchForCarts',
+    defaultMessage: 'Search for carts',
+  },
 });

@@ -19,6 +19,7 @@ import type {
 import FetchCartsQuery from './fetch-carts.ctp.graphql';
 import FetchCartDetailsQuery from './fetch-cart-details.ctp.graphql';
 import UpdateCartMutation from './update-cart.ctp.graphql';
+import { LABEL_KEYS } from '../../components/carts/constants';
 
 type PaginationAndSortingProps = {
   page: { value: number };
@@ -44,8 +45,15 @@ export const useCartsFetcher: TUseCartsFetcher = ({
   where,
   labelKey,
 }) => {
+  // TODO: Sanitize email if desired via RegEx or util. By now we only need to asses that if a
+  // '@' is present, the id "where" filter should not be used, to avoid errors on ALL_FIELDS search.
+  const isEmail: boolean = where?.includes('@') ?? false;
   const searchQuery =
-    labelKey === 'cartId' ? `id="${where}"` : `customerEmail="${where}"`;
+    labelKey === LABEL_KEYS.ALL_FIELDS && !isEmail
+      ? `id="${where}" or customerEmail="${where}"`
+      : labelKey === LABEL_KEYS.CART_ID
+      ? `id="${where}"`
+      : `customerEmail="${where}"`;
   const { data, error, loading } = useMcQuery<
     TFetchCartsQuery,
     TFetchCartsQueryVariables
