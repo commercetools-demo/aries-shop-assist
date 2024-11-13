@@ -5,7 +5,6 @@ import {
   screen,
   mapResourceAccessToAppliedPermissions,
   type TRenderAppWithReduxOptions,
-  waitFor,
 } from '@commercetools-frontend/application-shell/test-utils';
 import { buildGraphqlList } from '@commercetools-test-data/core';
 import { renderApplicationWithRedux } from '../../test-utils';
@@ -66,16 +65,17 @@ it('should render carts and paginate to second page', async () => {
   );
   renderApp();
 
+  //TODO: Fix test, passing on local but failing on CI/CD (GH Actions)
+  // Possible workarounds here: https://github.com/testing-library/react-testing-library/issues/865
+
   // First page
-  const firstPage = await screen.findByText('cart-key-0');
-  await waitFor(() => expect(firstPage).toBeInTheDocument());
+  await screen.findByText('cart-key-0');
   expect(screen.queryByText('cart-key-22')).not.toBeInTheDocument();
 
   // Go to second page
   fireEvent.click(screen.getByLabelText('Next page'));
 
   // Second page
-  const secondPage = await screen.findByText('cart-key-22');
-  await waitFor(() => expect(secondPage).toBeInTheDocument());
+  await screen.findByText('cart-key-22');
   expect(screen.queryByText('cart-key-0')).not.toBeInTheDocument();
 });
