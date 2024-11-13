@@ -67,17 +67,15 @@ it('should render carts and paginate to second page', async () => {
   renderApp();
 
   // First page
-  await screen.findByText('cart-key-0');
-  await waitFor(() =>
-    expect(screen.queryByText('cart-key-22')).not.toBeInTheDocument()
-  );
+  const firstPage = await screen.findByText('cart-key-0');
+  await waitFor(() => expect(firstPage).toBeInTheDocument());
+  expect(screen.queryByText('cart-key-22')).not.toBeInTheDocument();
 
   // Go to second page
   fireEvent.click(screen.getByLabelText('Next page'));
 
   // Second page
-  await screen.findByText('cart-key-22');
-  await waitFor(() =>
-    expect(screen.queryByText('cart-key-0')).not.toBeInTheDocument()
-  );
+  const secondPage = await screen.findByText('cart-key-22');
+  await waitFor(() => expect(secondPage).toBeInTheDocument());
+  expect(screen.queryByText('cart-key-0')).not.toBeInTheDocument();
 });
