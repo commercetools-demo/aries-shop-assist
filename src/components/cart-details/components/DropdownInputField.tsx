@@ -6,8 +6,8 @@ import PrimaryButton from '@commercetools-uikit/primary-button';
 import Spacings from '@commercetools-uikit/spacings';
 
 // local imports
-import { useProductBySkuFetcher } from '../../hooks/use-products-connector';
-import { TFetchProductBySkuQuery } from '../../types/generated/ctp';
+import { useProductBySkuFetcher } from '../../../hooks/use-products-connector';
+import { TFetchProductBySkuQuery } from '../../../types/generated/ctp';
 
 const DropdownInputField = ({
   handleSkuValue,

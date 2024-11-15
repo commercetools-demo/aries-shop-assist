@@ -1,14 +1,15 @@
 import { useMemo, useState } from 'react';
-import {
-  useCartDetailsFetcher,
-  useUpdateCart,
-} from '../../hooks/use-carts-connector/use-carts-connector';
+
+import { useParams } from 'react-router';
 import {
   TFetchProductBySkuQuery,
   TMyCartUpdateAction,
-} from '../../types/generated/ctp';
-import { useParams } from 'react-router';
-import { INCREASE } from './constants';
+} from '../../../types/generated/ctp';
+import {
+  useCartDetailsFetcher,
+  useUpdateCart,
+} from '../../../hooks/use-carts-connector';
+import { INCREASE } from '../constants';
 
 export const useCartDetails = () => {
   const [products, setProducts] =
