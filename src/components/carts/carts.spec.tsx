@@ -1,8 +1,6 @@
 import { graphql } from 'msw';
 import { setupServer } from 'msw/node';
 import {
-  fireEvent,
-  screen,
   mapResourceAccessToAppliedPermissions,
   type TRenderAppWithReduxOptions,
 } from '@commercetools-frontend/application-shell/test-utils';
