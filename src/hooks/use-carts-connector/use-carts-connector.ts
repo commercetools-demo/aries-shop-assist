@@ -111,8 +111,8 @@ type TUseUpdateCart = (
   >
 ) => {
   updateCart: (variables: TUpdateCartMutationVariables) => Promise<void>;
-  errorCart?: ApolloError;
-  loadingCart: boolean;
+  errorUpdateCart?: ApolloError;
+  loadingUpdateCart: boolean;
 };
 
 export const useUpdateCart: TUseUpdateCart = (cartId, version, actions) => {
@@ -132,7 +132,7 @@ export const useUpdateCart: TUseUpdateCart = (cartId, version, actions) => {
 
   return {
     updateCart,
-    errorCart: error,
-    loadingCart: loading,
+    errorUpdateCart: error,
+    loadingUpdateCart: loading,
   };
 };
