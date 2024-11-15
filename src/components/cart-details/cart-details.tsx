@@ -1,6 +1,6 @@
 // External imports
 import { useIntl } from 'react-intl';
-import { useHistory, useParams } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { useApplicationContext } from '@commercetools-frontend/application-shell-connectors';
 import { NO_VALUE_FALLBACK } from '@commercetools-frontend/constants';
 import LoadingSpinner from '@commercetools-uikit/loading-spinner';
@@ -14,42 +14,30 @@ import {
 import Card from '@commercetools-uikit/card';
 import { InfoModalPage } from '@commercetools-frontend/application-components';
 import Grid from '@commercetools-uikit/grid';
-import { useMemo, useState } from 'react';
 
 // Local imports
-import type {
-  TFetchProductBySkuQuery,
-  TMoney,
-  TMyCartUpdateAction,
-} from '../../types/generated/ctp';
-import {
-  useCartDetailsFetcher,
-  useUpdateCart,
-} from '../../hooks/use-carts-connector';
+import type { TMoney } from '../../types/generated/ctp';
 import { formatMoneyCurrency, getErrorMessage } from '../../helpers';
 import messages from './messages';
 import CartLineItem from './cart-line-item';
-import { INCREASE } from './constants';
 import DropdownInputField from './dropdown-input-field';
+import { useCartDetails } from './useCartDetails';
 
-type TCartDetailsProps = {
-  linkToCarts: string;
-};
-
-const CartDetails = (props: TCartDetailsProps) => {
+const CartDetails = () => {
   const intl = useIntl();
-  const params = useParams<{ id: string }>();
-  const { push } = useHistory();
-  const { loading, error, cart } = useCartDetailsFetcher(params.id);
-  const [products, setProducts] =
-    useState<TFetchProductBySkuQuery['products']['results']>();
-  const { updateCart, loadingCart, errorCart } = useUpdateCart(
-    params.id,
-    cart?.version ?? 0,
-    []
-  );
-
-  const items = useMemo(() => (cart && cart.lineItems) || [], [cart]);
+  const { goBack } = useHistory();
+  const {
+    setProducts,
+    handleAddProduct,
+    updateItemQuantity,
+    handleChangeLineItemQuantity,
+    loadingCartDetails,
+    loadingUpdateCart,
+    errorCartDetails,
+    errorUpdateCart,
+    cartDetails,
+    items,
+  } = useCartDetails();
 
   const { dataLocale, projectLanguages } = useApplicationContext((context) => ({
     dataLocale: context.dataLocale,
@@ -58,119 +46,63 @@ const CartDetails = (props: TCartDetailsProps) => {
 
   const itemSubtotal: TMoney = {
     type: 'centPrecision',
-    currencyCode: cart?.totalPrice?.currencyCode ?? NO_VALUE_FALLBACK,
+    currencyCode: cartDetails?.totalPrice?.currencyCode ?? NO_VALUE_FALLBACK,
     centAmount:
-      cart?.lineItems.reduce(
+      cartDetails?.lineItems.reduce(
         (acc, lineItem) => acc + (lineItem?.totalPrice?.centAmount ?? 0),
         0
       ) ?? 0,
-    fractionDigits: cart?.totalPrice?.fractionDigits ?? 0,
-  };
-  const handleUpdateCart = async (
-    actions: Array<TMyCartUpdateAction> | TMyCartUpdateAction
-  ) => {
-    try {
-      await updateCart({
-        cartId: params.id,
-        version: cart?.version || 0,
-        actions,
-      });
-    } catch (error) {}
+    fractionDigits: cartDetails?.totalPrice?.fractionDigits ?? 0,
   };
 
-  const handleChangeLineItemQuantity = async (
-    lineItem: { id: string; quantity: number },
-    quantity: number
-  ) => {
-    const actions = [
-      {
-        changeLineItemQuantity: {
-          lineItemId: lineItem.id,
-          quantity: quantity,
-        },
-      },
-    ];
-    await handleUpdateCart(actions);
-  };
-
-  const handleAddLineItem = async (sku: string) => {
-    const actions = [
-      {
-        addLineItem: {
-          sku: sku,
-          quantity: 1,
-        },
-      },
-    ];
-    await handleUpdateCart(actions);
-  };
-  const handleAddProduct = async (sku: string) => {
-    if (products) {
-      const existingLineItem = cart?.lineItems.find(
-        (item) => item?.variant?.sku === sku
-      );
-      existingLineItem
-        ? await handleChangeLineItemQuantity(
-            existingLineItem,
-            existingLineItem.quantity + 1
-          )
-        : sku && (await handleAddLineItem(sku));
-    }
-  };
-
-  const updateItemQuantity = async (
-    lineItem: { id: string; quantity: number },
-    quantity: string
-  ) => {
-    const updatedQuantity =
-      quantity === INCREASE ? lineItem.quantity + 1 : lineItem.quantity - 1;
-    handleChangeLineItemQuantity(lineItem, updatedQuantity);
-  };
-
-  if (error || errorCart) {
+  if (errorCartDetails || errorUpdateCart) {
     return (
       <ContentNotification type="error">
-        {error && (
-          <Text.Body tone="negative">{getErrorMessage(error)} </Text.Body>
+        {errorCartDetails && (
+          <Text.Body tone="negative">
+            {getErrorMessage(errorCartDetails)}{' '}
+          </Text.Body>
         )}
-        {errorCart && (
-          <Text.Body tone="negative">{getErrorMessage(errorCart)} </Text.Body>
+        {errorUpdateCart && (
+          <Text.Body tone="negative">
+            {getErrorMessage(errorUpdateCart)}{' '}
+          </Text.Body>
         )}
       </ContentNotification>
     );
   }
 
-  // TO DO: Fix how to get from commerce-tools api the discounts data
+  // TODO: Fix how to get from commerce-tools api the discounts data
 
   return (
     <InfoModalPage
       isOpen={true}
-      title={`${intl.formatMessage(messages.cartKeyLabel)}: ${cart?.id}`}
-      topBarCurrentPathLabel={cart?.id}
+      title={`${intl.formatMessage(messages.cartKeyLabel)}: ${cartDetails?.id}`}
+      topBarCurrentPathLabel={cartDetails?.id}
       topBarPreviousPathLabel={intl.formatMessage(messages.backToCartsList)}
-      onClose={() => push(props.linkToCarts)}
+      onClose={goBack}
     >
       <Spacings.Stack scale="xl">
-        {loading ||
-          (loadingCart && (
+        {loadingCartDetails ||
+          (loadingUpdateCart && (
             <Spacings.Stack alignItems="center">
               <LoadingSpinner />
             </Spacings.Stack>
           ))}
-        {error && (
+        {errorCartDetails && (
           <ContentNotification type="error">
             <Text.Body>
               {intl.formatMessage(messages.cartDetailsErrorMessage)}
             </Text.Body>
           </ContentNotification>
         )}
-        {cart && (
+        {cartDetails && (
           <DropdownInputField
             handleProducts={(products) => setProducts(products)}
             handleSkuValue={(sku: string) => handleAddProduct(sku)}
           />
         )}
-        {cart && (
+        {cartDetails && (
           <Grid
             gridGap="20px"
             gridRowGap="20px"
@@ -208,9 +140,9 @@ const CartDetails = (props: TCartDetailsProps) => {
                     price={
                       item?.totalPrice ?? {
                         type: 'centPrecision',
-                        currencyCode: cart?.totalPrice?.currencyCode,
+                        currencyCode: cartDetails?.totalPrice?.currencyCode,
                         centAmount: 0,
-                        fractionDigits: cart?.totalPrice?.fractionDigits,
+                        fractionDigits: cartDetails?.totalPrice?.fractionDigits,
                       }
                     }
                   />
@@ -235,12 +167,12 @@ const CartDetails = (props: TCartDetailsProps) => {
                           )}
                         </Text.Body>
                       </Spacings.Inline>
-                      {cart?.taxedPrice?.totalTax && (
+                      {cartDetails?.taxedPrice?.totalTax && (
                         <Spacings.Inline scale="s">
                           <Text.Body isBold={true}>Total Tax:</Text.Body>
                           <Text.Body>
                             {formatMoneyCurrency(
-                              cart?.taxedPrice?.totalTax,
+                              cartDetails?.taxedPrice?.totalTax,
                               dataLocale || projectLanguages[0]
                             )}
                           </Text.Body>
@@ -252,9 +184,11 @@ const CartDetails = (props: TCartDetailsProps) => {
                           {formatMoneyCurrency(
                             {
                               type: 'centPrecision',
-                              currencyCode: cart?.totalPrice?.currencyCode,
+                              currencyCode:
+                                cartDetails?.totalPrice?.currencyCode,
                               centAmount: 0,
-                              fractionDigits: cart?.totalPrice?.fractionDigits,
+                              fractionDigits:
+                                cartDetails?.totalPrice?.fractionDigits,
                             },
                             dataLocale || projectLanguages[0]
                           )}
@@ -262,10 +196,10 @@ const CartDetails = (props: TCartDetailsProps) => {
                       </Spacings.Inline>
                       <Spacings.Inline scale="s">
                         <Text.Body isBold={true}>Shipping:</Text.Body>
-                        {cart?.shippingInfo?.price && (
+                        {cartDetails?.shippingInfo?.price && (
                           <Text.Body>
                             {formatMoneyCurrency(
-                              cart?.shippingInfo?.price,
+                              cartDetails?.shippingInfo?.price,
                               dataLocale || projectLanguages[0]
                             )}
                           </Text.Body>
@@ -275,7 +209,7 @@ const CartDetails = (props: TCartDetailsProps) => {
                         <Text.Body isBold={true}>Total:</Text.Body>
                         <Text.Body>
                           {formatMoneyCurrency(
-                            cart?.totalPrice,
+                            cartDetails?.totalPrice,
                             dataLocale || projectLanguages[0]
                           )}
                         </Text.Body>
@@ -291,29 +225,29 @@ const CartDetails = (props: TCartDetailsProps) => {
                         intlMessage={messages.cartShippingLabel}
                       />
                       <Text.Subheadline as="h4">
-                        {cart?.shippingInfo?.shippingMethodName ??
+                        {cartDetails?.shippingInfo?.shippingMethodName ??
                           NO_VALUE_FALLBACK}
                       </Text.Subheadline>
                     </Spacings.Stack>
                     <Text.Wrap>
                       <Text.Body>
-                        {cart?.customer?.salutation +
+                        {cartDetails?.customer?.salutation +
                           '. ' +
-                          cart?.shippingAddress?.firstName +
+                          cartDetails?.shippingAddress?.firstName +
                           ' ' +
-                          cart?.shippingAddress?.lastName}
+                          cartDetails?.shippingAddress?.lastName}
                       </Text.Body>
                       <Text.Body>
-                        {cart?.shippingAddress?.streetNumber +
+                        {cartDetails?.shippingAddress?.streetNumber +
                           ' ' +
-                          cart?.shippingAddress?.streetName}
+                          cartDetails?.shippingAddress?.streetName}
                       </Text.Body>
                       <Text.Body>
-                        {cart?.shippingAddress?.city +
+                        {cartDetails?.shippingAddress?.city +
                           ', ' +
-                          cart?.shippingAddress?.state +
+                          cartDetails?.shippingAddress?.state +
                           ' ' +
-                          cart?.shippingAddress?.postalCode}
+                          cartDetails?.shippingAddress?.postalCode}
                       </Text.Body>
                     </Text.Wrap>
                   </Spacings.Stack>
