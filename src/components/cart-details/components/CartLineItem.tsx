@@ -1,8 +1,6 @@
 import { useApplicationContext } from '@commercetools-frontend/application-shell-connectors';
 import Spacings from '@commercetools-uikit/spacings';
 import Text from '@commercetools-uikit/text';
-import type { TMoney } from '../../types/generated/ctp';
-import { formatMoneyCurrency } from '../../helpers';
 import Card from '@commercetools-uikit/card';
 import Grid from '@commercetools-uikit/grid';
 import IconButton from '@commercetools-uikit/icon-button';
@@ -11,7 +9,9 @@ import {
   AngleUpIcon,
   CheckInactiveIcon,
 } from '@commercetools-uikit/icons';
-import { DECREASE, INCREASE } from './constants';
+import { formatMoneyCurrency } from '../../../helpers';
+import { TMoney } from '../../../types/generated/ctp';
+import { DECREASE, INCREASE } from '../constants';
 
 type TLineItemProps = {
   key: string;

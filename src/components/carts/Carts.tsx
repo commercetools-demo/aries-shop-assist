@@ -28,7 +28,7 @@ import SelectableSearchInput, {
   TValue,
 } from '@commercetools-uikit/selectable-search-input';
 import { dataTableColumns, LABEL_KEYS } from './constants';
-import Badge from '../badge/badge';
+import Badge from '../badge/Badge';
 
 const Carts = () => {
   const match = useRouteMatch();
@@ -209,7 +209,7 @@ const Carts = () => {
               />
               <Switch>
                 <SuspendedRoute path={`${match.url}/:id`}>
-                  <CartDetails linkToCarts={match.url} />
+                  <CartDetails />
                 </SuspendedRoute>
               </Switch>
             </Spacings.Stack>
