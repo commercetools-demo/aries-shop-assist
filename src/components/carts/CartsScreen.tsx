@@ -28,7 +28,7 @@ import SelectableSearchInput, {
   TValue,
 } from '@commercetools-uikit/selectable-search-input';
 import { dataTableColumns, LABEL_KEYS } from './constants';
-import Badge from '../badge/Badge';
+import Badge from '../badge/BadgeStatus';
 
 const Carts = () => {
   const match = useRouteMatch();
