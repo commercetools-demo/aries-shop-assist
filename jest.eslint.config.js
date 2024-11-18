@@ -13,14 +13,6 @@ module.exports = {
     'public/',
     'generated',
   ],
-  testMatch: [
-    '<rootDir>/**/*.js',
-    '<rootDir>/**/*.ts',
-    '<rootDir>/**/*.tsx',
-    '<rootDir>/**/**/*.js',
-    '<rootDir>/**/**/*.ts',
-    '<rootDir>/**/**/*.tsx',
-  ],
   watchPlugins: [
     'jest-watch-typeahead/filename',
     'jest-runner-eslint/watch-fix',
