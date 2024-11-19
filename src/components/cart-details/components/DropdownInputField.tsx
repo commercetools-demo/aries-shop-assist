@@ -8,6 +8,8 @@ import Spacings from '@commercetools-uikit/spacings';
 // local imports
 import { useProductBySkuFetcher } from '../../../hooks/use-products-connector';
 import { TFetchProductBySkuQuery } from '../../../types/generated/ctp';
+import { useIntl } from 'react-intl';
+import messages from '../messages';
 
 const DropdownInputField = ({
   handleSkuValue,
@@ -18,9 +20,10 @@ const DropdownInputField = ({
     product: TFetchProductBySkuQuery['products']['results']
   ) => void;
 }) => {
+  const intl = useIntl();
   const [searchValue, setSearchValue] = useState<string>('');
-  const { product } = useProductBySkuFetcher(searchValue);
-  const [skus, setSkus] = useState<string[] | null>(null);
+  const { product, loading, error } = useProductBySkuFetcher(searchValue);
+  const [variantsSkus, setVariantsSkus] = useState<string[] | null>(null);
   const [selectedSku, setSelectedSku] = useState<string>('');
 
   // Here in the useEffect we are checking if the product is available or not
@@ -44,31 +47,42 @@ const DropdownInputField = ({
         .flat(2)
         .filter((sku) => sku !== undefined && sku !== null);
 
-      if (allSkus) {
-        setSkus(allSkus);
-      }
+      if (allSkus) setVariantsSkus(allSkus);
     }
   }, [handleProducts, product]);
+
+  useEffect(() => {
+    console.log('🟢', { searchValue, error: error?.message });
+  }, [error, searchValue]);
+
+  // TODO: Consider refactoring this component to use SearchSelectField component from CT UI KIT
+  // to improve search experience, error handling and UI glitches.
+  // https://uikit.commercetools.com/?path=/docs/form-fields-searchselectfield-readme--props
+
   return (
-    <Spacings.Inline scale="s" alignItems="flex-end">
+    <Spacings.Inline scale="m" alignItems="flex-end">
       <DropdownMenu
         triggerElement={
           <TextField
-            title="Add items to your shopping cart."
+            title={intl.formatMessage(messages.cartDetailsAddItemsToTheCart)}
             value={searchValue}
             onChange={(event) => setSearchValue(event.target.value)}
-            placeholder="Search Product by sku"
+            placeholder={intl.formatMessage(messages.cartDetailsSearchBySku)}
+            horizontalConstraint={16}
           />
         }
         menuHorizontalConstraint={6}
         menuPosition="left"
         menuType="list"
       >
-        {skus &&
-          skus.map((sku: string) => (
+        {variantsSkus &&
+          variantsSkus.map((sku: string) => (
             <DropdownMenu.ListMenuItem
               key={sku}
-              onClick={() => setSelectedSku(sku)}
+              onClick={() => {
+                setSelectedSku(sku);
+                setSearchValue(sku);
+              }}
             >
               {sku}
             </DropdownMenu.ListMenuItem>
@@ -77,7 +91,7 @@ const DropdownInputField = ({
       <PrimaryButton
         label="Add to cart"
         onClick={() => handleSkuValue(selectedSku)}
-        isDisabled={false}
+        isDisabled={!selectedSku}
       />
     </Spacings.Inline>
   );

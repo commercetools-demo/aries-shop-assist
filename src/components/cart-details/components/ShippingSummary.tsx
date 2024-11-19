@@ -3,7 +3,7 @@ import { TCart } from '../../../types/generated/ctp';
 import Text from '@commercetools-uikit/text';
 import Card from '@commercetools-uikit/card';
 import Spacings from '@commercetools-uikit/spacings';
-import { NO_VALUE_FALLBACK } from '@commercetools-frontend/constants';
+import { useIntl } from 'react-intl';
 
 interface IShippingSummary {
   cartDetails: TCart;
@@ -20,27 +20,31 @@ const ShippingSummary = ({ cartDetails }: IShippingSummary) => {
     postalCode,
   } = cartDetails?.shippingAddress ?? {};
 
-  const shippingMethod = cartDetails?.shippingInfo?.shippingMethodName;
-  const salutation = cartDetails?.customer?.salutation;
+  const intl = useIntl();
 
-  //TODO: Improve string concat, spacings, etc.
+  const shippingMethod = cartDetails?.shippingInfo?.shippingMethodName;
 
   return (
-    <Card type="raised" theme="light" insetScale="s">
+    <Card type="raised" theme="light" insetScale="m">
       <Spacings.Stack scale="l">
         <Spacings.Stack scale="xs">
           <Text.Headline as="h2" intlMessage={messages.cartShippingLabel} />
-          <Text.Subheadline as="h4">
-            {shippingMethod ?? NO_VALUE_FALLBACK}
+          <Text.Subheadline as="h5" tone="tertiary">
+            {shippingMethod ??
+              intl.formatMessage(messages.cartDetailsNoShippingMethod)}
           </Text.Subheadline>
         </Spacings.Stack>
-        <Text.Wrap>
+        {cartDetails?.shippingAddress ? (
+          <Text.Wrap>
+            <Text.Body>{`${firstName} ${lastName}`}</Text.Body>
+            <Text.Body>{`${streetNumber} ${streetName}`}</Text.Body>
+            <Text.Body>{`${city}, ${state} ${postalCode}`}</Text.Body>
+          </Text.Wrap>
+        ) : (
           <Text.Body>
-            {salutation + '. ' + firstName + ' ' + lastName}
+            {intl.formatMessage(messages.cartDetailsNoShippinAddress)}
           </Text.Body>
-          <Text.Body>{streetNumber + ' ' + streetName}</Text.Body>
-          <Text.Body>{city + ', ' + state + ' ' + postalCode}</Text.Body>
-        </Text.Wrap>
+        )}
       </Spacings.Stack>
     </Card>
   );

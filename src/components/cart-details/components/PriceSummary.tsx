@@ -31,12 +31,16 @@ const PriceSummary = ({ cartDetails }: IPriceSummary) => {
     fractionDigits: totalPrice?.fractionDigits ?? 0,
   };
   return (
-    <Card type="raised" theme="light" insetScale="s">
+    <Card type="raised" theme="light" insetScale="m">
       <Spacings.Stack scale="m">
         <Text.Headline as="h2" intlMessage={messages.cartSummaryLabel} />
         <Spacings.Stack scale="xs">
-          <Spacings.Inline scale="s">
-            <Text.Body isBold={true}>Items Subtotal:</Text.Body>
+          {/* SUBTOTAL */}
+          <Spacings.Inline scale="s" justifyContent="space-between">
+            <Text.Body
+              isBold={true}
+              intlMessage={messages.cartItemsSubtotalLabel}
+            />
             <Text.Body>
               {formatMoneyCurrency(
                 itemSubtotal,
@@ -44,9 +48,13 @@ const PriceSummary = ({ cartDetails }: IPriceSummary) => {
               )}
             </Text.Body>
           </Spacings.Inline>
+          {/* TAXES */}
           {taxedPrice?.totalTax && (
-            <Spacings.Inline scale="s">
-              <Text.Body isBold={true}>Total Tax:</Text.Body>
+            <Spacings.Inline scale="s" justifyContent="space-between">
+              <Text.Body
+                isBold={true}
+                intlMessage={messages.cartTotalTaxLabel}
+              />
               <Text.Body>
                 {formatMoneyCurrency(
                   taxedPrice?.totalTax,
@@ -55,8 +63,12 @@ const PriceSummary = ({ cartDetails }: IPriceSummary) => {
               </Text.Body>
             </Spacings.Inline>
           )}
-          <Spacings.Inline scale="s">
-            <Text.Body isBold={true}>Discounts:</Text.Body>
+          {/* DISCOUNTS */}
+          <Spacings.Inline scale="s" justifyContent="space-between">
+            <Text.Body
+              isBold={true}
+              intlMessage={messages.cartDiscountslLabel}
+            />
             <Text.Body>
               {formatMoneyCurrency(
                 {
@@ -69,27 +81,30 @@ const PriceSummary = ({ cartDetails }: IPriceSummary) => {
               )}
             </Text.Body>
           </Spacings.Inline>
-          <Spacings.Inline scale="s">
+          {/* SHIPPING */}
+          <Spacings.Inline scale="s" justifyContent="space-between">
             <Text.Body isBold={true}>Shipping:</Text.Body>
             {shippingInfo?.price && (
               <Text.Body>
                 {formatMoneyCurrency(
-                  shippingInfo?.price,
+                  shippingInfo.price,
                   dataLocale || projectLanguages[0]
                 )}
               </Text.Body>
             )}
           </Spacings.Inline>
-          <Spacings.Inline scale="s">
-            <Text.Body isBold={true}>Total:</Text.Body>
-            <Text.Body>
-              {formatMoneyCurrency(
-                totalPrice,
-                dataLocale || projectLanguages[0]
-              )}
-            </Text.Body>
-          </Spacings.Inline>
         </Spacings.Stack>
+        {/* TOTAL */}
+        <Spacings.Inline scale="s" justifyContent="space-between">
+          <Text.Subheadline
+            as="h4"
+            tone="primary"
+            intlMessage={messages.cartTotalLabel}
+          />
+          <Text.Subheadline as="h4" tone="primary">
+            {formatMoneyCurrency(totalPrice, dataLocale || projectLanguages[0])}
+          </Text.Subheadline>
+        </Spacings.Inline>
       </Spacings.Stack>
     </Card>
   );

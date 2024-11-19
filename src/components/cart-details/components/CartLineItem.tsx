@@ -2,16 +2,19 @@ import { useApplicationContext } from '@commercetools-frontend/application-shell
 import Spacings from '@commercetools-uikit/spacings';
 import Text from '@commercetools-uikit/text';
 import Card from '@commercetools-uikit/card';
-import Grid from '@commercetools-uikit/grid';
 import IconButton from '@commercetools-uikit/icon-button';
+import { useIntl } from 'react-intl';
+import { designTokens } from '@commercetools-uikit/design-system';
+
 import {
-  AngleDownIcon,
-  AngleUpIcon,
-  CheckInactiveIcon,
+  BinFilledIcon,
+  MinimizeIcon,
+  PlusBoldIcon,
 } from '@commercetools-uikit/icons';
 import { formatMoneyCurrency } from '../../../helpers';
 import { TMoney } from '../../../types/generated/ctp';
 import { DECREASE, INCREASE } from '../constants';
+import messages from '../messages';
 
 type TLineItemProps = {
   key: string;
@@ -41,82 +44,82 @@ const CartLineItem = ({
     projectLanguages: context.project?.languages ?? [],
   }));
 
+  const intl = useIntl();
+
   return (
-    <div key={key}>
-      <Card type="raised" theme="light" insetScale="s">
-        <Grid gridGap="xl" gridAutoFlow="row" gridTemplateColumns="20fr 2fr">
-          <Grid.Item>
-            <Spacings.Inline scale="m">
-              <Spacings.Stack scale="m">
-                <img src={imageUrl} alt={sku} width="246" height="190" />
-              </Spacings.Stack>
-              <Spacings.Stack scale="m">
-                <Text.Headline as="h3">{itemName}</Text.Headline>
-                <Spacings.Stack scale="xs">
-                  <Spacings.Inline scale="s">
-                    <Text.Body isBold={true}>SKU </Text.Body>
-                    <Text.Body>{sku}</Text.Body>
-                  </Spacings.Inline>
-                  <Spacings.Inline scale="s" alignItems="center">
-                    <Text.Body isBold={true}>Quantity </Text.Body>
-                    <Spacings.Inline scale="m" alignItems="center">
-                      <Text.Body>{quantity}</Text.Body>
-                      <Spacings.Stack scale="xs">
-                        <IconButton
-                          label="Increase quantity"
-                          icon={<AngleUpIcon />}
-                          type="button"
-                          size="small"
-                          theme="default"
-                          onClick={() => updateItemQuantity(INCREASE)}
-                        />
-                        <IconButton
-                          label="Decrease quantity"
-                          icon={<AngleDownIcon />}
-                          type="button"
-                          size="small"
-                          theme="default"
-                          onClick={() => updateItemQuantity(DECREASE)}
-                        />
-                      </Spacings.Stack>
-                    </Spacings.Inline>
-                  </Spacings.Inline>
-                </Spacings.Stack>
-              </Spacings.Stack>
-            </Spacings.Inline>
-          </Grid.Item>
-          <Grid.Item>
-            <Spacings.Stack scale="xxxl" alignItems="flex-end">
-              <IconButton
-                label="Remove from cart"
-                icon={<CheckInactiveIcon />}
-                type="button"
-                shape="round"
-                size="big"
-                theme="default"
-                onClick={removeItem}
-              />
-              <Spacings.Stack scale="xs" alignItems="flex-end">
-                {discountedPrice && (
-                  <Text.Body isStrikethrough={true} tone="negative">
-                    {formatMoneyCurrency(
-                      discountedPrice,
-                      dataLocale || projectLanguages[0]
-                    )}
-                  </Text.Body>
-                )}
-                <Text.Body fontWeight="medium">
-                  {formatMoneyCurrency(
-                    price,
-                    dataLocale || projectLanguages[0]
-                  )}
-                </Text.Body>
-              </Spacings.Stack>
+    <Card type="raised" theme="light" insetScale="m" key={key}>
+      <Spacings.Inline justifyContent="space-between">
+        {/* IMAGE, SKU, QUANTITY DISPLAY & BUTTONS */}
+        <Spacings.Inline scale="m">
+          <img
+            src={imageUrl}
+            alt={sku}
+            width="230"
+            height="190"
+            style={{
+              backgroundColor: designTokens.colorPrimary95,
+              color: designTokens.colorInfo40,
+              textAlign: 'center',
+              lineHeight: '190px',
+            }}
+          />
+          <Spacings.Stack scale="l">
+            <Spacings.Stack scale="xs">
+              <Text.Headline as="h2">{itemName}</Text.Headline>
+              <Text.Subheadline tone="primary" as="h5">
+                {intl.formatMessage(messages.cartDetailsSku)}: {sku}
+              </Text.Subheadline>
             </Spacings.Stack>
-          </Grid.Item>
-        </Grid>
-      </Card>
-    </div>
+
+            {/* QUANTITY */}
+            <Spacings.Inline scale="m" alignItems="center">
+              <Text.Body
+                isBold={true}
+                intlMessage={messages.cartDetailsQuantity}
+              />
+              <IconButton
+                label="Increase quantity"
+                icon={<MinimizeIcon />}
+                type="button"
+                size="medium"
+                onClick={() => updateItemQuantity(DECREASE)}
+              />
+              <Text.Body>{quantity}</Text.Body>
+              <IconButton
+                label="Decrease quantity"
+                icon={<PlusBoldIcon />}
+                type="button"
+                size="medium"
+                onClick={() => updateItemQuantity(INCREASE)}
+              />
+            </Spacings.Inline>
+          </Spacings.Stack>
+        </Spacings.Inline>
+        {/* PRICE & DELETE */}
+        <Spacings.Stack scale="m" alignItems="flex-end">
+          <Spacings.Stack scale="xxl" alignItems="flex-end">
+            <IconButton
+              label="Remove from cart"
+              icon={<BinFilledIcon />}
+              type="button"
+              size="big"
+              onClick={removeItem}
+            />
+            <Text.Headline as="h3">
+              {formatMoneyCurrency(price, dataLocale || projectLanguages[0])}
+            </Text.Headline>
+            {discountedPrice && (
+              <Text.Body isStrikethrough={true} tone="negative">
+                {formatMoneyCurrency(
+                  discountedPrice,
+                  dataLocale || projectLanguages[0]
+                )}
+              </Text.Body>
+            )}
+          </Spacings.Stack>
+        </Spacings.Stack>
+      </Spacings.Inline>
+    </Card>
   );
 };
 CartLineItem.displayName = 'Cart Line Item';
