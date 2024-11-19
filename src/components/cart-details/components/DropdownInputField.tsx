@@ -51,10 +51,6 @@ const DropdownInputField = ({
     }
   }, [handleProducts, product]);
 
-  useEffect(() => {
-    console.log('🟢', { searchValue, error: error?.message });
-  }, [error, searchValue]);
-
   // TODO: Consider refactoring this component to use SearchSelectField component from CT UI KIT
   // to improve search experience, error handling and UI glitches.
   // https://uikit.commercetools.com/?path=/docs/form-fields-searchselectfield-readme--props
