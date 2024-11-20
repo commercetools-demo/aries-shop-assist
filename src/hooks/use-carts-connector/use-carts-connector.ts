@@ -115,7 +115,7 @@ type TUseUpdateCart = (
   loadingUpdateCart: boolean;
 };
 
-export const useUpdateCart: TUseUpdateCart = (cartId, version, actions) => {
+export const useUpdateCart: TUseUpdateCart = () => {
   const [updateCartMutation, { error, loading }] = useMcMutation<
     TUpdateCartMutation,
     TUpdateCartMutationVariables

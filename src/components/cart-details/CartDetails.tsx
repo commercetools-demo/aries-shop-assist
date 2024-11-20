@@ -28,8 +28,6 @@ const CartDetails = () => {
   const intl = useIntl();
   const { goBack } = useHistory();
   const {
-    setProducts,
-    handleAddProduct,
     updateItemQuantity,
     handleChangeLineItemQuantity,
     loadingCartDetails,
@@ -104,10 +102,7 @@ const CartDetails = () => {
         )}
         {cartDetails && (
           <>
-            <DropdownInputField
-              handleProducts={(products) => setProducts(products)}
-              handleSkuValue={(sku: string) => handleAddProduct(sku)}
-            />
+            <DropdownInputField />
             <Grid
               gridGap="20px"
               gridRowGap="20px"
