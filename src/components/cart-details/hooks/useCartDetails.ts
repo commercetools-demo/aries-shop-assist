@@ -33,7 +33,9 @@ export const useCartDetails = () => {
         version: cart?.version || 0,
         actions,
       });
-    } catch (error) {}
+    } catch (error) {
+      console.error('Error updating cart.', error);
+    }
   };
 
   const handleChangeLineItemQuantity = async (
@@ -64,18 +66,17 @@ export const useCartDetails = () => {
   };
 
   const handleAddProduct = async (sku: string) => {
-    if (products) {
-      const existingLineItem = cart?.lineItems.find(
-        (item) => item?.variant?.sku === sku
-      );
-      existingLineItem
-        ? await handleChangeLineItemQuantity(
-            existingLineItem,
-            existingLineItem.quantity + 1
-          )
-        : sku && (await handleAddLineItem(sku));
-    }
+    const existingLineItem = cart?.lineItems.find(
+      (item) => item?.variant?.sku === sku
+    );
+    existingLineItem
+      ? await handleChangeLineItemQuantity(
+          existingLineItem,
+          existingLineItem.quantity + 1
+        )
+      : sku && (await handleAddLineItem(sku));
   };
+
   const updateItemQuantity = async (
     lineItem: { id: string; quantity: number },
     quantity: string
@@ -87,6 +88,7 @@ export const useCartDetails = () => {
 
   return {
     setProducts,
+    products,
     handleUpdateCart,
     handleChangeLineItemQuantity,
     handleAddLineItem,

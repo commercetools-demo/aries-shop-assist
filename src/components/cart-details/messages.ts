@@ -17,9 +17,49 @@ export default defineMessages({
     id: 'CartDetails.cartShippingLabel',
     defaultMessage: 'Shipping',
   },
+  cartTotalTaxLabel: {
+    id: 'CartDetails.cartTotalTaxLabel',
+    defaultMessage: 'Total Tax:',
+  },
+  cartItemsSubtotalLabel: {
+    id: 'CartDetails.cartItemsSubtotal',
+    defaultMessage: 'Items Subtotal:',
+  },
+  cartDiscountslLabel: {
+    id: 'CartDetails.cartDiscounts',
+    defaultMessage: 'Discounts:',
+  },
+  cartTotalLabel: {
+    id: 'CartDetails.cartTotalLabel',
+    defaultMessage: 'TOTAL',
+  },
   cartDetailsErrorMessage: {
     id: 'CartDetails.errorMessage',
     defaultMessage:
       'We were unable to fetch the cart details. Please check your connection, the provided cart ID and try again.',
+  },
+  cartDetailsSku: {
+    id: 'CartDetails.sku',
+    defaultMessage: 'SKU',
+  },
+  cartDetailsQuantity: {
+    id: 'CartDetails.quantity',
+    defaultMessage: 'Quantity:',
+  },
+  cartDetailsNoShippingMethod: {
+    id: 'CartDetails.noShippingMethod',
+    defaultMessage: 'No shipping method available',
+  },
+  cartDetailsNoShippinAddress: {
+    id: 'CartDetails.noShippingAddress',
+    defaultMessage: 'No shipping address info available for this cart',
+  },
+  cartDetailsAddItemsToTheCart: {
+    id: 'CartDetails.addItemsToTheCart',
+    defaultMessage: 'Add items to the cart',
+  },
+  cartDetailsSearchBySku: {
+    id: 'CartDetails.searchBySku',
+    defaultMessage: 'Search products by SKU',
   },
 });

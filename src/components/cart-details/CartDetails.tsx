@@ -22,13 +22,12 @@ import { useCartDetails } from './hooks/useCartDetails';
 import CartLineItem from './components/CartLineItem';
 import PriceSummary from './components/PriceSummary';
 import ShippingSummary from './components/ShippingSummary';
+import { TLineItem } from '../../types/generated/ctp';
 
 const CartDetails = () => {
   const intl = useIntl();
   const { goBack } = useHistory();
   const {
-    setProducts,
-    handleAddProduct,
     updateItemQuantity,
     handleChangeLineItemQuantity,
     loadingCartDetails,
@@ -63,6 +62,23 @@ const CartDetails = () => {
 
   const isLoading = loadingCartDetails || loadingUpdateCart;
 
+  const structureItemName = (item: TLineItem) => {
+    if (!item?.nameAllLocales) return '';
+    return formatLocalizedString(
+      {
+        name: transformLocalizedFieldToLocalizedString(
+          item.nameAllLocales ?? []
+        ),
+      },
+      {
+        key: 'name',
+        locale: dataLocale,
+        fallbackOrder: projectLanguages,
+        fallback: NO_VALUE_FALLBACK,
+      }
+    );
+  };
+
   // TODO: Fix how to get from commerce-tools api the discounts data
 
   return (
@@ -73,12 +89,12 @@ const CartDetails = () => {
       topBarPreviousPathLabel={intl.formatMessage(messages.backToCartsList)}
       onClose={goBack}
     >
+      {isLoading && (
+        <Spacings.Stack alignItems="center">
+          <LoadingSpinner />
+        </Spacings.Stack>
+      )}
       <Spacings.Stack scale="xl">
-        {isLoading && (
-          <Spacings.Stack alignItems="center">
-            <LoadingSpinner />
-          </Spacings.Stack>
-        )}
         {errorCartDetails && (
           <ContentNotification type="error">
             <Text.Body intlMessage={messages.cartDetailsErrorMessage} />
@@ -86,15 +102,12 @@ const CartDetails = () => {
         )}
         {cartDetails && (
           <>
-            <DropdownInputField
-              handleProducts={(products) => setProducts(products)}
-              handleSkuValue={(sku: string) => handleAddProduct(sku)}
-            />
+            <DropdownInputField />
             <Grid
               gridGap="20px"
               gridRowGap="20px"
               gridAutoFlow="row"
-              gridTemplateColumns="10fr 4fr"
+              gridTemplateColumns="8fr 4fr"
             >
               <Grid.Item>
                 <Spacings.Stack scale="m">
@@ -105,23 +118,8 @@ const CartDetails = () => {
                       updateItemQuantity={(quantity: string) =>
                         updateItemQuantity(item, quantity)
                       }
-                      itemName={
-                        item?.nameAllLocales &&
-                        formatLocalizedString(
-                          {
-                            name: transformLocalizedFieldToLocalizedString(
-                              item.nameAllLocales ?? []
-                            ),
-                          },
-                          {
-                            key: 'name',
-                            locale: dataLocale,
-                            fallbackOrder: projectLanguages,
-                            fallback: NO_VALUE_FALLBACK,
-                          }
-                        )
-                      }
-                      imageUrl={item?.variant?.images[0]?.url ?? ''}
+                      itemName={structureItemName(item)}
+                      imageUrl={item?.variant?.images[0]?.url ?? undefined}
                       sku={item?.variant?.sku ?? ''}
                       quantity={item.quantity}
                       price={
