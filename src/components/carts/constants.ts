@@ -49,6 +49,41 @@ export const dataTableColumns = [
   },
 ];
 
+export const initialDataTableColumns = [
+  { key: 'id', label: 'ID', isSortable: true },
+  {
+    key: 'customerEmail',
+    label: 'Customer email',
+    isSortable: true,
+  },
+  {
+    key: 'cartState',
+    label: 'Cart state',
+    isSortable: true,
+    disableResizing: true,
+  },
+  {
+    key: 'totalLineItemQuantity',
+    label: '# Items',
+    isSortable: false,
+  },
+  {
+    key: 'totalPrice',
+    label: 'Total price',
+    isSortable: false,
+  },
+  {
+    key: 'origin',
+    label: 'Origin',
+    isSortable: true,
+  },
+  {
+    key: 'store',
+    label: 'Store',
+    isSortable: false,
+  },
+];
+
 export enum LABEL_KEYS {
   CART_ID = 'cartId',
   CUSTOMER_EMAIL = 'customerEmail',
