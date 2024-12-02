@@ -113,10 +113,12 @@ type TUseUpdateCart = (
   updateCart: (variables: TUpdateCartMutationVariables) => Promise<void>;
   errorUpdateCart?: ApolloError;
   loadingUpdateCart: boolean;
+  dataUpdateCart: TUpdateCartMutation | null | undefined;
+  resetUpdateCartMutationResult: () => void;
 };
 
 export const useUpdateCart: TUseUpdateCart = () => {
-  const [updateCartMutation, { error, loading }] = useMcMutation<
+  const [updateCartMutation, { data, loading, error, reset }] = useMcMutation<
     TUpdateCartMutation,
     TUpdateCartMutationVariables
   >(UpdateCartMutation);
@@ -132,6 +134,8 @@ export const useUpdateCart: TUseUpdateCart = () => {
 
   return {
     updateCart,
+    resetUpdateCartMutationResult: reset,
+    dataUpdateCart: data,
     errorUpdateCart: error,
     loadingUpdateCart: loading,
   };

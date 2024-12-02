@@ -16,11 +16,13 @@ export const useCartDetails = () => {
     useState<TFetchProductBySkuQuery['products']['results']>();
   const params = useParams<{ id: string }>();
   const { loading, error, cart } = useCartDetailsFetcher(params.id);
-  const { updateCart, loadingUpdateCart, errorUpdateCart } = useUpdateCart(
-    params.id,
-    cart?.version ?? 0,
-    []
-  );
+  const {
+    updateCart,
+    resetUpdateCartMutationResult,
+    loadingUpdateCart,
+    errorUpdateCart,
+    dataUpdateCart,
+  } = useUpdateCart(params.id, cart?.version ?? 0, []);
 
   const items = useMemo(() => (cart && cart.lineItems) || [], [cart]);
 
@@ -94,8 +96,10 @@ export const useCartDetails = () => {
     handleAddLineItem,
     handleAddProduct,
     updateItemQuantity,
+    resetUpdateCartMutationResult,
     loadingUpdateCart,
     errorUpdateCart,
+    dataUpdateCart,
     loadingCartDetails: loading,
     cartDetails: cart,
     errorCartDetails: error,
