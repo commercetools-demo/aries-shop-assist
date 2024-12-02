@@ -76,9 +76,7 @@ const DropdownInputField = () => {
           onClick={() => handleAddProduct(searchValue)}
           isDisabled={!searchValue}
         />
-        {loadingUpdateCart && (
-          <LoadingSpinner>Loading cart update</LoadingSpinner>
-        )}
+        {loadingUpdateCart && <LoadingSpinner />}
       </Spacings.Inline>
     </>
   );
