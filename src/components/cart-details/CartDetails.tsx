@@ -15,7 +15,6 @@ import { InfoModalPage } from '@commercetools-frontend/application-components';
 import Grid from '@commercetools-uikit/grid';
 
 // Local imports
-import { getErrorMessage } from '../../helpers';
 import messages from './messages';
 import DropdownInputField from './components/DropdownInputField';
 import { useCartDetails } from './hooks/useCartDetails';
@@ -31,9 +30,7 @@ const CartDetails = () => {
     updateItemQuantity,
     handleChangeLineItemQuantity,
     loadingCartDetails,
-    loadingUpdateCart,
     errorCartDetails,
-    errorUpdateCart,
     cartDetails,
     items,
   } = useCartDetails();
@@ -43,24 +40,7 @@ const CartDetails = () => {
     projectLanguages: context.project?.languages ?? [],
   }));
 
-  if (errorCartDetails || errorUpdateCart) {
-    return (
-      <ContentNotification type="error">
-        {errorCartDetails && (
-          <Text.Body tone="negative">
-            {getErrorMessage(errorCartDetails)}{' '}
-          </Text.Body>
-        )}
-        {errorUpdateCart && (
-          <Text.Body tone="negative">
-            {getErrorMessage(errorUpdateCart)}{' '}
-          </Text.Body>
-        )}
-      </ContentNotification>
-    );
-  }
-
-  const isLoading = loadingCartDetails || loadingUpdateCart;
+  const isLoading = loadingCartDetails;
 
   const structureItemName = (item: TLineItem) => {
     if (!item?.nameAllLocales) return '';
@@ -139,6 +119,7 @@ const CartDetails = () => {
                 <Spacings.Stack scale="m">
                   <PriceSummary cartDetails={cartDetails} />
                   <ShippingSummary cartDetails={cartDetails} />
+                  {/* TODO: IMPLEMENT PROMO CODES COMPONENT HERE */}
                 </Spacings.Stack>
               </Grid.Item>
             </Grid>
