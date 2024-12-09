@@ -12,6 +12,7 @@ import { useCartDetails } from '../hooks/useCartDetails';
 import IconButton from '@commercetools-uikit/icon-button';
 import DiscountCodeInput from './DiscountCodeInput';
 import Tooltip from '@commercetools-uikit/tooltip';
+import { TDiscountCodeState } from '../../../types/generated/ctp';
 
 const DiscountsSummary = () => {
   const { handleRemoveDiscount, handleAddDiscount, cartDetails } =
@@ -25,9 +26,9 @@ const DiscountsSummary = () => {
 
   const hasDiscountsApplied = discountCodes && discountCodes.length > 0;
 
-  //TODO: Implement notifications for ADD/REMOVE promo codes, for which ctp types need to be
+  //TODO: Implement/extract notifications to ADD/REMOVE promo codes, for which ctp types need to be
   // updated via package.json script. That update appears to include additional type changes that
-  // where pending in the proyect and might need extra work to fix potential errors in other sections.
+  // where pending in the project and might need separate work to address discrepancies in other sections.
 
   // const showNotification = useShowNotification();
 
@@ -68,7 +69,7 @@ const DiscountsSummary = () => {
               style={{
                 border: '1px solid',
                 borderColor:
-                  discountCode.state === 'MatchesCart'
+                  discountCode.state === TDiscountCodeState.MatchesCart
                     ? designTokens.colorSuccess85
                     : designTokens.colorWarning85,
                 borderRadius: designTokens.borderRadius4,
@@ -87,7 +88,7 @@ const DiscountsSummary = () => {
                   <Tooltip
                     title={`Discount state: ${discountCode.state ?? ''}`}
                   >
-                    {discountCode.state === 'MatchesCart' ? (
+                    {discountCode.state === TDiscountCodeState.MatchesCart ? (
                       <CheckActiveIcon color="success" />
                     ) : (
                       <ErrorIcon color="warning" />

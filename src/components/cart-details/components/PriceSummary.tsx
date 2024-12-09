@@ -8,7 +8,6 @@ import Card from '@commercetools-uikit/card';
 import Spacings from '@commercetools-uikit/spacings';
 import { useApplicationContext } from '@commercetools-frontend/application-shell-connectors';
 import { useCartDetails } from '../hooks/useCartDetails';
-import { useEffect } from 'react';
 
 const ZERO_MONEY_AMOUNT_FALLBACK: TMoney = {
   type: 'centPrecision',
@@ -93,8 +92,10 @@ const PriceSummary = () => {
           </Spacings.Inline>
           {/* SHIPPING */}
           <Spacings.Inline scale="s" justifyContent="space-between">
-            {/* TODO: Improve messages / translations */}
-            <Text.Body isBold={true}>Shipping:</Text.Body>
+            <Text.Body
+              isBold={true}
+              intlMessage={messages.cartDetailsShipping}
+            />
             <Text.Body>
               {formatMoneyCurrency(
                 shippingInfo?.price ?? ZERO_MONEY_AMOUNT_FALLBACK,

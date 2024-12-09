@@ -54,6 +54,10 @@ export default defineMessages({
     id: 'CartDetails.UnitPrice',
     defaultMessage: 'Total',
   },
+  cartDetailsShipping: {
+    id: 'CartDetails.shipping',
+    defaultMessage: 'Shipping:',
+  },
   cartDetailsNoShippingMethod: {
     id: 'CartDetails.noShippingMethod',
     defaultMessage: 'No shipping method available',
