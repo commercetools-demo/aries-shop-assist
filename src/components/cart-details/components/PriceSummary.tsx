@@ -1,5 +1,5 @@
 import { formatMoneyCurrency } from '../../../helpers';
-import { TCart, TMoney } from '../../../types/generated/ctp';
+import { TMoney } from '../../../types/generated/ctp';
 import { NO_VALUE_FALLBACK } from '@commercetools-frontend/constants';
 import Text from '@commercetools-uikit/text';
 
@@ -7,13 +7,20 @@ import messages from '../messages';
 import Card from '@commercetools-uikit/card';
 import Spacings from '@commercetools-uikit/spacings';
 import { useApplicationContext } from '@commercetools-frontend/application-shell-connectors';
+import { useCartDetails } from '../hooks/useCartDetails';
+import { useEffect } from 'react';
 
-interface IPriceSummary {
-  cartDetails: TCart;
-}
+const ZERO_MONEY_AMOUNT_FALLBACK: TMoney = {
+  type: 'centPrecision',
+  currencyCode: 'USD',
+  centAmount: 0, // Zero USD
+  fractionDigits: 2,
+};
 
-const PriceSummary = ({ cartDetails }: IPriceSummary) => {
-  const { taxedPrice, totalPrice, shippingInfo } = cartDetails;
+const PriceSummary = () => {
+  const { cartDetails } = useCartDetails();
+  const { taxedPrice, totalPrice, shippingInfo, discountOnTotalPrice } =
+    cartDetails || {};
 
   const { dataLocale, projectLanguages } = useApplicationContext((context) => ({
     dataLocale: context.dataLocale,
@@ -30,6 +37,7 @@ const PriceSummary = ({ cartDetails }: IPriceSummary) => {
       ) ?? 0,
     fractionDigits: totalPrice?.fractionDigits ?? 0,
   };
+
   return (
     <Card type="raised" theme="light" insetScale="m">
       <Spacings.Stack scale="m">
@@ -69,29 +77,30 @@ const PriceSummary = ({ cartDetails }: IPriceSummary) => {
               isBold={true}
               intlMessage={messages.cartDiscountslLabel}
             />
-            <Text.Body>
+            <Text.Body
+              tone={
+                discountOnTotalPrice?.discountedAmount ? 'negative' : 'inherit'
+              }
+            >
+              {/* MINUS SIGN */}
+              {discountOnTotalPrice?.discountedAmount && '-'}
               {formatMoneyCurrency(
-                {
-                  type: 'centPrecision',
-                  currencyCode: totalPrice?.currencyCode,
-                  centAmount: 0,
-                  fractionDigits: totalPrice?.fractionDigits,
-                },
+                discountOnTotalPrice?.discountedAmount ??
+                  ZERO_MONEY_AMOUNT_FALLBACK,
                 dataLocale || projectLanguages[0]
               )}
             </Text.Body>
           </Spacings.Inline>
           {/* SHIPPING */}
           <Spacings.Inline scale="s" justifyContent="space-between">
+            {/* TODO: Improve messages / translations */}
             <Text.Body isBold={true}>Shipping:</Text.Body>
-            {shippingInfo?.price && (
-              <Text.Body>
-                {formatMoneyCurrency(
-                  shippingInfo.price,
-                  dataLocale || projectLanguages[0]
-                )}
-              </Text.Body>
-            )}
+            <Text.Body>
+              {formatMoneyCurrency(
+                shippingInfo?.price ?? ZERO_MONEY_AMOUNT_FALLBACK,
+                dataLocale || projectLanguages[0]
+              )}
+            </Text.Body>
           </Spacings.Inline>
         </Spacings.Stack>
         {/* TOTAL */}
@@ -99,11 +108,17 @@ const PriceSummary = ({ cartDetails }: IPriceSummary) => {
           <Text.Subheadline
             as="h4"
             tone="primary"
+            isBold
             intlMessage={messages.cartTotalLabel}
           />
-          <Text.Subheadline as="h4" tone="primary">
-            {formatMoneyCurrency(totalPrice, dataLocale || projectLanguages[0])}
-          </Text.Subheadline>
+          {totalPrice && (
+            <Text.Subheadline as="h4" tone="primary">
+              {formatMoneyCurrency(
+                totalPrice,
+                dataLocale || projectLanguages[0]
+              )}
+            </Text.Subheadline>
+          )}
         </Spacings.Inline>
       </Spacings.Stack>
     </Card>

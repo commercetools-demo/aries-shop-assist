@@ -29,7 +29,6 @@ declare module '*/fetch-product-by-sku.ctp.graphql' {
   import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;
   export const FetchProductBySku: DocumentNode;
-  export const VariantInfo: DocumentNode;
 
   export default defaultDocument;
 }

@@ -3,7 +3,7 @@ import {
   transformLocalizedFieldToLocalizedString,
 } from '@commercetools-frontend/l10n';
 import { isApolloError, ApolloError, type ServerError } from '@apollo/client';
-import type { TChannel, TMoney } from './types/generated/ctp';
+import type { TBaseMoney, TChannel, TMoney } from './types/generated/ctp';
 import type {
   TGraphqlUpdateAction,
   TSyncAction,
@@ -71,7 +71,10 @@ export const convertToActionData = (draft: Partial<TChannel>) => ({
   name: transformLocalizedFieldToLocalizedString(draft.nameAllLocales || []),
 });
 
-export const formatMoneyCurrency = (price: TMoney, locale: string) => {
+export const formatMoneyCurrency = (
+  price: TMoney | TBaseMoney,
+  locale: string
+) => {
   return new Intl.NumberFormat(locale, {
     style: 'currency',
     currency: price.currencyCode || 'EUR',

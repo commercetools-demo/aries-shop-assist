@@ -1,15 +1,13 @@
 import messages from '../messages';
-import { TCart } from '../../../types/generated/ctp';
 import Text from '@commercetools-uikit/text';
 import Card from '@commercetools-uikit/card';
 import Spacings from '@commercetools-uikit/spacings';
 import { useIntl } from 'react-intl';
+import { useCartDetails } from '../hooks/useCartDetails';
 
-interface IShippingSummary {
-  cartDetails: TCart;
-}
+const ShippingSummary = () => {
+  const { cartDetails } = useCartDetails();
 
-const ShippingSummary = ({ cartDetails }: IShippingSummary) => {
   const {
     firstName,
     lastName,

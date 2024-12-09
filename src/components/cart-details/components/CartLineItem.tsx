@@ -1,7 +1,6 @@
 import { useApplicationContext } from '@commercetools-frontend/application-shell-connectors';
 import Spacings from '@commercetools-uikit/spacings';
 import Text from '@commercetools-uikit/text';
-import Card from '@commercetools-uikit/card';
 import IconButton from '@commercetools-uikit/icon-button';
 import { useIntl } from 'react-intl';
 import { designTokens } from '@commercetools-uikit/design-system';
@@ -12,30 +11,30 @@ import {
   PlusBoldIcon,
 } from '@commercetools-uikit/icons';
 import { formatMoneyCurrency } from '../../../helpers';
-import { TMoney } from '../../../types/generated/ctp';
+import { TMoney, TProductPrice } from '../../../types/generated/ctp';
 import { DECREASE, INCREASE } from '../constants';
 import messages from '../messages';
 
 type TLineItemProps = {
-  key: string;
+  id: string;
   itemName: string;
   imageUrl?: string;
   sku: string;
   quantity: number;
-  price: TMoney;
-  discountedPrice?: TMoney;
+  price?: TProductPrice;
+  totalPrice: TMoney;
   removeItem: () => void;
   updateItemQuantity: (quantity: string) => void;
 };
 
 const CartLineItem = ({
-  key,
+  id,
   itemName,
   imageUrl,
   sku,
   quantity,
+  totalPrice,
   price,
-  discountedPrice,
   removeItem,
   updateItemQuantity,
 }: TLineItemProps) => {
@@ -47,36 +46,72 @@ const CartLineItem = ({
   const intl = useIntl();
 
   return (
-    <Card type="raised" theme="light" insetScale="m" key={key}>
-      <Spacings.Inline justifyContent="space-between">
-        {/* IMAGE, SKU, QUANTITY DISPLAY & BUTTONS */}
-        <Spacings.Inline scale="m">
+    <div
+      key={id}
+      style={{
+        border: '1px solid',
+        borderRadius: designTokens.borderRadius4,
+        borderColor: designTokens.colorNeutral90,
+        background: designTokens.colorNeutral98,
+        padding: '1rem',
+      }}
+    >
+      <Spacings.Inline justifyContent="space-between" alignItems="flex-start">
+        {/* IMG, NAME, SKU */}
+        <Spacings.Inline>
           <img
             src={imageUrl}
             alt={sku}
-            width="230"
-            height="190"
+            width="110"
+            height="90"
             style={{
               backgroundColor: designTokens.colorPrimary95,
               color: designTokens.colorInfo40,
               textAlign: 'center',
-              lineHeight: '190px',
+              lineHeight: '90px',
+              marginRight: '10px',
             }}
           />
-          <Spacings.Stack scale="l">
-            <Spacings.Stack scale="xs">
-              <Text.Headline as="h2">{itemName}</Text.Headline>
-              <Text.Subheadline tone="primary" as="h5">
-                {intl.formatMessage(messages.cartDetailsSku)}: {sku}
-              </Text.Subheadline>
-            </Spacings.Stack>
+          <Spacings.Stack scale="xs">
+            <Text.Headline as="h2">{itemName}</Text.Headline>
+            <Text.Subheadline tone="primary" as="h5">
+              {intl.formatMessage(messages.cartDetailsSku)}: {sku}
+            </Text.Subheadline>
+          </Spacings.Stack>
+        </Spacings.Inline>
 
-            {/* QUANTITY */}
+        <Spacings.Inline justifyContent="space-around" scale="xxxl">
+          {/* UNIT PRICE & DISCOUNTED PRICE */}
+          <Spacings.Stack scale="xs" alignItems="center">
+            <Text.Detail intlMessage={messages.cartDetailsUnitPrice} />
+            {/* IF DISCOUNTED PRICE, RENDER ORIGINAL PRICE */}
+            {price?.value && price.discounted && (
+              <Text.Body isStrikethrough={true} tone="negative">
+                {formatMoneyCurrency(
+                  price.value,
+                  dataLocale || projectLanguages[0]
+                )}
+              </Text.Body>
+            )}
+            {/* IF NO DISCOUNTED PRICE, RENDER OG ONLY */}
+            <Text.Body>
+              {price?.discounted
+                ? formatMoneyCurrency(
+                    price?.discounted.value,
+                    dataLocale || projectLanguages[0]
+                  )
+                : price?.value &&
+                  formatMoneyCurrency(
+                    price?.value,
+                    dataLocale || projectLanguages[0]
+                  )}
+            </Text.Body>
+          </Spacings.Stack>
+
+          {/* QUANTITY */}
+          <Spacings.Stack alignItems="center">
+            <Text.Detail intlMessage={messages.cartDetailsQuantity} />
             <Spacings.Inline scale="m" alignItems="center">
-              <Text.Body
-                isBold={true}
-                intlMessage={messages.cartDetailsQuantity}
-              />
               <IconButton
                 label="Increase quantity"
                 icon={<MinimizeIcon />}
@@ -94,34 +129,31 @@ const CartLineItem = ({
               />
             </Spacings.Inline>
           </Spacings.Stack>
-        </Spacings.Inline>
-        {/* PRICE & DELETE */}
-        <Spacings.Stack scale="m" alignItems="flex-end">
-          <Spacings.Stack scale="xxl" alignItems="flex-end">
-            <IconButton
-              label="Remove from cart"
-              icon={<BinFilledIcon />}
-              type="button"
-              size="big"
-              onClick={removeItem}
-            />
+
+          {/* TOTAL PRICE */}
+          <Spacings.Stack scale="m" alignItems="center">
+            <Text.Detail intlMessage={messages.cartDetailsTotalPrice} />
             <Text.Headline as="h3">
-              {formatMoneyCurrency(price, dataLocale || projectLanguages[0])}
+              {formatMoneyCurrency(
+                totalPrice,
+                dataLocale || projectLanguages[0]
+              )}
             </Text.Headline>
-            {discountedPrice && (
-              <Text.Body isStrikethrough={true} tone="negative">
-                {formatMoneyCurrency(
-                  discountedPrice,
-                  dataLocale || projectLanguages[0]
-                )}
-              </Text.Body>
-            )}
           </Spacings.Stack>
-        </Spacings.Stack>
+
+          {/* REMOVE FROM CART BUTTON */}
+
+          <IconButton
+            label="Remove from cart"
+            icon={<BinFilledIcon />}
+            type="button"
+            size="big"
+            onClick={removeItem}
+          />
+        </Spacings.Inline>
       </Spacings.Inline>
-    </Card>
+    </div>
   );
 };
-CartLineItem.displayName = 'Cart Line Item';
 
 export default CartLineItem;
