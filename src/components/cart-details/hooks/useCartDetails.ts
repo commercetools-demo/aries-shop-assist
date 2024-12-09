@@ -67,6 +67,31 @@ export const useCartDetails = () => {
     await handleUpdateCart(actions);
   };
 
+  const handleAddDiscount = async (code: string) => {
+    const actions = [
+      {
+        addDiscountCode: {
+          code: code,
+        },
+      },
+    ];
+    await handleUpdateCart(actions);
+  };
+
+  const handleRemoveDiscount = async (id: string) => {
+    const actions = [
+      {
+        removeDiscountCode: {
+          discountCode: {
+            typeId: 'discount-code',
+            id: id,
+          },
+        },
+      },
+    ];
+    await handleUpdateCart(actions);
+  };
+
   const handleAddProduct = async (sku: string) => {
     const existingLineItem = cart?.lineItems.find(
       (item) => item?.variant?.sku === sku
@@ -97,6 +122,8 @@ export const useCartDetails = () => {
     handleAddProduct,
     updateItemQuantity,
     resetUpdateCartMutationResult,
+    handleAddDiscount,
+    handleRemoveDiscount,
     loadingUpdateCart,
     errorUpdateCart,
     dataUpdateCart,

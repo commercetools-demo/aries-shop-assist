@@ -22,6 +22,7 @@ import CartLineItem from './components/CartLineItem';
 import PriceSummary from './components/PriceSummary';
 import ShippingSummary from './components/ShippingSummary';
 import { TLineItem } from '../../types/generated/ctp';
+import DiscountsSummary from './components/DiscountsSummary';
 
 const CartDetails = () => {
   const intl = useIntl();
@@ -59,7 +60,7 @@ const CartDetails = () => {
     );
   };
 
-  // TODO: Fix how to get from commerce-tools api the discounts data
+  if (!cartDetails?.id) return <LoadingSpinner />;
 
   return (
     <InfoModalPage
@@ -94,6 +95,7 @@ const CartDetails = () => {
                   {items?.map((item, idx) => (
                     <CartLineItem
                       key={`idx-${item?.id}-${idx}`}
+                      id={`idx-${item?.id}-${idx}`}
                       removeItem={() => handleChangeLineItemQuantity(item, 0)}
                       updateItemQuantity={(quantity: string) =>
                         updateItemQuantity(item, quantity)
@@ -102,7 +104,8 @@ const CartDetails = () => {
                       imageUrl={item?.variant?.images[0]?.url ?? undefined}
                       sku={item?.variant?.sku ?? ''}
                       quantity={item.quantity}
-                      price={
+                      price={item.price}
+                      totalPrice={
                         item?.totalPrice ?? {
                           type: 'centPrecision',
                           currencyCode: cartDetails?.totalPrice?.currencyCode,
@@ -117,9 +120,9 @@ const CartDetails = () => {
               </Grid.Item>
               <Grid.Item>
                 <Spacings.Stack scale="m">
-                  <PriceSummary cartDetails={cartDetails} />
-                  <ShippingSummary cartDetails={cartDetails} />
-                  {/* TODO: IMPLEMENT PROMO CODES COMPONENT HERE */}
+                  <PriceSummary />
+                  <DiscountsSummary />
+                  <ShippingSummary />
                 </Spacings.Stack>
               </Grid.Item>
             </Grid>

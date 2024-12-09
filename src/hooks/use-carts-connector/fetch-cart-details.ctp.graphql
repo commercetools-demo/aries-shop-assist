@@ -37,6 +37,27 @@ query FetchCartDetails($cartId: String!) {
       centAmount
       fractionDigits
     }
+    discountOnTotalPrice {
+      discountedAmount {
+        type
+        currencyCode
+        centAmount
+        fractionDigits
+      }
+    }
+    discountCodes {
+      discountCodeRef {
+        id
+      }
+      discountCode {
+        code
+        key
+        isActive
+        id
+        name(locale: "en-US")
+      }
+      state
+    }
     lineItems {
       id
       nameAllLocales {
@@ -55,6 +76,26 @@ query FetchCartDetails($cartId: String!) {
         }
       }
       quantity
+      price {
+        id
+        value {
+          type
+          currencyCode
+          centAmount
+          fractionDigits
+        }
+        discounted {
+          discount {
+            id
+          }
+          value {
+            type
+            currencyCode
+            centAmount
+            fractionDigits
+          }
+        }
+      }
       totalPrice {
         currencyCode
         centAmount

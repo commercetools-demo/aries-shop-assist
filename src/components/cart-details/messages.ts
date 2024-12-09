@@ -44,7 +44,19 @@ export default defineMessages({
   },
   cartDetailsQuantity: {
     id: 'CartDetails.quantity',
-    defaultMessage: 'Quantity:',
+    defaultMessage: 'Quantity',
+  },
+  cartDetailsUnitPrice: {
+    id: 'CartDetails.UnitPrice',
+    defaultMessage: 'Unit Price',
+  },
+  cartDetailsTotalPrice: {
+    id: 'CartDetails.UnitPrice',
+    defaultMessage: 'Total',
+  },
+  cartDetailsShipping: {
+    id: 'CartDetails.shipping',
+    defaultMessage: 'Shipping:',
   },
   cartDetailsNoShippingMethod: {
     id: 'CartDetails.noShippingMethod',
@@ -61,5 +73,13 @@ export default defineMessages({
   cartDetailsSearchBySku: {
     id: 'CartDetails.searchBySku',
     defaultMessage: 'Search products by SKU',
+  },
+  cartDetailsDiscounts: {
+    id: 'CartDetails.discounts',
+    defaultMessage: 'Discounts',
+  },
+  cartDetailsDiscountsEnterCode: {
+    id: 'CartDetails.enterCode',
+    defaultMessage: 'Enter Code',
   },
 });

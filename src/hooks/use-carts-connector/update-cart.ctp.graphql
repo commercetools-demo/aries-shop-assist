@@ -1,4 +1,8 @@
-mutation UpdateCart($cartId: String!, $version: Long!, $actions: [CartUpdateAction!]!) {
+mutation UpdateCart(
+  $cartId: String!
+  $version: Long!
+  $actions: [CartUpdateAction!]!
+) {
   updateCart(id: $cartId, version: $version, actions: $actions) {
     id
     version
@@ -15,6 +19,27 @@ mutation UpdateCart($cartId: String!, $version: Long!, $actions: [CartUpdateActi
       currencyCode
       centAmount
       fractionDigits
+    }
+    discountOnTotalPrice {
+      discountedAmount {
+        type
+        currencyCode
+        centAmount
+        fractionDigits
+      }
+    }
+    discountCodes {
+      discountCodeRef {
+        id
+      }
+      discountCode {
+        code
+        key
+        isActive
+        id
+        name(locale: "en-US")
+      }
+      state
     }
   }
 }
