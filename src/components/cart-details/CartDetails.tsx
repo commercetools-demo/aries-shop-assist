@@ -23,6 +23,7 @@ import PriceSummary from './components/PriceSummary';
 import ShippingSummary from './components/ShippingSummary';
 import { TLineItem } from '../../types/generated/ctp';
 import DiscountsSummary from './components/DiscountsSummary';
+import Badge from '../badge/Badge';
 
 const CartDetails = () => {
   const intl = useIntl();
@@ -83,7 +84,10 @@ const CartDetails = () => {
         )}
         {cartDetails && (
           <>
-            <DropdownInputField />
+            <Spacings.Inline justifyContent="space-between">
+              <DropdownInputField />
+              <Badge cartStatus={cartDetails.cartState} />
+            </Spacings.Inline>
             <Grid
               gridGap="20px"
               gridRowGap="20px"
