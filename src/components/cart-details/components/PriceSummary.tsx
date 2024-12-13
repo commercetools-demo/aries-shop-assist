@@ -37,6 +37,8 @@ const PriceSummary = () => {
     fractionDigits: totalPrice?.fractionDigits ?? 0,
   };
 
+  const shippingDiscount = shippingInfo?.discountedPrice?.value;
+
   return (
     <Card type="raised" theme="light" insetScale="m">
       <Spacings.Stack scale="m">
@@ -70,6 +72,32 @@ const PriceSummary = () => {
               </Text.Body>
             </Spacings.Inline>
           )}
+          {/* SHIPPING */}
+          <Spacings.Inline scale="s" justifyContent="space-between">
+            <Text.Body
+              isBold={true}
+              intlMessage={messages.cartDetailsShipping}
+            />
+            <Spacings.Inline>
+              <Text.Body
+                tone={shippingDiscount ? 'negative' : 'inherit'}
+                isStrikethrough={!!shippingDiscount}
+              >
+                {formatMoneyCurrency(
+                  shippingInfo?.price ?? ZERO_MONEY_AMOUNT_FALLBACK,
+                  dataLocale || projectLanguages[0]
+                )}{' '}
+              </Text.Body>
+              {shippingDiscount && (
+                <Text.Body>
+                  {formatMoneyCurrency(
+                    shippingDiscount ?? ZERO_MONEY_AMOUNT_FALLBACK,
+                    dataLocale || projectLanguages[0]
+                  )}
+                </Text.Body>
+              )}
+            </Spacings.Inline>
+          </Spacings.Inline>
           {/* DISCOUNTS */}
           <Spacings.Inline scale="s" justifyContent="space-between">
             <Text.Body
@@ -86,19 +114,6 @@ const PriceSummary = () => {
               {formatMoneyCurrency(
                 discountOnTotalPrice?.discountedAmount ??
                   ZERO_MONEY_AMOUNT_FALLBACK,
-                dataLocale || projectLanguages[0]
-              )}
-            </Text.Body>
-          </Spacings.Inline>
-          {/* SHIPPING */}
-          <Spacings.Inline scale="s" justifyContent="space-between">
-            <Text.Body
-              isBold={true}
-              intlMessage={messages.cartDetailsShipping}
-            />
-            <Text.Body>
-              {formatMoneyCurrency(
-                shippingInfo?.price ?? ZERO_MONEY_AMOUNT_FALLBACK,
                 dataLocale || projectLanguages[0]
               )}
             </Text.Body>

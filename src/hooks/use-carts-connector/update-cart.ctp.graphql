@@ -28,6 +28,7 @@ mutation UpdateCart(
         fractionDigits
       }
     }
+    totalLineItemQuantity
     discountCodes {
       discountCodeRef {
         id
@@ -40,6 +41,16 @@ mutation UpdateCart(
         name(locale: "en-US")
       }
       state
+    }
+    shippingInfo {
+      discountedPrice {
+        value {
+          type
+          currencyCode
+          centAmount
+          fractionDigits
+        }
+      }
     }
   }
 }

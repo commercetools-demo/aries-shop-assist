@@ -43,6 +43,7 @@ const Badge = ({ cartStatus }: { cartStatus: TCartState }) => {
         textAlign: 'center',
         fontWeight: 'semi-bold',
         width: '5rem',
+        padding: '0.15rem 0',
       }}
     >
       {cartStatus}

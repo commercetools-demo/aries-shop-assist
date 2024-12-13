@@ -33,18 +33,24 @@ const DropdownInputField = () => {
 
   useEffect(() => {
     if (dataUpdateCart)
-      showNotification({
-        kind: NOTIFICATION_KINDS_SIDE.success,
-        domain: DOMAINS.SIDE,
-        text: `Sucessfully added product to the cart.`,
-      });
+      showNotification(
+        {
+          kind: NOTIFICATION_KINDS_SIDE.success,
+          domain: DOMAINS.SIDE,
+          text: `Sucessfully added product to the cart.`,
+        },
+        { dismissAfter: 4000 }
+      );
 
     if (errorUpdateCart)
-      showNotification({
-        kind: NOTIFICATION_KINDS_PAGE.error,
-        domain: DOMAINS.SIDE,
-        text: getErrorMessage(errorUpdateCart),
-      });
+      showNotification(
+        {
+          kind: NOTIFICATION_KINDS_PAGE.error,
+          domain: DOMAINS.SIDE,
+          text: getErrorMessage(errorUpdateCart),
+        },
+        { dismissAfter: 4000 }
+      );
   }, [errorUpdateCart, dataUpdateCart, showNotification]);
 
   const handleSearchInputReset = () => {
