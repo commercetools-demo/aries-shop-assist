@@ -1,10 +1,10 @@
 import LocalizedTextInput from '@commercetools-uikit/localized-text-input';
 import { transformLocalizedFieldToLocalizedString } from '@commercetools-frontend/l10n';
-import type { TFetchChannelDetailsQuery } from '../../types/generated/ctp';
 import type { TFormValues } from '../../types';
+import { TChannel } from '../../types/generated/ctp';
 
 export const docToFormValues = (
-  channel: TFetchChannelDetailsQuery['channel'],
+  channel: TChannel,
   languages: string[]
 ): TFormValues => ({
   key: channel?.key ?? '',
