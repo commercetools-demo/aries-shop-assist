@@ -66,7 +66,7 @@ const PriceSummary = () => {
               />
               <Text.Body>
                 {formatMoneyCurrency(
-                  taxedPrice?.totalTax,
+                  taxedPrice?.totalTax as TMoney,
                   dataLocale || projectLanguages[0]
                 )}
               </Text.Body>
@@ -84,7 +84,7 @@ const PriceSummary = () => {
                 isStrikethrough={!!shippingDiscount}
               >
                 {formatMoneyCurrency(
-                  shippingInfo?.price ?? ZERO_MONEY_AMOUNT_FALLBACK,
+                  (shippingInfo?.price as TMoney) ?? ZERO_MONEY_AMOUNT_FALLBACK,
                   dataLocale || projectLanguages[0]
                 )}{' '}
               </Text.Body>
@@ -130,7 +130,7 @@ const PriceSummary = () => {
           {totalPrice && (
             <Text.Subheadline as="h4" tone="primary">
               {formatMoneyCurrency(
-                totalPrice,
+                totalPrice as TMoney,
                 dataLocale || projectLanguages[0]
               )}
             </Text.Subheadline>

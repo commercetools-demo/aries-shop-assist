@@ -15,6 +15,7 @@ import type {
   TFetchCartsQueryVariables,
   TUpdateCartMutationVariables,
   TUpdateCartMutation,
+  TCart,
 } from '../../types/generated/ctp';
 import FetchCartsQuery from './fetch-carts.ctp.graphql';
 import FetchCartDetailsQuery from './fetch-cart-details.ctp.graphql';
@@ -32,7 +33,7 @@ type PaginationAndSortingProps = {
 type TUseCartsFetcher = (
   paginationAndSortingProps: PaginationAndSortingProps
 ) => {
-  cartsPaginatedResult?: TFetchCartsQuery['carts']['results'];
+  cartsPaginatedResult?: TCart[];
   total?: number;
   error?: ApolloError;
   loading: boolean;
@@ -69,7 +70,7 @@ export const useCartsFetcher: TUseCartsFetcher = ({
     },
   });
   return {
-    cartsPaginatedResult: data?.carts?.results,
+    cartsPaginatedResult: data?.carts?.results as TCart[],
     total: data?.carts?.total,
     error,
     loading,
@@ -77,7 +78,7 @@ export const useCartsFetcher: TUseCartsFetcher = ({
 };
 
 type TUseCartDetailsFetcher = (cartId: string) => {
-  cart?: TFetchCartDetailsQuery['cart'];
+  cart?: TCart;
   error?: ApolloError;
   loading: boolean;
 };
@@ -96,7 +97,7 @@ export const useCartDetailsFetcher: TUseCartDetailsFetcher = (cartId) => {
   });
 
   return {
-    cart: data?.cart,
+    cart: data?.cart as TCart,
     error,
     loading,
   };
