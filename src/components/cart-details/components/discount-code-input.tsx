@@ -4,6 +4,7 @@ import TextInput from '@commercetools-uikit/text-input';
 import PrimaryButton from '@commercetools-uikit/primary-button';
 import { useIntl } from 'react-intl';
 import Spacings from '@commercetools-uikit/spacings';
+import React from 'react';
 
 interface IDiscountCodeInput {
   onAddDiscount: (code: string) => Promise<void>;

@@ -4,6 +4,7 @@ import Text from '@commercetools-uikit/text';
 import IconButton from '@commercetools-uikit/icon-button';
 import { useIntl } from 'react-intl';
 import { designTokens } from '@commercetools-uikit/design-system';
+import React from 'react';
 
 import {
   BinFilledIcon,

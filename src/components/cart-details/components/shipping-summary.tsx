@@ -4,6 +4,7 @@ import Card from '@commercetools-uikit/card';
 import Spacings from '@commercetools-uikit/spacings';
 import { useIntl } from 'react-intl';
 import { useCartDetails } from '../hooks/use-cart-details';
+import React from 'react';
 
 const ShippingSummary = () => {
   const { cartDetails } = useCartDetails();

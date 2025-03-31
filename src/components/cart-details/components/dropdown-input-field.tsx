@@ -1,5 +1,5 @@
 // external imports
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PrimaryButton from '@commercetools-uikit/primary-button';
 import Spacings from '@commercetools-uikit/spacings';
 import SearchTextInput from '@commercetools-uikit/search-text-input';

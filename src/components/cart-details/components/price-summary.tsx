@@ -2,6 +2,7 @@ import { formatMoneyCurrency } from '../../../helpers';
 import { TMoney } from '../../../types/generated/ctp';
 import { NO_VALUE_FALLBACK } from '@commercetools-frontend/constants';
 import Text from '@commercetools-uikit/text';
+import React from 'react';
 
 import messages from '../messages';
 import Card from '@commercetools-uikit/card';

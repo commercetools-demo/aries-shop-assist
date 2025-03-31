@@ -7,6 +7,7 @@ import {
   CheckActiveIcon,
   ErrorIcon,
 } from '@commercetools-uikit/icons';
+import React from 'react';
 import { designTokens } from '@commercetools-uikit/design-system';
 import { useCartDetails } from '../hooks/use-cart-details';
 import IconButton from '@commercetools-uikit/icon-button';
